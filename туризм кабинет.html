@@ -422,7 +422,6 @@
     function updateUI() { const user = getCurrentUser(); const authDiv = document.getElementById('authButtons'); const userDiv = document.getElementById('userInfo'); const mobileProfileLink = document.getElementById('mobileProfileLink'); const userNameSpan = document.getElementById('userNameDisplay'); if(user) { authDiv.style.display = 'none'; userDiv.style.display = 'block'; if(mobileProfileLink) mobileProfileLink.style.display = 'flex'; userNameSpan.textContent = user.name || user.email.split('@')[0]; const settings = getSettings(); currentCurrency = settings.defaultCurrency; const currencySelect = document.getElementById('globalCurrencySelect'); if(currencySelect) currencySelect.value = currentCurrency; loadChecklist(); renderContent(); } else { authDiv.style.display = 'flex'; userDiv.style.display = 'none'; if(mobileProfileLink) mobileProfileLink.style.display = 'none'; renderContent(); } }
     updateUI();
 </script>
-<script src="optimize.js"></script>
 <script src="demo-account.js"></script>
 </body>
 </html>
