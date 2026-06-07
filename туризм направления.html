@@ -48,21 +48,19 @@
         .logout-btn:hover { background: #fee2e2; color: #ef4444; }
         @media (max-width: 900px) { .desktop-nav { display: none; } .burger-menu { display: flex; } .navbar { justify-content: space-between; } }
         @media (max-width: 640px) { .right-panel .currency-selector span { display: none; } .container { padding: 0 16px; } }
-        
-        /* page header */
+
+        /* ===== СТИЛИ СТРАНИЦЫ ===== */
         .page-header { text-align: center; padding: 20px 0 30px; }
         .page-header h1 { font-size: 2rem; font-weight: 800; margin-bottom: 12px; background: linear-gradient(135deg, #1a2c3e, #1F6E8C, #2E9A7E); background-clip: text; -webkit-background-clip: text; color: transparent; letter-spacing: -0.3px; }
         .page-header p { font-size: 1rem; color: #5a6e7a; max-width: 580px; margin: 0 auto; }
-        
-        /* new info blocks */
+
         .info-blocks { display: flex; flex-wrap: wrap; gap: 28px; margin: 30px 0 40px; justify-content: center; }
         .info-card { background: white; border-radius: 28px; padding: 24px 20px; flex: 1; min-width: 200px; text-align: center; box-shadow: 0 6px 14px rgba(0,0,0,0.02), 0 0 0 1px rgba(31,110,140,0.08); transition: all 0.25s; }
         .info-card i { font-size: 2.2rem; color: #1F6E8C; margin-bottom: 16px; }
         .info-card h3 { font-size: 1.1rem; margin-bottom: 8px; }
         .info-card p { font-size: 0.85rem; color: #6c7e8c; }
         .info-card:hover { transform: translateY(-5px); box-shadow: 0 18px 28px rgba(31,110,140,0.1); border-color: transparent; }
-        
-        /* modern grid cards */
+
         .tours-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; padding: 10px 0 40px; }
         .tour-card { background: rgba(255,255,255,0.96); border-radius: 32px; overflow: hidden; transition: all 0.35s cubic-bezier(0.2, 0, 0, 1); box-shadow: 0 12px 28px rgba(0,0,0,0.06), 0 0 0 1px rgba(31,110,140,0.04); backdrop-filter: blur(0px); display: flex; flex-direction: column; height: 100%; }
         .tour-card:hover { transform: translateY(-10px); box-shadow: 0 28px 40px rgba(31,110,140,0.18), 0 0 0 1px rgba(31,110,140,0.15); }
@@ -88,8 +86,7 @@
         .btn-details:hover { background: #1F6E8C; color: white; border-color: #1F6E8C; transform: translateY(-2px); }
         .btn-select { background: linear-gradient(135deg, #1F6E8C, #2E9A7E); border: none; color: white; font-weight: 700; box-shadow: 0 2px 6px rgba(31,110,140,0.2); }
         .btn-select:hover { transform: translateY(-3px); box-shadow: 0 8px 18px rgba(31,110,140,0.3); }
-        
-        /* faq / about section */
+
         .about-section { background: white; border-radius: 40px; padding: 40px 32px; margin: 40px 0 30px; box-shadow: 0 12px 28px rgba(0,0,0,0.04); border: 1px solid #e2edf2; }
         .about-section h2 { font-size: 1.6rem; margin-bottom: 24px; font-weight: 700; position: relative; display: inline-block; }
         .about-section h2:after { content: ''; position: absolute; bottom: -8px; left: 0; width: 60px; height: 3px; background: linear-gradient(90deg, #1F6E8C, #2E9A7E); border-radius: 4px; }
@@ -97,15 +94,70 @@
         .faq-item h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 8px; color: #1F6E8C; }
         .faq-item p { color: #5a6e7a; line-height: 1.45; font-size: 0.9rem; }
         @media (max-width: 700px) { .faq-grid { grid-template-columns: 1fr; } .info-blocks { flex-direction: column; } }
-        
+
         footer { text-align: center; padding: 40px 0; border-top: 1px solid rgba(31,110,140,0.15); color: #8a9aa8; font-size: 0.85rem; margin-top: 20px; }
         @media (max-width: 1000px) { .tours-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; } }
         @media (max-width: 640px) { .tours-grid { grid-template-columns: 1fr; gap: 28px; } .page-header h1 { font-size: 1.7rem; } }
-        
+
         .fade-in { animation: fadeUp 0.5s ease forwards; }
         @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
         .toast-msg { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #1a2c3e; color: white; padding: 12px 28px; border-radius: 60px; font-size: 0.9rem; font-weight: 500; box-shadow: 0 12px 24px rgba(0,0,0,0.2); z-index: 1200; backdrop-filter: blur(8px); background: rgba(26,44,62,0.9); pointer-events: none; transition: opacity 0.2s; opacity: 0; }
         .toast-msg.show { opacity: 1; }
+
+        /* ===== УНИВЕРСАЛЬНОЕ МОБИЛЬНОЕ МЕНЮ ===== */
+        #mobile-menu-unified {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 80%;
+            max-width: 320px;
+            height: 100%;
+            background: white;
+            z-index: 9999;
+            padding: 80px 24px 32px;
+            box-shadow: 4px 0 24px rgba(0,0,0,0.15);
+            overflow-y: auto;
+            border-radius: 0 24px 24px 0;
+            font-family: 'Inter', sans-serif;
+        }
+        #mobile-menu-unified a {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 16px;
+            border-radius: 18px;
+            color: #5a6e7a;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        #mobile-menu-unified a:hover {
+            background: #f0f4f9;
+        }
+        #mobile-menu-unified a i {
+            width: 24px;
+            font-size: 1.1rem;
+            color: #1F6E8C;
+        }
+        .close-mobile-unified {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 36px;
+            height: 36px;
+            background: #f0f4f9;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: #5a6e7a;
+        }
+        .close-mobile-unified:hover {
+            background: #e2edf2;
+        }
     </style>
 </head>
 <body>
@@ -125,7 +177,7 @@
             <div id="userInfo" style="display: none;"><div class="user-panel"><span class="user-name" id="userNameDisplay"></span><button class="logout-btn" id="logoutBtn">Выйти</button></div></div>
         </div>
     </nav>
-    
+
     <div class="page-header">
         <h1>🌍 Выберите маршрут мечты</h1>
         <p>Интерактивные карточки, живые цены и полная прозрачность бюджета — планируйте путешествие с умом</p>
@@ -245,12 +297,12 @@
         if(user) { authDiv.style.display = 'none'; userDiv.style.display = 'block'; if(profileLink) profileLink.style.display = 'inline-block'; if(mobileProfileLink) mobileProfileLink.style.display = 'flex'; userNameSpan.textContent = user.name || user.email?.split('@')[0] || 'Турист'; }
         else { authDiv.style.display = 'flex'; userDiv.style.display = 'none'; if(profileLink) profileLink.style.display = 'none'; if(mobileProfileLink) mobileProfileLink.style.display = 'none'; }
     }
-    
-    const burgerMenu = document.getElementById('burgerMenu');
-    burgerMenu?.addEventListener('click', function() {
+
+    // ===== МОБИЛЬНОЕ МЕНЮ =====
+    document.getElementById('burgerMenu')?.addEventListener('click', function() {
         document.getElementById('mobile-menu-unified').style.display = 'block';
     });
-
+    
     document.getElementById('globalCurrencySelect')?.addEventListener('change', changeGlobalCurrency);
     document.getElementById('logoutBtn')?.addEventListener('click', logout);
     renderTours(); updateUI();
