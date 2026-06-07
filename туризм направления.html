@@ -33,14 +33,6 @@
         .nav-link:hover, .nav-link.active { background: white; color: #1F6E8C; box-shadow: 0 2px 6px rgba(0,0,0,0.02); }
         .burger-menu { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 10px; }
         .burger-menu span { width: 25px; height: 2px; background: #1a2c3e; transition: 0.3s; border-radius: 4px; }
-        .mobile-nav { display: none; position: fixed; top: 0; left: -100%; width: 80%; max-width: 300px; height: 100%; background: white; z-index: 1000; padding: 80px 24px 24px; box-shadow: 2px 0 20px rgba(0,0,0,0.1); transition: left 0.3s ease; overflow-y: auto; }
-        .mobile-nav.active { left: 0; }
-        .mobile-nav-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999; backdrop-filter: blur(2px); }
-        .mobile-nav-overlay.active { display: block; }
-        .mobile-nav a { display: flex; align-items: center; gap: 12px; padding: 14px 0; color: #5a6e7a; text-decoration: none; font-weight: 500; border-bottom: 1px solid #e2edf2; }
-        .mobile-nav a i { width: 24px; color: #1F6E8C; }
-        .mobile-nav .mobile-section-title { font-size: 0.7rem; text-transform: uppercase; color: #8a9aa8; margin-top: 16px; margin-bottom: 8px; letter-spacing: 1px; font-weight: 600; }
-        .close-mobile-nav { position: absolute; top: 20px; right: 20px; font-size: 1.5rem; cursor: pointer; color: #8a9aa8; }
         .right-panel { display: flex; align-items: center; gap: 16px; }
         .currency-selector { display: flex; align-items: center; gap: 8px; background: #f8fafc; padding: 6px 16px; border-radius: 40px; border: 1px solid #e2edf2; transition: all 0.2s; }
         .currency-selector:hover { border-color: #1F6E8C; background: white; }
@@ -133,15 +125,12 @@
             <div id="userInfo" style="display: none;"><div class="user-panel"><span class="user-name" id="userNameDisplay"></span><button class="logout-btn" id="logoutBtn">Выйти</button></div></div>
         </div>
     </nav>
-    <div class="mobile-nav-overlay" id="mobileOverlay"></div>
-    <div class="mobile-nav" id="mobileNav"><div class="close-mobile-nav" id="closeMobileNav">&times;</div><a href="туризм главная.html"><i class="fas fa-home"></i> Главная</a><div class="mobile-section-title">ПУТЕШЕСТВИЯ</div><a href="туризм направления.html"><i class="fas fa-plane"></i> Направления</a><a href="туризм учет.html"><i class="fas fa-wallet"></i> Мой учёт</a><a href="туризм бюджет.html"><i class="fas fa-chart-line"></i> Бюджет</a><div class="mobile-section-title">МЕДИА</div><a href="туризм фото.html"><i class="fas fa-camera"></i> Фотоальбом</a><a href="туризм аналитика.html"><i class="fas fa-chart-pie"></i> Аналитика</a><div class="mobile-section-title">АККАУНТ</div><a href="туризм кабинет.html" id="mobileProfileLink"><i class="fas fa-user"></i> Личный кабинет</a></div>
     
     <div class="page-header">
         <h1>🌍 Выберите маршрут мечты</h1>
         <p>Интерактивные карточки, живые цены и полная прозрачность бюджета — планируйте путешествие с умом</p>
     </div>
 
-    <!-- Блоки преимуществ и идей -->
     <div class="info-blocks">
         <div class="info-card"><i class="fas fa-chart-simple"></i><h3>Прозрачный бюджет</h3><p>Детализация каждой статьи расходов — без скрытых комиссий</p></div>
         <div class="info-card"><i class="fas fa-globe"></i><h3>50+ направлений</h3><p>От экзотических пляжей до горных вершин</p></div>
@@ -151,7 +140,6 @@
 
     <div class="tours-grid" id="toursGrid"></div>
 
-    <!-- Дополнительный блок о сервисе и популярных вопросах -->
     <div class="about-section">
         <h2><i class="fas fa-leaf" style="margin-right: 12px; color:#1F6E8C;"></i> О сервисе TravelBudget</h2>
         <p style="margin-top: 16px; max-width: 85%;">Мы объединили тревел-экспертизу и умный учёт расходов. Каждый тур в каталоге содержит полную смету: от авиабилетов до экскурсий. Вы можете мгновенно пересчитать стоимость в удобной валюте и сохранить выбранный пакет в личном кабинете. Путешествуйте осознанно — без финансовых сюрпризов.</p>
@@ -167,13 +155,11 @@
 <div id="toastMsg" class="toast-msg"></div>
 
 <script>
-    // ---------- КОНФИГУРАЦИЯ ----------
     const STORAGE_SESSION = 'travelbudget_session';
     const exchangeRates = { EUR: 1, USD: 1.09, GBP: 0.86, RUB: 95.5, CHF: 0.98, TRY: 35.2, JPY: 164.5 };
     const currencySymbols = { EUR: '€', USD: '$', GBP: '£', RUB: '₽', CHF: '₣', TRY: '₺', JPY: '¥' };
     let currentCurrency = 'EUR';
     
-    // Расширенный массив туров с доп. полями для ярких карточек
     const tours = [
         { id:1, name:"Мальдивский рай", location:"Мальдивы, Атолл Северный Мале", country:"Мальдивы", price:2500, days:7, image:"тур-1-9.jpg", shortDescription:"Белый песок, бирюзовая вода и полное расслабление.", fullDescription:"Роскошные виллы на воде, дайвинг с мanta rays.", highlights:["🏖️ Пляжи","🤿 Дайвинг","🌅 Закаты"], features:["Отель 5*", "All inclusive"], expenses:[{name:"Авиабилеты",amount:800},{name:"Проживание",amount:1200},{name:"Питание",amount:350},{name:"Трансфер",amount:80},{name:"Экскурсии",amount:70}] },
         { id:2, name:"Швейцарские Альпы", location:"Швейцария, Интерлакен", country:"Швейцария", price:1800, days:7, image:"тур-2-1.jpg", shortDescription:"Горы, чистейший воздух, активный отдых.", fullDescription:"Идеально для лыжников и альпинистов.", highlights:["⛷️ Лыжи","🚂 Юнгфрау","🍫 Шоколад"], features:["Ски-пасс", "Трансфер"], expenses:[{name:"Авиабилеты",amount:400},{name:"Проживание",amount:900},{name:"Питание",amount:300},{name:"Ски-пасс",amount:120},{name:"Аренда снаряжения",amount:80}] },
@@ -213,7 +199,6 @@
         if(tour) { saveTourToUser(tour); showToast(`✅ Тур "${tour.name}" сохранён в учёте`, 1800); setTimeout(() => { window.location.href = 'туризм учет.html'; }, 1000); }
     }
     
-    // Генерация карточек с живыми элементами (без модалок, просто ссылки)
     function renderTours() {
         const grid = document.getElementById('toursGrid');
         if(!grid) return;
@@ -248,7 +233,7 @@
         }).join('');
     }
     
-    function logout() { localStorage.removeItem(STORAGE_SESSION); updateUI(); showToast('Вы вышли из профиля', 1800); closeMobileMenu(); }
+    function logout() { localStorage.removeItem(STORAGE_SESSION); updateUI(); showToast('Вы вышли из профиля', 1800); }
     function changeGlobalCurrency() { currentCurrency = document.getElementById('globalCurrencySelect').value; renderTours(); }
     function updateUI() {
         const user = getCurrentUser();
@@ -261,10 +246,11 @@
         else { authDiv.style.display = 'flex'; userDiv.style.display = 'none'; if(profileLink) profileLink.style.display = 'none'; if(mobileProfileLink) mobileProfileLink.style.display = 'none'; }
     }
     
-    const burgerMenu = document.getElementById('burgerMenu'); const mobileNav = document.getElementById('mobileNav'); const mobileOverlay = document.getElementById('mobileOverlay'); const closeMobileNav = document.getElementById('closeMobileNav');
-    function openMobileMenu() { mobileNav.classList.add('active'); mobileOverlay.classList.add('active'); document.body.style.overflow = 'hidden'; }
-    function closeMobileMenu() { mobileNav.classList.remove('active'); mobileOverlay.classList.remove('active'); document.body.style.overflow = ''; }
-    burgerMenu?.addEventListener('click', openMobileMenu); closeMobileNav?.addEventListener('click', closeMobileMenu); mobileOverlay?.addEventListener('click', closeMobileMenu);
+    const burgerMenu = document.getElementById('burgerMenu');
+    burgerMenu?.addEventListener('click', function() {
+        document.getElementById('mobile-menu-unified').style.display = 'block';
+    });
+
     document.getElementById('globalCurrencySelect')?.addEventListener('change', changeGlobalCurrency);
     document.getElementById('logoutBtn')?.addEventListener('click', logout);
     renderTours(); updateUI();
@@ -272,44 +258,28 @@
     window.selectTour = selectTour;
 </script>
 <script src="demo-account.js"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Находим кнопку бургера
-        const burger = document.querySelector('.burger-menu');
-        // Создаём меню, если его нет
-        if (document.getElementById('mobile-menu-simple') === null) {
-            const menu = document.createElement('div');
-            menu.id = 'mobile-menu-simple';
-            menu.style.cssText = `
-                display: none;
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: white;
-                z-index: 9999;
-                padding: 40px 20px;
-            `;
-            menu.innerHTML = `
-                <div onclick="document.getElementById('mobile-menu-simple').style.display='none'" style="font-size:40px; position:absolute; top:20px; right:30px; cursor:pointer;">&times;</div>
-                <a href="туризм главная.html" style="display:block; padding:15px 0; font-size:1.2rem; text-decoration:none; color:#1a2c3e;">🏠 Главная</a>
-                <a href="туризм направления.html" style="display:block; padding:15px 0; font-size:1.2rem; text-decoration:none; color:#1a2c3e;">✈️ Направления</a>
-                <a href="туризм учет.html" style="display:block; padding:15px 0; font-size:1.2rem; text-decoration:none; color:#1a2c3e;">💰 Мой учёт</a>
-                <a href="туризм бюджет.html" style="display:block; padding:15px 0; font-size:1.2rem; text-decoration:none; color:#1a2c3e;">📊 Бюджет</a>
-                <a href="туризм фото.html" style="display:block; padding:15px 0; font-size:1.2rem; text-decoration:none; color:#1a2c3e;">📸 Фотоальбом</a>
-                <a href="туризм аналитика.html" style="display:block; padding:15px 0; font-size:1.2rem; text-decoration:none; color:#1a2c3e;">📈 Аналитика</a>
-                <a href="туризм кабинет.html" style="display:block; padding:15px 0; font-size:1.2rem; text-decoration:none; color:#1a2c3e;">👤 Личный кабинет</a>
-            `;
-            document.body.appendChild(menu);
-        }
-        // При клике на бургер открываем меню
-        if (burger) {
-            burger.onclick = function() {
-                document.getElementById('mobile-menu-simple').style.display = 'block';
-            };
-        }
-    });
-</script>
+
+<!-- УНИВЕРСАЛЬНОЕ МОБИЛЬНОЕ МЕНЮ -->
+<div id="mobile-menu-unified">
+    <div class="close-mobile-unified" onclick="document.getElementById('mobile-menu-unified').style.display='none'">&times;</div>
+    <div style="margin-bottom:24px; padding-bottom:16px; border-bottom:2px solid #e2edf2;">
+        <div style="display:flex; align-items:center; gap:12px;">
+            <div style="width:44px; height:44px; background:linear-gradient(135deg,#1F6E8C,#2E9A7E); border-radius:12px; display:flex; align-items:center; justify-content:center;"><i class="fas fa-compass" style="color:white; font-size:1.3rem;"></i></div>
+            <span style="font-size:1.3rem; font-weight:800; background:linear-gradient(135deg,#1a2c3e,#1F6E8C); -webkit-background-clip:text; background-clip:text; color:transparent;">TravelBudget</span>
+        </div>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:6px;">
+        <a href="туризм главная.html"><i class="fas fa-home"></i> Главная</a>
+        <a href="туризм направления.html"><i class="fas fa-plane"></i> Направления</a>
+        <a href="туризм учет.html"><i class="fas fa-wallet"></i> Мой учёт</a>
+        <a href="туризм бюджет.html"><i class="fas fa-chart-line"></i> Бюджет</a>
+        <a href="туризм фото.html"><i class="fas fa-camera"></i> Фотоальбом</a>
+        <a href="туризм аналитика.html"><i class="fas fa-chart-pie"></i> Аналитика</a>
+        <a href="туризм кабинет.html"><i class="fas fa-user"></i> Личный кабинет</a>
+    </div>
+    <div style="margin-top:24px; padding-top:16px; border-top:1px solid #e2edf2; text-align:center; font-size:0.7rem; color:#8a9aa8;">
+        <i class="fas fa-shield-alt"></i> TravelBudget v2.0
+    </div>
+</div>
 </body>
 </html>

@@ -10,661 +10,152 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #f5f9fc 0%, #eef3f8 100%); color: #1a2c3e; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 0 32px; }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #f5f9fc 0%, #eef3f8 100%);
-            color: #1a2c3e;
-        }
+        /* НАВИГАЦИЯ */
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid #e2edf2; margin-bottom: 20px; flex-wrap: wrap; gap: 16px; }
+        .logo { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+        .logo-icon { width: 42px; height: 42px; background: linear-gradient(135deg, #1F6E8C, #2E9A7E); border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+        .logo-icon i { font-size: 1.3rem; color: white; }
+        .logo-text { font-size: 1.4rem; font-weight: 700; color: #1a2c3e; }
+        .desktop-nav { display: flex; align-items: center; gap: 8px; }
+        .dropdown { position: relative; }
+        .dropdown-btn { padding: 8px 20px; border-radius: 40px; font-weight: 500; font-size: 0.9rem; color: #5a6e7a; text-decoration: none; transition: all 0.2s; cursor: pointer; background: transparent; display: flex; align-items: center; gap: 8px; border: none; font-family: inherit; }
+        .dropdown-btn i { font-size: 0.7rem; transition: transform 0.2s; }
+        .dropdown:hover .dropdown-btn i { transform: rotate(180deg); }
+        .dropdown-btn:hover { background: white; color: #1F6E8C; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+        .dropdown-content { position: absolute; top: 100%; left: 0; background: white; min-width: 200px; border-radius: 20px; box-shadow: 0 20px 35px rgba(0,0,0,0.1); border: 1px solid #e2edf2; opacity: 0; visibility: hidden; transform: translateY(-10px); transition: all 0.2s; z-index: 100; }
+        .dropdown:hover .dropdown-content { opacity: 1; visibility: visible; transform: translateY(0); }
+        .dropdown-content a { display: flex; align-items: center; gap: 12px; padding: 12px 20px; color: #5a6e7a; text-decoration: none; font-size: 0.85rem; transition: all 0.2s; }
+        .dropdown-content a i { width: 20px; color: #1F6E8C; }
+        .dropdown-content a:hover { background: #f8fafc; color: #1F6E8C; }
+        .nav-link { padding: 8px 20px; border-radius: 40px; font-weight: 500; font-size: 0.9rem; color: #5a6e7a; text-decoration: none; transition: all 0.2s; cursor: pointer; background: transparent; }
+        .nav-link:hover, .nav-link.active { background: white; color: #1F6E8C; }
+        .burger-menu { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 10px; }
+        .burger-menu span { width: 25px; height: 2px; background: #1a2c3e; transition: 0.3s; }
+        .right-panel { display: flex; align-items: center; gap: 16px; }
+        .currency-selector { display: flex; align-items: center; gap: 8px; background: #f8fafc; padding: 6px 16px; border-radius: 40px; border: 1px solid #e2edf2; }
+        .currency-selector select { border: none; background: transparent; font-weight: 500; color: #1F6E8C; outline: none; font-family: inherit; cursor: pointer; }
+        .auth-section { display: flex; align-items: center; gap: 12px; }
+        .btn-login { background: transparent; border: 1px solid #cbdde6; padding: 8px 24px; border-radius: 40px; font-weight: 600; font-size: 0.9rem; color: #1F6E8C; cursor: pointer; transition: all 0.2s; }
+        .btn-login:hover { background: #1F6E8C; color: white; }
+        .btn-register { background: linear-gradient(135deg, #1F6E8C, #2E9A7E); border: none; padding: 8px 24px; border-radius: 40px; font-weight: 600; font-size: 0.9rem; color: white; cursor: pointer; transition: all 0.2s; box-shadow: 0 2px 8px rgba(31,110,140,0.2); }
+        .user-panel { display: flex; align-items: center; gap: 16px; background: #f8fafc; padding: 5px 5px 5px 16px; border-radius: 50px; border: 1px solid #e2edf2; }
+        .user-name { font-weight: 600; font-size: 0.9rem; color: #1F6E8C; }
+        .logout-btn { background: transparent; border: none; padding: 6px 16px; border-radius: 40px; font-size: 0.8rem; color: #94a3b8; cursor: pointer; transition: all 0.2s; }
+        .logout-btn:hover { background: #fee2e2; color: #ef4444; }
+        @media (max-width: 900px) { .desktop-nav { display: none; } .burger-menu { display: flex; } .navbar { justify-content: space-between; } }
+        @media (max-width: 640px) { .right-panel .currency-selector span { display: none; } .container { padding: 0 16px; } }
 
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 32px;
-        }
+        /* СТИЛИ АНАЛИТИКИ */
+        .page-header { margin-bottom: 32px; }
+        .page-header h1 { font-size: 2rem; font-weight: 700; background: linear-gradient(135deg, #1a2c3e, #1F6E8C); background-clip: text; -webkit-background-clip: text; color: transparent; }
+        .page-header p { color: #6c7e8c; margin-top: 8px; }
+        .filters-bar { background: white; border-radius: 20px; padding: 16px 24px; margin-bottom: 32px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; border: 1px solid rgba(31,110,140,0.1); }
+        .filter-group { display: flex; align-items: center; gap: 12px; }
+        .filter-group label { font-weight: 500; color: #5a6e7a; }
+        .filter-select { padding: 8px 16px; border: 1px solid #e2edf2; border-radius: 40px; font-family: inherit; background: white; cursor: pointer; }
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-bottom: 40px; }
+        .stat-card { background: white; padding: 24px; border-radius: 28px; border: 1px solid rgba(31,110,140,0.1); transition: transform 0.3s; }
+        .stat-card:hover { transform: translateY(-4px); box-shadow: 0 12px 28px rgba(31,110,140,0.1); }
+        .stat-icon { width: 48px; height: 48px; background: linear-gradient(135deg, rgba(31,110,140,0.1), rgba(46,154,126,0.1)); border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
+        .stat-icon i { font-size: 1.5rem; color: #1F6E8C; }
+        .stat-value { font-size: 2rem; font-weight: 800; color: #1a2c3e; }
+        .stat-label { font-size: 0.85rem; color: #8a9aa8; margin-top: 4px; }
+        .charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-bottom: 40px; }
+        .chart-card { background: white; border-radius: 28px; padding: 24px; border: 1px solid rgba(31,110,140,0.1); }
+        .chart-title { font-size: 1.2rem; font-weight: 600; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+        .chart-title i { color: #1F6E8C; }
+        .chart-container { position: relative; height: 300px; }
+        .top-expenses-card { background: white; border-radius: 28px; padding: 24px; margin-bottom: 40px; border: 1px solid rgba(31,110,140,0.1); }
+        .top-expenses-title { font-size: 1.2rem; font-weight: 600; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+        .top-expenses-list { display: flex; flex-direction: column; gap: 12px; }
+        .top-expense-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: #f8fafc; border-radius: 16px; }
+        .top-expense-name { display: flex; align-items: center; gap: 12px; }
+        .top-expense-name i { width: 32px; color: #1F6E8C; }
+        .top-expense-amount { font-weight: 700; color: #1F6E8C; }
+        .budget-card { background: linear-gradient(135deg, #1F6E8C, #2E9A7E); border-radius: 28px; padding: 32px; margin-bottom: 40px; color: white; }
+        .budget-card h3 { font-size: 1.3rem; margin-bottom: 20px; }
+        .budget-progress { background: rgba(255,255,255,0.3); border-radius: 20px; height: 12px; overflow: hidden; margin: 16px 0; }
+        .budget-progress-bar { background: white; height: 100%; border-radius: 20px; transition: width 0.5s ease; }
+        .budget-stats { display: flex; justify-content: space-between; margin-top: 16px; flex-wrap: wrap; gap: 12px; }
+        .insights-card { background: white; border-radius: 28px; padding: 24px; border: 1px solid rgba(31,110,140,0.1); margin-bottom: 40px; }
+        .insights-list { display: flex; flex-direction: column; gap: 16px; }
+        .insight-item { display: flex; align-items: center; gap: 16px; padding: 12px; background: #f8fafc; border-radius: 16px; }
+        .insight-icon { width: 40px; height: 40px; background: rgba(31,110,140,0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+        .empty-state { text-align: center; padding: 60px; background: white; border-radius: 28px; }
+        footer { text-align: center; padding: 40px 0; border-top: 1px solid rgba(31,110,140,0.15); color: #8a9aa8; margin-top: 40px; }
+        @media (max-width: 1000px) { .charts-grid { grid-template-columns: 1fr; } .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 640px) { .stats-grid { grid-template-columns: 1fr; } .container { padding: 0 16px; } }
 
-        /* ========== НАВИГАЦИЯ ========== */
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 16px 0;
-            border-bottom: 1px solid #e2edf2;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            gap: 16px;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-        }
-
-        .logo-icon {
-            width: 42px;
-            height: 42px;
-            background: linear-gradient(135deg, #1F6E8C, #2E9A7E);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .logo-icon i {
-            font-size: 1.3rem;
-            color: white;
-        }
-
-        .logo-text {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: #1a2c3e;
-        }
-
-        .desktop-nav {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .dropdown {
-            position: relative;
-        }
-
-        .dropdown-btn {
-            padding: 8px 20px;
-            border-radius: 40px;
-            font-weight: 500;
-            font-size: 0.9rem;
-            color: #5a6e7a;
-            text-decoration: none;
-            transition: all 0.2s;
-            cursor: pointer;
-            background: transparent;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            border: none;
-            font-family: inherit;
-        }
-
-        .dropdown-btn i {
-            font-size: 0.7rem;
-            transition: transform 0.2s;
-        }
-
-        .dropdown:hover .dropdown-btn i {
-            transform: rotate(180deg);
-        }
-
-        .dropdown-btn:hover {
-            background: white;
-            color: #1F6E8C;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-        }
-
-        .dropdown-content {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            background: white;
-            min-width: 200px;
-            border-radius: 20px;
-            box-shadow: 0 20px 35px rgba(0,0,0,0.1);
-            border: 1px solid #e2edf2;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(-10px);
-            transition: all 0.2s;
-            z-index: 100;
-        }
-
-        .dropdown:hover .dropdown-content {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-
-        .dropdown-content a {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 20px;
-            color: #5a6e7a;
-            text-decoration: none;
-            font-size: 0.85rem;
-            transition: all 0.2s;
-        }
-
-        .dropdown-content a i {
-            width: 20px;
-            color: #1F6E8C;
-        }
-
-        .dropdown-content a:hover {
-            background: #f8fafc;
-            color: #1F6E8C;
-        }
-
-        .nav-link {
-            padding: 8px 20px;
-            border-radius: 40px;
-            font-weight: 500;
-            font-size: 0.9rem;
-            color: #5a6e7a;
-            text-decoration: none;
-            transition: all 0.2s;
-            cursor: pointer;
-            background: transparent;
-        }
-
-        .nav-link:hover,
-        .nav-link.active {
-            background: white;
-            color: #1F6E8C;
-        }
-
-        .burger-menu {
-            display: none;
-            flex-direction: column;
-            gap: 5px;
-            cursor: pointer;
-            padding: 10px;
-        }
-
-        .burger-menu span {
-            width: 25px;
-            height: 2px;
-            background: #1a2c3e;
-            transition: 0.3s;
-        }
-
-        .mobile-nav {
+        /* УНИВЕРСАЛЬНОЕ МОБИЛЬНОЕ МЕНЮ */
+        #mobile-menu-unified {
             display: none;
             position: fixed;
             top: 0;
-            left: -100%;
+            left: 0;
             width: 80%;
-            max-width: 300px;
+            max-width: 320px;
             height: 100%;
             background: white;
-            z-index: 1000;
-            padding: 80px 24px 24px;
-            box-shadow: 2px 0 20px rgba(0,0,0,0.1);
-            transition: left 0.3s ease;
+            z-index: 9999;
+            padding: 80px 24px 32px;
+            box-shadow: 4px 0 24px rgba(0,0,0,0.15);
             overflow-y: auto;
+            border-radius: 0 24px 24px 0;
+            font-family: 'Inter', sans-serif;
         }
-
-        .mobile-nav.active {
-            left: 0;
-        }
-
-        .mobile-nav-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 999;
-        }
-
-        .mobile-nav-overlay.active {
-            display: block;
-        }
-
-        .mobile-nav a {
+        #mobile-menu-unified a {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 14px 0;
+            gap: 14px;
+            padding: 14px 16px;
+            border-radius: 18px;
             color: #5a6e7a;
-            text-decoration: none;
             font-weight: 500;
-            border-bottom: 1px solid #e2edf2;
+            text-decoration: none;
+            transition: all 0.2s;
         }
-
-        .mobile-nav a i {
+        #mobile-menu-unified a:hover {
+            background: #f0f4f9;
+        }
+        #mobile-menu-unified a i {
             width: 24px;
+            font-size: 1.1rem;
             color: #1F6E8C;
         }
-
-        .mobile-nav .mobile-section-title {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            color: #8a9aa8;
-            margin-top: 16px;
-            margin-bottom: 8px;
-            letter-spacing: 1px;
-        }
-
-        .close-mobile-nav {
+        .close-mobile-unified {
             position: absolute;
             top: 20px;
             right: 20px;
-            font-size: 1.5rem;
+            width: 36px;
+            height: 36px;
+            background: #f0f4f9;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             cursor: pointer;
-            color: #8a9aa8;
-        }
-
-        .right-panel {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .currency-selector {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: #f8fafc;
-            padding: 6px 16px;
-            border-radius: 40px;
-            border: 1px solid #e2edf2;
-        }
-
-        .currency-selector select {
-            border: none;
-            background: transparent;
-            font-weight: 500;
-            color: #1F6E8C;
-            outline: none;
-            font-family: inherit;
-            cursor: pointer;
-        }
-
-        .auth-section {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .btn-login {
-            background: transparent;
-            border: 1px solid #cbdde6;
-            padding: 8px 24px;
-            border-radius: 40px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            color: #1F6E8C;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .btn-login:hover {
-            background: #1F6E8C;
-            color: white;
-        }
-
-        .btn-register {
-            background: linear-gradient(135deg, #1F6E8C, #2E9A7E);
-            border: none;
-            padding: 8px 24px;
-            border-radius: 40px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            color: white;
-            cursor: pointer;
-            transition: all 0.2s;
-            box-shadow: 0 2px 8px rgba(31,110,140,0.2);
-        }
-
-        .user-panel {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            background: #f8fafc;
-            padding: 5px 5px 5px 16px;
-            border-radius: 50px;
-            border: 1px solid #e2edf2;
-        }
-
-        .user-name {
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
-
-        .logout-btn {
-            background: transparent;
-            border: none;
-            padding: 6px 16px;
-            border-radius: 40px;
-            font-size: 0.8rem;
-            color: #94a3b8;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .logout-btn:hover {
-            background: #fee2e2;
-            color: #ef4444;
-        }
-
-        @media (max-width: 900px) {
-            .desktop-nav {
-                display: none;
-            }
-            .burger-menu {
-                display: flex;
-            }
-            .navbar {
-                justify-content: space-between;
-            }
-        }
-
-        @media (max-width: 640px) {
-            .right-panel .currency-selector span {
-                display: none;
-            }
-            .container {
-                padding: 0 16px;
-            }
-        }
-
-        /* ========== СТИЛИ СТРАНИЦЫ АНАЛИТИКИ ========== */
-        .page-header {
-            margin-bottom: 32px;
-        }
-
-        .page-header h1 {
-            font-size: 2rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #1a2c3e, #1F6E8C);
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
-        }
-
-        .page-header p {
-            color: #6c7e8c;
-            margin-top: 8px;
-        }
-
-        .filters-bar {
-            background: white;
-            border-radius: 20px;
-            padding: 16px 24px;
-            margin-bottom: 32px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 16px;
-            border: 1px solid rgba(31,110,140,0.1);
-        }
-
-        .filter-group {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .filter-group label {
-            font-weight: 500;
+            font-size: 1.2rem;
             color: #5a6e7a;
         }
-
-        .filter-select {
-            padding: 8px 16px;
-            border: 1px solid #e2edf2;
-            border-radius: 40px;
-            font-family: inherit;
-            background: white;
-            cursor: pointer;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 24px;
-            margin-bottom: 40px;
-        }
-
-        .stat-card {
-            background: white;
-            padding: 24px;
-            border-radius: 28px;
-            border: 1px solid rgba(31,110,140,0.1);
-            transition: transform 0.3s;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 28px rgba(31,110,140,0.1);
-        }
-
-        .stat-icon {
-            width: 48px;
-            height: 48px;
-            background: linear-gradient(135deg, rgba(31,110,140,0.1), rgba(46,154,126,0.1));
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 16px;
-        }
-
-        .stat-icon i {
-            font-size: 1.5rem;
-            color: #1F6E8C;
-        }
-
-        .stat-value {
-            font-size: 2rem;
-            font-weight: 800;
-            color: #1a2c3e;
-        }
-
-        .stat-label {
-            font-size: 0.85rem;
-            color: #8a9aa8;
-            margin-top: 4px;
-        }
-
-        .charts-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 32px;
-            margin-bottom: 40px;
-        }
-
-        .chart-card {
-            background: white;
-            border-radius: 28px;
-            padding: 24px;
-            border: 1px solid rgba(31,110,140,0.1);
-        }
-
-        .chart-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .chart-title i {
-            color: #1F6E8C;
-        }
-
-        .chart-container {
-            position: relative;
-            height: 300px;
-        }
-
-        .top-expenses-card {
-            background: white;
-            border-radius: 28px;
-            padding: 24px;
-            margin-bottom: 40px;
-            border: 1px solid rgba(31,110,140,0.1);
-        }
-
-        .top-expenses-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .top-expenses-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .top-expense-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 16px;
-            background: #f8fafc;
-            border-radius: 16px;
-        }
-
-        .top-expense-name {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .top-expense-name i {
-            width: 32px;
-            color: #1F6E8C;
-        }
-
-        .top-expense-amount {
-            font-weight: 700;
-            color: #1F6E8C;
-        }
-
-        .budget-card {
-            background: linear-gradient(135deg, #1F6E8C, #2E9A7E);
-            border-radius: 28px;
-            padding: 32px;
-            margin-bottom: 40px;
-            color: white;
-        }
-
-        .budget-card h3 {
-            font-size: 1.3rem;
-            margin-bottom: 20px;
-        }
-
-        .budget-progress {
-            background: rgba(255,255,255,0.3);
-            border-radius: 20px;
-            height: 12px;
-            overflow: hidden;
-            margin: 16px 0;
-        }
-
-        .budget-progress-bar {
-            background: white;
-            height: 100%;
-            border-radius: 20px;
-            transition: width 0.5s ease;
-        }
-
-        .budget-stats {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 16px;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-
-        .insights-card {
-            background: white;
-            border-radius: 28px;
-            padding: 24px;
-            border: 1px solid rgba(31,110,140,0.1);
-            margin-bottom: 40px;
-        }
-
-        .insights-list {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .insight-item {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            padding: 12px;
-            background: #f8fafc;
-            border-radius: 16px;
-        }
-
-        .insight-icon {
-            width: 40px;
-            height: 40px;
-            background: rgba(31,110,140,0.1);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 60px;
-            background: white;
-            border-radius: 28px;
-        }
-
-        footer {
-            text-align: center;
-            padding: 40px 0;
-            border-top: 1px solid rgba(31,110,140,0.15);
-            color: #8a9aa8;
-            margin-top: 40px;
-        }
-
-        @media (max-width: 1000px) {
-            .charts-grid {
-                grid-template-columns: 1fr;
-            }
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (max-width: 640px) {
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-            .container {
-                padding: 0 16px;
-            }
+        .close-mobile-unified:hover {
+            background: #e2edf2;
         }
     </style>
 </head>
 <body>
-
 <div class="container">
-    <!-- НАВИГАЦИЯ -->
+    <!-- ========== НАВИГАЦИЯ ========== -->
     <nav class="navbar">
         <div class="logo" onclick="window.location.href='туризм главная.html'">
             <div class="logo-icon"><i class="fas fa-compass"></i></div>
             <span class="logo-text">TravelBudget</span>
         </div>
-
         <div class="desktop-nav">
             <a class="nav-link" href="туризм главная.html">Главная</a>
-
             <div class="dropdown">
                 <button class="dropdown-btn">Путешествия <i class="fas fa-chevron-down"></i></button>
                 <div class="dropdown-content">
@@ -673,7 +164,6 @@
                     <a href="туризм бюджет.html"><i class="fas fa-chart-line"></i> Бюджет</a>
                 </div>
             </div>
-
             <div class="dropdown">
                 <button class="dropdown-btn">Медиа <i class="fas fa-chevron-down"></i></button>
                 <div class="dropdown-content">
@@ -681,14 +171,11 @@
                     <a href="туризм аналитика.html"><i class="fas fa-chart-pie"></i> Аналитика</a>
                 </div>
             </div>
-
             <a class="nav-link" href="туризм кабинет.html" id="profileNavLink" style="display: none;">Личный кабинет</a>
         </div>
-
         <div class="burger-menu" id="burgerMenu">
             <span></span><span></span><span></span>
         </div>
-
         <div class="right-panel">
             <div class="currency-selector">
                 <i class="fas fa-exchange-alt" style="color:#1F6E8C;"></i>
@@ -702,12 +189,10 @@
                     <option value="JPY">¥ JPY</option>
                 </select>
             </div>
-
             <div class="auth-section" id="authButtons">
                 <button class="btn-login" onclick="window.location.href='туризм вход.html'">Вход</button>
                 <button class="btn-register" onclick="window.location.href='туризм вход.html'">Регистрация</button>
             </div>
-
             <div id="userInfo" style="display: none;">
                 <div class="user-panel">
                     <span class="user-name" id="userNameDisplay"></span>
@@ -717,23 +202,7 @@
         </div>
     </nav>
 
-    <!-- МОБИЛЬНОЕ МЕНЮ -->
-    <div class="mobile-nav-overlay" id="mobileOverlay"></div>
-    <div class="mobile-nav" id="mobileNav">
-        <div class="close-mobile-nav" id="closeMobileNav">&times;</div>
-        <a href="туризм главная.html"><i class="fas fa-home"></i> Главная</a>
-        <div class="mobile-section-title">ПУТЕШЕСТВИЯ</div>
-        <a href="туризм направления.html"><i class="fas fa-plane"></i> Направления</a>
-        <a href="туризм учет.html"><i class="fas fa-wallet"></i> Мой учёт</a>
-        <a href="туризм бюджет.html"><i class="fas fa-chart-line"></i> Бюджет</a>
-        <div class="mobile-section-title">МЕДИА</div>
-        <a href="туризм фото.html"><i class="fas fa-camera"></i> Фотоальбом</a>
-        <a href="туризм аналитика.html"><i class="fas fa-chart-pie"></i> Аналитика</a>
-        <div class="mobile-section-title">АККАУНТ</div>
-        <a href="туризм кабинет.html" id="mobileProfileLink"><i class="fas fa-user"></i> Личный кабинет</a>
-    </div>
-
-    <!-- ОСНОВНОЙ КОНТЕНТ -->
+    <!-- ========== ОСНОВНОЙ КОНТЕНТ ========== -->
     <div class="page-header">
         <h1>📊 Аналитика расходов</h1>
         <p>Детальная статистика ваших трат в путешествиях</p>
@@ -771,40 +240,18 @@
 </div>
 
 <script>
-    // ========== КОНСТАНТЫ ==========
     const STORAGE_SESSION = 'travelbudget_session';
     const STORAGE_CURRENT_TOUR = 'current_user_tour';
 
-    const exchangeRates = {
-        EUR: 1,
-        USD: 1.09,
-        GBP: 0.86,
-        RUB: 95.5,
-        CHF: 0.98,
-        TRY: 35.2,
-        JPY: 164.5
-    };
-
-    const currencySymbols = {
-        EUR: '€',
-        USD: '$',
-        GBP: '£',
-        RUB: '₽',
-        CHF: '₣',
-        TRY: '₺',
-        JPY: '¥'
-    };
-
+    const exchangeRates = { EUR: 1, USD: 1.09, GBP: 0.86, RUB: 95.5, CHF: 0.98, TRY: 35.2, JPY: 164.5 };
+    const currencySymbols = { EUR: '€', USD: '$', GBP: '£', RUB: '₽', CHF: '₣', TRY: '₺', JPY: '¥' };
     let currentCurrency = 'EUR';
     let lineChart = null;
     let pieChart = null;
 
-    // Категории расходов
     const categoryMapping = {
-        'еда': '🍕 Еда', 'обед': '🍕 Еда', 'завтрак': '🍕 Еда',
-        'ужин': '🍕 Еда', 'кафе': '🍕 Еда', 'ресторан': '🍕 Еда',
-        'транспорт': '🚗 Транспорт', 'такси': '🚗 Транспорт', 'поезд': '🚗 Транспорт',
-        'автобус': '🚗 Транспорт', 'метро': '🚗 Транспорт',
+        'еда': '🍕 Еда', 'обед': '🍕 Еда', 'завтрак': '🍕 Еда', 'ужин': '🍕 Еда', 'кафе': '🍕 Еда', 'ресторан': '🍕 Еда',
+        'транспорт': '🚗 Транспорт', 'такси': '🚗 Транспорт', 'поезд': '🚗 Транспорт', 'автобус': '🚗 Транспорт', 'метро': '🚗 Транспорт',
         'отель': '🏨 Проживание', 'гостиница': '🏨 Проживание', 'хостел': '🏨 Проживание',
         'экскурсия': '🎉 Развлечения', 'музей': '🎉 Развлечения', 'билет': '🎉 Развлечения',
         'сувенир': '🛍️ Покупки', 'магазин': '🛍️ Покупки',
@@ -874,26 +321,14 @@
     function filterExpensesByPeriod(expenses, period) {
         const now = new Date();
         const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-
         return expenses.filter(exp => {
             const expDate = exp.date ? new Date(exp.date) : new Date();
             expDate.setHours(0, 0, 0, 0);
-
             switch(period) {
-                case 'week':
-                    const weekAgo = new Date(today);
-                    weekAgo.setDate(today.getDate() - 7);
-                    return expDate >= weekAgo;
-                case 'month':
-                    const monthAgo = new Date(today);
-                    monthAgo.setMonth(today.getMonth() - 1);
-                    return expDate >= monthAgo;
-                case 'year':
-                    const yearAgo = new Date(today);
-                    yearAgo.setFullYear(today.getFullYear() - 1);
-                    return expDate >= yearAgo;
-                default:
-                    return true;
+                case 'week': const weekAgo = new Date(today); weekAgo.setDate(today.getDate() - 7); return expDate >= weekAgo;
+                case 'month': const monthAgo = new Date(today); monthAgo.setMonth(today.getMonth() - 1); return expDate >= monthAgo;
+                case 'year': const yearAgo = new Date(today); yearAgo.setFullYear(today.getFullYear() - 1); return expDate >= yearAgo;
+                default: return true;
             }
         });
     }
@@ -922,10 +357,7 @@
             dailyMap.set(date, (dailyMap.get(date) || 0) + exp.amount);
         });
         const sorted = Array.from(dailyMap.entries()).sort((a, b) => new Date(a[0]) - new Date(b[0]));
-        return {
-            labels: sorted.map(d => d[0]),
-            values: sorted.map(d => d[1])
-        };
+        return { labels: sorted.map(d => d[0]), values: sorted.map(d => d[1]) };
     }
 
     function getBudget() {
@@ -1219,29 +651,10 @@
         return div.innerHTML;
     }
 
-    // Мобильное меню
-    const burgerMenu = document.getElementById('burgerMenu');
-    const mobileNav = document.getElementById('mobileNav');
-    const mobileOverlay = document.getElementById('mobileOverlay');
-    const closeMobileNav = document.getElementById('closeMobileNav');
+    document.getElementById('burgerMenu')?.addEventListener('click', function() {
+        document.getElementById('mobile-menu-unified').style.display = 'block';
+    });
 
-    function openMobileMenu() {
-        mobileNav.classList.add('active');
-        mobileOverlay.classList.add('active');
-        document.body.style.overflow = 'hidden';
-    }
-
-    function closeMobileMenu() {
-        mobileNav.classList.remove('active');
-        mobileOverlay.classList.remove('active');
-        document.body.style.overflow = '';
-    }
-
-    burgerMenu?.addEventListener('click', openMobileMenu);
-    closeMobileNav?.addEventListener('click', closeMobileMenu);
-    mobileOverlay?.addEventListener('click', closeMobileMenu);
-
-    // Инициализация
     document.getElementById('globalCurrencySelect')?.addEventListener('change', changeCurrency);
     document.getElementById('logoutBtn')?.addEventListener('click', logout);
     document.getElementById('periodSelect')?.addEventListener('change', loadAnalytics);
@@ -1254,7 +667,29 @@
 
     updateUI();
 </script>
-
 <script src="demo-account.js"></script>
+
+<!-- УНИВЕРСАЛЬНОЕ МОБИЛЬНОЕ МЕНЮ -->
+<div id="mobile-menu-unified">
+    <div class="close-mobile-unified" onclick="document.getElementById('mobile-menu-unified').style.display='none'">&times;</div>
+    <div style="margin-bottom:24px; padding-bottom:16px; border-bottom:2px solid #e2edf2;">
+        <div style="display:flex; align-items:center; gap:12px;">
+            <div style="width:44px; height:44px; background:linear-gradient(135deg,#1F6E8C,#2E9A7E); border-radius:12px; display:flex; align-items:center; justify-content:center;"><i class="fas fa-compass" style="color:white; font-size:1.3rem;"></i></div>
+            <span style="font-size:1.3rem; font-weight:800; background:linear-gradient(135deg,#1a2c3e,#1F6E8C); -webkit-background-clip:text; background-clip:text; color:transparent;">TravelBudget</span>
+        </div>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:6px;">
+        <a href="туризм главная.html"><i class="fas fa-home"></i> Главная</a>
+        <a href="туризм направления.html"><i class="fas fa-plane"></i> Направления</a>
+        <a href="туризм учет.html"><i class="fas fa-wallet"></i> Мой учёт</a>
+        <a href="туризм бюджет.html"><i class="fas fa-chart-line"></i> Бюджет</a>
+        <a href="туризм фото.html"><i class="fas fa-camera"></i> Фотоальбом</a>
+        <a href="туризм аналитика.html"><i class="fas fa-chart-pie"></i> Аналитика</a>
+        <a href="туризм кабинет.html"><i class="fas fa-user"></i> Личный кабинет</a>
+    </div>
+    <div style="margin-top:24px; padding-top:16px; border-top:1px solid #e2edf2; text-align:center; font-size:0.7rem; color:#8a9aa8;">
+        <i class="fas fa-shield-alt"></i> TravelBudget v2.0
+    </div>
+</div>
 </body>
 </html>

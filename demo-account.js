@@ -14,22 +14,6 @@
         avatar: null
     };
 
-    // ========== ФОТОГРАФИИ ДЛЯ АЛЬБОМА (без фото) ==========
-    const DEMO_PHOTOS = [
-        { id: 1001, title: 'Закат на Мальдивах', location: 'Мальдивы, Атолл Северный Мале', date: '2025-02-15', description: 'Невероятной красоты закат над океаном. Краски неба просто завораживают!', imageData: null, createdAt: '2025-02-15T12:00:00Z' },
-        { id: 1002, title: 'Вилла на воде', location: 'Мальдивы, курорт Anantara', date: '2025-02-16', description: 'Наша роскошная вилла с прозрачным полом. Прямо под ногами плавают скаты!', imageData: null, createdAt: '2025-02-16T10:30:00Z' },
-        { id: 1003, title: 'Швейцарские Альпы', location: 'Швейцария, Интерлакен', date: '2025-01-10', description: 'Вид на Юнгфрауйох с вершины. Дух захватывает от красоты!', imageData: null, createdAt: '2025-01-10T14:20:00Z' },
-        { id: 1004, title: 'Канатная дорога Фист', location: 'Швейцария, Гриндельвальд', date: '2025-01-11', description: 'Подъём на канатной дороге к леднику. Адреналин и красота!', imageData: null, createdAt: '2025-01-11T09:15:00Z' },
-        { id: 1005, title: 'Храм Большого Будды', location: 'Таиланд, Пхукет', date: '2025-03-05', description: 'Величественный храм с 45-метровой статуей Будды. Место силы!', imageData: null, createdAt: '2025-03-05T11:45:00Z' },
-        { id: 1006, title: 'Острова Пхи-Пхи', location: 'Таиланд, Краби', date: '2025-03-06', description: 'Бухта Майя Бэй — изумрудная вода и белый песок. Райское место!', imageData: null, createdAt: '2025-03-06T13:00:00Z' },
-        { id: 1007, title: 'Амальфитанское побережье', location: 'Италия, Амальфи', date: '2024-10-20', description: 'Пастельные домики, лазурное море и лимончелло — настоящая dolce vita!', imageData: null, createdAt: '2024-10-20T16:30:00Z' },
-        { id: 1008, title: 'Позитано', location: 'Италия, Позитано', date: '2024-10-21', description: 'Самый фотогеничный город Италии. Каждый уголок — открытка!', imageData: null, createdAt: '2024-10-21T10:00:00Z' },
-        { id: 1009, title: 'Станция Сибуя', location: 'Япония, Токио', date: '2024-11-15', description: 'Самый оживлённый перекрёсток мира. Энергия Токио зашкаливает!', imageData: null, createdAt: '2024-11-15T18:45:00Z' },
-        { id: 1010, title: 'Фусими Инари', location: 'Япония, Киото', date: '2024-11-16', description: 'Тысячи красных тории — путь к святыне. Мистическое место.', imageData: null, createdAt: '2024-11-16T09:30:00Z' },
-        { id: 1011, title: 'Старый Тбилиси', location: 'Грузия, Тбилиси', date: '2025-04-12', description: 'Уютные дворики, серные бани и гостеприимство!', imageData: null, createdAt: '2025-04-12T15:20:00Z' },
-        { id: 1012, title: 'Церковь Гергети', location: 'Грузия, Казбек', date: '2025-04-13', description: 'Церковь на фоне гор — одно из самых красивых мест на Кавказе.', imageData: null, createdAt: '2025-04-13T11:00:00Z' }
-    ];
-
     // ========== ПОСЕЩЁННЫЕ МЕСТА (без фото) ==========
     const DEMO_PLACES = [
         { id: 2001, name: 'Вилла на воде, Мальдивы', date: '2025-02-15', description: 'Незабываемые 7 дней в раю! Жили в вилле с прозрачным полом, видели акул и скатов. Обязательно вернёмся!', image: null, createdAt: '2025-02-22T00:00:00Z' },
@@ -107,9 +91,7 @@
             localStorage.setItem('travelbudget_users', JSON.stringify(users));
         }
         
-        if (!localStorage.getItem(`user_photos_${email}`)) {
-            localStorage.setItem(`user_photos_${email}`, JSON.stringify(DEMO_PHOTOS));
-        }
+        // Фото больше не загружаем — массив DEMO_PHOTOS удалён
         
         if (!localStorage.getItem(`user_visited_places_${email}`)) {
             localStorage.setItem(`user_visited_places_${email}`, JSON.stringify(DEMO_PLACES));

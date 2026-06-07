@@ -9,246 +9,49 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #f5f9fc 0%, #eef3f8 100%); color: #1a2c3e; }
+        .container { max-width: 1280px; margin: 0 auto; padding: 0 32px; }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #f5f9fc 0%, #eef3f8 100%);
-            color: #1a2c3e;
-        }
-
-        .container {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 0 32px;
-        }
-
-        /* ========== НАВИГАЦИЯ ========== */
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 16px 0;
-            border-bottom: 1px solid #e2edf2;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            gap: 16px;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-            transition: transform 0.2s ease;
-        }
+        /* НАВИГАЦИЯ */
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid #e2edf2; margin-bottom: 20px; flex-wrap: wrap; gap: 16px; }
+        .logo { display: flex; align-items: center; gap: 10px; cursor: pointer; transition: transform 0.2s ease; }
         .logo:hover { transform: scale(1.02); }
-
-        .logo-icon {
-            width: 42px;
-            height: 42px;
-            background: linear-gradient(135deg, #1F6E8C, #2E9A7E);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 6px 12px rgba(31,110,140,0.2);
-        }
-
+        .logo-icon { width: 42px; height: 42px; background: linear-gradient(135deg, #1F6E8C, #2E9A7E); border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 12px rgba(31,110,140,0.2); }
         .logo-icon i { font-size: 1.3rem; color: white; }
         .logo-text { font-size: 1.4rem; font-weight: 700; color: #1a2c3e; }
-
         .desktop-nav { display: flex; align-items: center; gap: 8px; }
         .dropdown { position: relative; }
-        .dropdown-btn {
-            padding: 8px 20px;
-            border-radius: 40px;
-            font-weight: 500;
-            font-size: 0.9rem;
-            color: #5a6e7a;
-            text-decoration: none;
-            transition: all 0.2s;
-            cursor: pointer;
-            background: transparent;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            border: none;
-            font-family: inherit;
-        }
+        .dropdown-btn { padding: 8px 20px; border-radius: 40px; font-weight: 500; font-size: 0.9rem; color: #5a6e7a; text-decoration: none; transition: all 0.2s; cursor: pointer; background: transparent; display: flex; align-items: center; gap: 8px; border: none; font-family: inherit; }
         .dropdown-btn i { font-size: 0.7rem; transition: transform 0.2s; }
         .dropdown:hover .dropdown-btn i { transform: rotate(180deg); }
         .dropdown-btn:hover { background: white; color: #1F6E8C; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
-        .dropdown-content {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            background: white;
-            min-width: 200px;
-            border-radius: 20px;
-            box-shadow: 0 20px 35px rgba(0,0,0,0.1);
-            border: 1px solid #e2edf2;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(-10px);
-            transition: all 0.2s;
-            z-index: 100;
-        }
+        .dropdown-content { position: absolute; top: 100%; left: 0; background: white; min-width: 200px; border-radius: 20px; box-shadow: 0 20px 35px rgba(0,0,0,0.1); border: 1px solid #e2edf2; opacity: 0; visibility: hidden; transform: translateY(-10px); transition: all 0.2s; z-index: 100; }
         .dropdown:hover .dropdown-content { opacity: 1; visibility: visible; transform: translateY(0); }
-        .dropdown-content a {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 20px;
-            color: #5a6e7a;
-            text-decoration: none;
-            font-size: 0.85rem;
-            transition: all 0.2s;
-        }
+        .dropdown-content a { display: flex; align-items: center; gap: 12px; padding: 12px 20px; color: #5a6e7a; text-decoration: none; font-size: 0.85rem; transition: all 0.2s; }
         .dropdown-content a i { width: 20px; color: #1F6E8C; }
         .dropdown-content a:hover { background: #f8fafc; color: #1F6E8C; }
-        .nav-link {
-            padding: 8px 20px;
-            border-radius: 40px;
-            font-weight: 500;
-            font-size: 0.9rem;
-            color: #5a6e7a;
-            text-decoration: none;
-            transition: all 0.2s;
-            cursor: pointer;
-        }
+        .nav-link { padding: 8px 20px; border-radius: 40px; font-weight: 500; font-size: 0.9rem; color: #5a6e7a; text-decoration: none; transition: all 0.2s; cursor: pointer; background: transparent; }
         .nav-link:hover, .nav-link.active { background: white; color: #1F6E8C; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
         .burger-menu { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 10px; }
         .burger-menu span { width: 25px; height: 2px; background: #1a2c3e; transition: 0.3s; }
-        .mobile-nav {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: -100%;
-            width: 80%;
-            max-width: 300px;
-            height: 100%;
-            background: white;
-            z-index: 1000;
-            padding: 80px 24px 24px;
-            box-shadow: 2px 0 20px rgba(0,0,0,0.1);
-            transition: left 0.3s ease;
-            overflow-y: auto;
-        }
-        .mobile-nav.active { left: 0; display: block; }
-        .mobile-nav-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 999;
-        }
-        .mobile-nav-overlay.active { display: block; }
-        .mobile-nav a {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 14px 0;
-            color: #5a6e7a;
-            text-decoration: none;
-            font-weight: 500;
-            border-bottom: 1px solid #e2edf2;
-        }
-        .mobile-nav a i { width: 24px; color: #1F6E8C; }
-        .mobile-nav .mobile-section-title { font-size: 0.7rem; text-transform: uppercase; color: #8a9aa8; margin-top: 16px; margin-bottom: 8px; letter-spacing: 1px; }
-        .close-mobile-nav { position: absolute; top: 20px; right: 20px; font-size: 1.5rem; cursor: pointer; color: #8a9aa8; }
         .right-panel { display: flex; align-items: center; gap: 16px; }
-        .currency-selector {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: #f8fafc;
-            padding: 6px 16px;
-            border-radius: 40px;
-            border: 1px solid #e2edf2;
-            transition: all 0.2s;
-        }
+        .currency-selector { display: flex; align-items: center; gap: 8px; background: #f8fafc; padding: 6px 16px; border-radius: 40px; border: 1px solid #e2edf2; }
         .currency-selector select { border: none; background: transparent; font-weight: 500; color: #1F6E8C; outline: none; font-family: inherit; cursor: pointer; }
         .auth-section { display: flex; align-items: center; gap: 12px; }
-        .btn-login {
-            background: transparent;
-            border: 1px solid #cbdde6;
-            padding: 8px 24px;
-            border-radius: 40px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            color: #1F6E8C;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
+        .btn-login { background: transparent; border: 1px solid #cbdde6; padding: 8px 24px; border-radius: 40px; font-weight: 600; font-size: 0.9rem; color: #1F6E8C; cursor: pointer; transition: all 0.2s; }
         .btn-login:hover { background: #1F6E8C; color: white; }
-        .btn-register {
-            background: linear-gradient(135deg, #1F6E8C, #2E9A7E);
-            border: none;
-            padding: 8px 24px;
-            border-radius: 40px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            color: white;
-            cursor: pointer;
-            transition: all 0.2s;
-            box-shadow: 0 2px 8px rgba(31,110,140,0.2);
-        }
-        .btn-register:hover { transform: translateY(-2px); box-shadow: 0 6px 14px rgba(31,110,140,0.3); }
-        .user-panel {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            background: #f8fafc;
-            padding: 5px 5px 5px 16px;
-            border-radius: 50px;
-            border: 1px solid #e2edf2;
-        }
+        .btn-register { background: linear-gradient(135deg, #1F6E8C, #2E9A7E); border: none; padding: 8px 24px; border-radius: 40px; font-weight: 600; font-size: 0.9rem; color: white; cursor: pointer; transition: all 0.2s; box-shadow: 0 2px 8px rgba(31,110,140,0.2); }
+        .user-panel { display: flex; align-items: center; gap: 16px; background: #f8fafc; padding: 5px 5px 5px 16px; border-radius: 50px; border: 1px solid #e2edf2; }
         .user-name { font-weight: 700; font-size: 0.9rem; background: linear-gradient(135deg, #1F6E8C, #2E9A7E); -webkit-background-clip: text; background-clip: text; color: transparent; }
-        .logout-btn {
-            background: transparent;
-            border: none;
-            padding: 6px 16px;
-            border-radius: 40px;
-            font-size: 0.8rem;
-            color: #94a3b8;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
+        .logout-btn { background: transparent; border: none; padding: 6px 16px; border-radius: 40px; font-size: 0.8rem; color: #94a3b8; cursor: pointer; transition: all 0.2s; }
         .logout-btn:hover { background: #fee2e2; color: #ef4444; }
-
         @media (max-width: 900px) { .desktop-nav { display: none; } .burger-menu { display: flex; } .navbar { justify-content: space-between; } }
         @media (max-width: 640px) { .right-panel .currency-selector span { display: none; } .container { padding: 0 16px; } }
 
-        /* ========== ВКЛАДКИ ЛИЧНОГО КАБИНЕТА (улучшенные) ========== */
-        .profile-tabs {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 32px;
-            flex-wrap: wrap;
-            border-bottom: 1px solid #e2edf2;
-            padding-bottom: 8px;
-        }
-        .profile-tab {
-            padding: 10px 24px;
-            border-radius: 40px;
-            background: #f8fafc;
-            border: 1px solid #e2edf2;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            font-weight: 600;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+        /* ВКЛАДКИ ЛИЧНОГО КАБИНЕТА */
+        .profile-tabs { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; border-bottom: 1px solid #e2edf2; padding-bottom: 8px; }
+        .profile-tab { padding: 10px 24px; border-radius: 40px; background: #f8fafc; border: 1px solid #e2edf2; cursor: pointer; transition: all 0.25s ease; font-weight: 600; font-size: 0.9rem; display: flex; align-items: center; gap: 8px; }
         .profile-tab i { font-size: 1rem; }
         .profile-tab:hover { background: white; transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0,0,0,0.05); }
         .profile-tab.active { background: linear-gradient(135deg, #1F6E8C, #2E9A7E); color: white; border-color: transparent; box-shadow: 0 8px 18px rgba(31,110,140,0.25); }
@@ -256,35 +59,12 @@
         .tab-content.active { display: block; }
         @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* ========== ОБЩИЕ УЛУЧШЕНИЯ ========== */
-        .settings-panel, .profile-header, .stat-card, .place-card, .tour-item, .checklist-progress {
-            transition: all 0.25s ease;
-        }
-        .stat-card {
-            background: white;
-            padding: 28px 20px;
-            border-radius: 28px;
-            text-align: center;
-            border: 1px solid rgba(31,110,140,0.08);
-            box-shadow: 0 6px 14px rgba(0,0,0,0.02);
-        }
+        .settings-panel, .profile-header, .stat-card, .place-card, .tour-item, .checklist-progress { transition: all 0.25s ease; }
+        .stat-card { background: white; padding: 28px 20px; border-radius: 28px; text-align: center; border: 1px solid rgba(31,110,140,0.08); box-shadow: 0 6px 14px rgba(0,0,0,0.02); }
         .stat-card:hover { transform: translateY(-6px); box-shadow: 0 20px 30px rgba(31,110,140,0.12); border-color: rgba(31,110,140,0.2); }
         .stat-number { font-size: 2.6rem; font-weight: 800; background: linear-gradient(135deg, #1F6E8C, #2E9A7E); -webkit-background-clip: text; background-clip: text; color: transparent; }
         .section-title { font-size: 1.5rem; font-weight: 700; margin: 40px 0 20px; display: flex; align-items: center; gap: 12px; }
-        .add-trip-btn {
-            background: linear-gradient(135deg, #1F6E8C, #2E9A7E);
-            border: none;
-            padding: 10px 24px;
-            border-radius: 40px;
-            color: white;
-            cursor: pointer;
-            margin-left: auto;
-            transition: all 0.2s;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
+        .add-trip-btn { background: linear-gradient(135deg, #1F6E8C, #2E9A7E); border: none; padding: 10px 24px; border-radius: 40px; color: white; cursor: pointer; margin-left: auto; transition: all 0.2s; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; }
         .add-trip-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 18px rgba(31,110,140,0.3); }
         .place-card { cursor: pointer; transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1); }
         .place-card:hover { transform: translateY(-6px); box-shadow: 0 20px 30px rgba(0,0,0,0.1); }
@@ -296,10 +76,64 @@
         .btn-save-settings:hover, .btn-create:hover, .btn-save:hover { transform: translateY(-2px); filter: brightness(1.02); box-shadow: 0 10px 18px rgba(31,110,140,0.25); }
         .empty-state { text-align: center; padding: 50px 20px; background: white; border-radius: 32px; box-shadow: 0 4px 12px rgba(0,0,0,0.02); }
         footer { text-align: center; padding: 40px 0; border-top: 1px solid rgba(31,110,140,0.15); color: #8a9aa8; margin-top: 40px; }
-
         @media (max-width: 1000px) { .settings-grid { grid-template-columns: 1fr; } .stats-grid { grid-template-columns: repeat(2, 1fr); } .visited-places { grid-template-columns: repeat(2, 1fr); } }
         @media (max-width: 768px) { .settings-grid { grid-template-columns: 1fr; } }
         @media (max-width: 640px) { .stats-grid { grid-template-columns: 1fr; } .visited-places { grid-template-columns: 1fr; } .profile-header { flex-direction: column; text-align: center; } .profile-tab { padding: 6px 16px; font-size: 0.8rem; } }
+
+        /* УНИВЕРСАЛЬНОЕ МОБИЛЬНОЕ МЕНЮ */
+        #mobile-menu-unified {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 80%;
+            max-width: 320px;
+            height: 100%;
+            background: white;
+            z-index: 9999;
+            padding: 80px 24px 32px;
+            box-shadow: 4px 0 24px rgba(0,0,0,0.15);
+            overflow-y: auto;
+            border-radius: 0 24px 24px 0;
+            font-family: 'Inter', sans-serif;
+        }
+        #mobile-menu-unified a {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 16px;
+            border-radius: 18px;
+            color: #5a6e7a;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        #mobile-menu-unified a:hover {
+            background: #f0f4f9;
+        }
+        #mobile-menu-unified a i {
+            width: 24px;
+            font-size: 1.1rem;
+            color: #1F6E8C;
+        }
+        .close-mobile-unified {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 36px;
+            height: 36px;
+            background: #f0f4f9;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: #5a6e7a;
+        }
+        .close-mobile-unified:hover {
+            background: #e2edf2;
+        }
     </style>
 </head>
 <body>
@@ -335,8 +169,6 @@
             <div id="userInfo" style="display: none;"><div class="user-panel"><span class="user-name" id="userNameDisplay"></span><button class="logout-btn" id="logoutBtn">Выйти</button></div></div>
         </div>
     </nav>
-    <div class="mobile-nav-overlay" id="mobileOverlay"></div>
-    <div class="mobile-nav" id="mobileNav"><div class="close-mobile-nav" id="closeMobileNav">&times;</div><a href="туризм главная.html"><i class="fas fa-home"></i> Главная</a><div class="mobile-section-title">ПУТЕШЕСТВИЯ</div><a href="туризм направления.html"><i class="fas fa-plane"></i> Направления</a><a href="туризм учет.html"><i class="fas fa-wallet"></i> Мой учёт</a><a href="туризм бюджет.html"><i class="fas fa-chart-line"></i> Бюджет</a><div class="mobile-section-title">МЕДИА</div><a href="туризм фото.html"><i class="fas fa-camera"></i> Фотоальбом</a><a href="туризм аналитика.html"><i class="fas fa-chart-pie"></i> Аналитика</a><div class="mobile-section-title">АККАУНТ</div><a href="туризм кабинет.html" id="mobileProfileLink"><i class="fas fa-user"></i> Личный кабинет</a></div>
 
     <div id="mainContent"></div>
     <footer><p>© 2025 TravelBudget — умный учёт расходов в путешествиях</p></footer>
@@ -347,7 +179,6 @@
 <style>.modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); z-index: 1000; justify-content: center; align-items: center; }.modal.active { display: flex; }.modal-content { background: white; border-radius: 32px; max-width: 500px; width: 90%; padding: 32px; animation: modalFadeIn 0.3s ease; }@keyframes modalFadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }.modal-content input, .modal-content textarea { width: 100%; padding: 12px; margin: 12px 0; border: 1px solid #e2edf2; border-radius: 16px; font-family: inherit; }.modal-buttons { display: flex; gap: 12px; margin-top: 20px; }.btn-save { background: linear-gradient(135deg, #1F6E8C, #2E9A7E); border: none; padding: 10px 24px; border-radius: 40px; color: white; cursor: pointer; }.btn-cancel { background: transparent; border: 1px solid #cbdde6; padding: 10px 24px; border-radius: 40px; cursor: pointer; }</style>
 
 <script>
-    // ========== КОНСТАНТЫ ==========
     const STORAGE_SESSION = 'travelbudget_session';
     const STORAGE_USER_TOURS = 'user_saved_tours';
     const STORAGE_USER_PLACES = 'user_visited_places';
@@ -412,16 +243,47 @@
     function switchTab(tab) { currentTab = tab; renderContent(); }
     function changeCurrency() { currentCurrency = document.getElementById('globalCurrencySelect').value; renderContent(); }
     function logout() { localStorage.removeItem(STORAGE_SESSION); window.location.reload(); }
-    const burgerMenu = document.getElementById('burgerMenu'); const mobileNav = document.getElementById('mobileNav'); const mobileOverlay = document.getElementById('mobileOverlay'); const closeMobileNav = document.getElementById('closeMobileNav');
-    function openMobileMenu() { mobileNav.classList.add('active'); mobileOverlay.classList.add('active'); document.body.style.overflow = 'hidden'; }
-    function closeMobileMenu() { mobileNav.classList.remove('active'); mobileOverlay.classList.remove('active'); document.body.style.overflow = ''; }
-    if(burgerMenu) burgerMenu.addEventListener('click', openMobileMenu); if(closeMobileNav) closeMobileNav.addEventListener('click', closeMobileMenu); if(mobileOverlay) mobileOverlay.addEventListener('click', closeMobileMenu);
-    document.getElementById('globalCurrencySelect')?.addEventListener('change', changeCurrency); document.getElementById('logoutBtn')?.addEventListener('click', logout); document.getElementById('savePlaceBtn')?.addEventListener('click', savePlaceFromModal); document.getElementById('cancelPlaceBtn')?.addEventListener('click', () => { document.getElementById('placeModal').classList.remove('active'); }); window.addEventListener('click', (e) => { if(e.target === document.getElementById('placeModal')) document.getElementById('placeModal').classList.remove('active'); });
+
+    document.getElementById('burgerMenu')?.addEventListener('click', function() {
+        document.getElementById('mobile-menu-unified').style.display = 'block';
+    });
+
+    document.getElementById('globalCurrencySelect')?.addEventListener('change', changeCurrency);
+    document.getElementById('logoutBtn')?.addEventListener('click', logout);
+    document.getElementById('savePlaceBtn')?.addEventListener('click', savePlaceFromModal);
+    document.getElementById('cancelPlaceBtn')?.addEventListener('click', () => { document.getElementById('placeModal').classList.remove('active'); });
+    window.addEventListener('click', (e) => { if(e.target === document.getElementById('placeModal')) document.getElementById('placeModal').classList.remove('active'); });
+
     window.editProfile = editProfile; window.openAddPlaceModal = openAddPlaceModal; window.deletePlace = deletePlace; window.viewPlace = viewPlace; window.loadTourToAccounting = loadTourToAccounting; window.updateAvatar = updateAvatar; window.saveSettings = saveSettings; window.switchTab = switchTab; window.setChecklistCategory = setChecklistCategory; window.toggleChecklistItem = toggleChecklistItem; window.deleteChecklistItem = deleteChecklistItem; window.addNewChecklistItem = addNewChecklistItem; window.resetChecklist = resetChecklist;
+
     const styleAnim = document.createElement('style'); styleAnim.textContent = `@keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } } .avatar:hover .avatar-upload { opacity: 1; }`; document.head.appendChild(styleAnim);
+
     function updateUI() { const user = getCurrentUser(); const authDiv = document.getElementById('authButtons'); const userDiv = document.getElementById('userInfo'); const mobileProfileLink = document.getElementById('mobileProfileLink'); const userNameSpan = document.getElementById('userNameDisplay'); if(user) { authDiv.style.display = 'none'; userDiv.style.display = 'block'; if(mobileProfileLink) mobileProfileLink.style.display = 'flex'; userNameSpan.textContent = user.name || user.email.split('@')[0]; const settings = getSettings(); currentCurrency = settings.defaultCurrency; const currencySelect = document.getElementById('globalCurrencySelect'); if(currencySelect) currencySelect.value = currentCurrency; loadChecklist(); renderContent(); } else { authDiv.style.display = 'flex'; userDiv.style.display = 'none'; if(mobileProfileLink) mobileProfileLink.style.display = 'none'; renderContent(); } }
     updateUI();
 </script>
 <script src="demo-account.js"></script>
+
+<!-- УНИВЕРСАЛЬНОЕ МОБИЛЬНОЕ МЕНЮ -->
+<div id="mobile-menu-unified">
+    <div class="close-mobile-unified" onclick="document.getElementById('mobile-menu-unified').style.display='none'">&times;</div>
+    <div style="margin-bottom:24px; padding-bottom:16px; border-bottom:2px solid #e2edf2;">
+        <div style="display:flex; align-items:center; gap:12px;">
+            <div style="width:44px; height:44px; background:linear-gradient(135deg,#1F6E8C,#2E9A7E); border-radius:12px; display:flex; align-items:center; justify-content:center;"><i class="fas fa-compass" style="color:white; font-size:1.3rem;"></i></div>
+            <span style="font-size:1.3rem; font-weight:800; background:linear-gradient(135deg,#1a2c3e,#1F6E8C); -webkit-background-clip:text; background-clip:text; color:transparent;">TravelBudget</span>
+        </div>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:6px;">
+        <a href="туризм главная.html"><i class="fas fa-home"></i> Главная</a>
+        <a href="туризм направления.html"><i class="fas fa-plane"></i> Направления</a>
+        <a href="туризм учет.html"><i class="fas fa-wallet"></i> Мой учёт</a>
+        <a href="туризм бюджет.html"><i class="fas fa-chart-line"></i> Бюджет</a>
+        <a href="туризм фото.html"><i class="fas fa-camera"></i> Фотоальбом</a>
+        <a href="туризм аналитика.html"><i class="fas fa-chart-pie"></i> Аналитика</a>
+        <a href="туризм кабинет.html"><i class="fas fa-user"></i> Личный кабинет</a>
+    </div>
+    <div style="margin-top:24px; padding-top:16px; border-top:1px solid #e2edf2; text-align:center; font-size:0.7rem; color:#8a9aa8;">
+        <i class="fas fa-shield-alt"></i> TravelBudget v2.0
+    </div>
+</div>
 </body>
 </html>

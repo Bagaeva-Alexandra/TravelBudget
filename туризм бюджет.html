@@ -9,681 +9,99 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #f5f9fc 0%, #eef3f8 100%);
-            color: #1a2c3e;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 32px;
-        }
-
-        /* ========== НАВИГАЦИЯ ========== */
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 16px 0;
-            border-bottom: 1px solid #e2edf2;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            gap: 16px;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-        }
-
-        .logo-icon {
-            width: 42px;
-            height: 42px;
-            background: linear-gradient(135deg, #1F6E8C, #2E9A7E);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .logo-icon i {
-            font-size: 1.3rem;
-            color: white;
-        }
-
-        .logo-text {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: #1a2c3e;
-        }
-
-        .desktop-nav {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .dropdown {
-            position: relative;
-        }
-
-        .dropdown-btn {
-            padding: 8px 20px;
-            border-radius: 40px;
-            font-weight: 500;
-            font-size: 0.9rem;
-            color: #5a6e7a;
-            text-decoration: none;
-            transition: all 0.2s;
-            cursor: pointer;
-            background: transparent;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            border: none;
-            font-family: inherit;
-        }
-
-        .dropdown-btn i {
-            font-size: 0.7rem;
-            transition: transform 0.2s;
-        }
-
-        .dropdown:hover .dropdown-btn i {
-            transform: rotate(180deg);
-        }
-
-        .dropdown-btn:hover {
-            background: white;
-            color: #1F6E8C;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-        }
-
-        .dropdown-content {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            background: white;
-            min-width: 200px;
-            border-radius: 20px;
-            box-shadow: 0 20px 35px rgba(0,0,0,0.1);
-            border: 1px solid #e2edf2;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(-10px);
-            transition: all 0.2s;
-            z-index: 100;
-        }
-
-        .dropdown:hover .dropdown-content {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-
-        .dropdown-content a {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 20px;
-            color: #5a6e7a;
-            text-decoration: none;
-            font-size: 0.85rem;
-            transition: all 0.2s;
-        }
-
-        .dropdown-content a i {
-            width: 20px;
-            color: #1F6E8C;
-        }
-
-        .dropdown-content a:hover {
-            background: #f8fafc;
-            color: #1F6E8C;
-        }
-
-        .nav-link {
-            padding: 8px 20px;
-            border-radius: 40px;
-            font-weight: 500;
-            font-size: 0.9rem;
-            color: #5a6e7a;
-            text-decoration: none;
-            transition: all 0.2s;
-            cursor: pointer;
-            background: transparent;
-        }
-
-        .nav-link:hover,
-        .nav-link.active {
-            background: white;
-            color: #1F6E8C;
-        }
-
-        .burger-menu {
-            display: none;
-            flex-direction: column;
-            gap: 5px;
-            cursor: pointer;
-            padding: 10px;
-        }
-
-        .burger-menu span {
-            width: 25px;
-            height: 2px;
-            background: #1a2c3e;
-            transition: 0.3s;
-        }
-
-        .mobile-nav {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: -100%;
-            width: 80%;
-            max-width: 300px;
-            height: 100%;
-            background: white;
-            z-index: 1000;
-            padding: 80px 24px 24px;
-            box-shadow: 2px 0 20px rgba(0,0,0,0.1);
-            transition: left 0.3s ease;
-            overflow-y: auto;
-        }
-
-        .mobile-nav.active {
-            left: 0;
-        }
-
-        .mobile-nav-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 999;
-        }
-
-        .mobile-nav-overlay.active {
-            display: block;
-        }
-
-        .mobile-nav a {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 14px 0;
-            color: #5a6e7a;
-            text-decoration: none;
-            font-weight: 500;
-            border-bottom: 1px solid #e2edf2;
-        }
-
-        .mobile-nav a i {
-            width: 24px;
-            color: #1F6E8C;
-        }
-
-        .mobile-nav .mobile-section-title {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            color: #8a9aa8;
-            margin-top: 16px;
-            margin-bottom: 8px;
-            letter-spacing: 1px;
-        }
-
-        .close-mobile-nav {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #8a9aa8;
-        }
-
-        .right-panel {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .currency-selector {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: #f8fafc;
-            padding: 6px 16px;
-            border-radius: 40px;
-            border: 1px solid #e2edf2;
-        }
-
-        .currency-selector select {
-            border: none;
-            background: transparent;
-            font-weight: 500;
-            color: #1F6E8C;
-            outline: none;
-            font-family: inherit;
-            cursor: pointer;
-        }
-
-        .auth-section {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .btn-login {
-            background: transparent;
-            border: 1px solid #cbdde6;
-            padding: 8px 24px;
-            border-radius: 40px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            color: #1F6E8C;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .btn-login:hover {
-            background: #1F6E8C;
-            color: white;
-        }
-
-        .btn-register {
-            background: linear-gradient(135deg, #1F6E8C, #2E9A7E);
-            border: none;
-            padding: 8px 24px;
-            border-radius: 40px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            color: white;
-            cursor: pointer;
-            transition: all 0.2s;
-            box-shadow: 0 2px 8px rgba(31,110,140,0.2);
-        }
-
-        .user-panel {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            background: #f8fafc;
-            padding: 5px 5px 5px 16px;
-            border-radius: 50px;
-            border: 1px solid #e2edf2;
-        }
-
-        .user-name {
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
-
-        .logout-btn {
-            background: transparent;
-            border: none;
-            padding: 6px 16px;
-            border-radius: 40px;
-            font-size: 0.8rem;
-            color: #94a3b8;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .logout-btn:hover {
-            background: #fee2e2;
-            color: #ef4444;
-        }
-
-        @media (max-width: 900px) {
-            .desktop-nav {
-                display: none;
-            }
-            .burger-menu {
-                display: flex;
-            }
-            .navbar {
-                justify-content: space-between;
-            }
-        }
-
-        @media (max-width: 640px) {
-            .right-panel .currency-selector span {
-                display: none;
-            }
-            .container {
-                padding: 0 16px;
-            }
-        }
-
-        /* ========== СТИЛИ СТРАНИЦЫ ========== */
-        .page-header {
-            margin-bottom: 32px;
-        }
-
-        .page-header h1 {
-            font-size: 2rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #1a2c3e, #1F6E8C);
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
-        }
-
-        .page-header p {
-            color: #6c7e8c;
-            margin-top: 8px;
-        }
-
-        .budget-main-card {
-            background: linear-gradient(135deg, #1F6E8C, #2E9A7E);
-            border-radius: 32px;
-            padding: 40px;
-            margin-bottom: 32px;
-            color: white;
-        }
-
-        .budget-label {
-            font-size: 0.9rem;
-            opacity: 0.9;
-            margin-bottom: 8px;
-        }
-
-        .budget-input-group {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            flex-wrap: wrap;
-            margin: 20px 0;
-        }
-
-        .budget-input {
-            background: rgba(255,255,255,0.2);
-            border: 1px solid rgba(255,255,255,0.3);
-            border-radius: 60px;
-            padding: 14px 24px;
-            font-size: 1.2rem;
-            color: white;
-            font-family: inherit;
-            width: 200px;
-        }
-
-        .budget-input::placeholder {
-            color: rgba(255,255,255,0.6);
-        }
-
-        .budget-input:focus {
-            outline: none;
-            background: rgba(255,255,255,0.3);
-        }
-
-        .btn-set-budget {
-            background: white;
-            border: none;
-            padding: 14px 32px;
-            border-radius: 60px;
-            font-weight: 600;
-            color: #1F6E8C;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .btn-set-budget:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-        }
-
-        .budget-display {
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255,255,255,0.2);
-        }
-
-        .budget-progress {
-            background: rgba(255,255,255,0.3);
-            border-radius: 20px;
-            height: 12px;
-            overflow: hidden;
-            margin: 16px 0;
-        }
-
-        .budget-progress-bar {
-            background: white;
-            height: 100%;
-            border-radius: 20px;
-            transition: width 0.5s ease;
-        }
-
-        .budget-stats {
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 16px;
-            margin-top: 16px;
-        }
-
-        .budget-stat-item {
-            background: rgba(255,255,255,0.15);
-            padding: 12px 20px;
-            border-radius: 20px;
-            text-align: center;
-        }
-
-        .budget-stat-value {
-            font-size: 1.3rem;
-            font-weight: 700;
-        }
-
-        .budget-stat-label {
-            font-size: 0.75rem;
-            opacity: 0.8;
-        }
-
-        .categories-section {
-            background: white;
-            border-radius: 28px;
-            padding: 32px;
-            margin-bottom: 32px;
-            border: 1px solid rgba(31,110,140,0.1);
-        }
-
-        .section-title {
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin-bottom: 24px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .categories-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-        }
-
-        .category-card {
-            background: #f8fafc;
-            border-radius: 20px;
-            padding: 20px;
-            transition: all 0.3s;
-            cursor: pointer;
-        }
-
-        .category-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-        }
-
-        .category-icon {
-            font-size: 2rem;
-            margin-bottom: 12px;
-        }
-
-        .category-name {
-            font-weight: 600;
-            margin-bottom: 12px;
-        }
-
-        .category-progress {
-            background: #e2edf2;
-            border-radius: 10px;
-            height: 6px;
-            overflow: hidden;
-            margin: 12px 0;
-        }
-
-        .category-progress-bar {
-            height: 100%;
-            border-radius: 10px;
-            transition: width 0.3s ease;
-        }
-
-        .category-stats {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.8rem;
-            color: #6c7e8c;
-        }
-
-        .category-spent {
-            font-weight: 600;
-            color: #1F6E8C;
-        }
-
-        .tips-section {
-            background: white;
-            border-radius: 28px;
-            padding: 32px;
-            margin-bottom: 32px;
-            border: 1px solid rgba(31,110,140,0.1);
-        }
-
-        .tips-list {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .tip-item {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            padding: 16px;
-            background: #f8fafc;
-            border-radius: 20px;
-            transition: all 0.3s;
-        }
-
-        .tip-icon {
-            width: 48px;
-            height: 48px;
-            background: rgba(31,110,140,0.1);
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.3rem;
-        }
-
-        .tip-content {
-            flex: 1;
-        }
-
-        .tip-title {
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .tip-text {
-            font-size: 0.85rem;
-            color: #6c7e8c;
-        }
-
-        .history-section {
-            background: white;
-            border-radius: 28px;
-            padding: 32px;
-            margin-bottom: 32px;
-            border: 1px solid rgba(31,110,140,0.1);
-        }
-
-        .history-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .history-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 16px;
-            background: #f8fafc;
-            border-radius: 16px;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 60px;
-            background: white;
-            border-radius: 28px;
-        }
-
-        footer {
-            text-align: center;
-            padding: 40px 0;
-            border-top: 1px solid rgba(31,110,140,0.15);
-            color: #8a9aa8;
-            margin-top: 40px;
-        }
-
-        @media (max-width: 900px) {
-            .categories-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (max-width: 640px) {
-            .categories-grid {
-                grid-template-columns: 1fr;
-            }
-            .budget-stats {
-                flex-direction: column;
-            }
-            .budget-stat-item {
-                text-align: left;
-            }
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #f5f9fc 0%, #eef3f8 100%); color: #1a2c3e; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
+
+        /* НАВИГАЦИЯ */
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid #e2edf2; margin-bottom: 20px; flex-wrap: wrap; gap: 16px; }
+        .logo { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+        .logo-icon { width: 42px; height: 42px; background: linear-gradient(135deg, #1F6E8C, #2E9A7E); border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+        .logo-icon i { font-size: 1.3rem; color: white; }
+        .logo-text { font-size: 1.4rem; font-weight: 700; color: #1a2c3e; }
+        .desktop-nav { display: flex; align-items: center; gap: 8px; }
+        .dropdown { position: relative; }
+        .dropdown-btn { padding: 8px 20px; border-radius: 40px; font-weight: 500; font-size: 0.9rem; color: #5a6e7a; text-decoration: none; transition: all 0.2s; cursor: pointer; background: transparent; display: flex; align-items: center; gap: 8px; border: none; font-family: inherit; }
+        .dropdown-btn i { font-size: 0.7rem; transition: transform 0.2s; }
+        .dropdown:hover .dropdown-btn i { transform: rotate(180deg); }
+        .dropdown-btn:hover { background: white; color: #1F6E8C; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+        .dropdown-content { position: absolute; top: 100%; left: 0; background: white; min-width: 200px; border-radius: 20px; box-shadow: 0 20px 35px rgba(0,0,0,0.1); border: 1px solid #e2edf2; opacity: 0; visibility: hidden; transform: translateY(-10px); transition: all 0.2s; z-index: 100; }
+        .dropdown:hover .dropdown-content { opacity: 1; visibility: visible; transform: translateY(0); }
+        .dropdown-content a { display: flex; align-items: center; gap: 12px; padding: 12px 20px; color: #5a6e7a; text-decoration: none; font-size: 0.85rem; transition: all 0.2s; }
+        .dropdown-content a i { width: 20px; color: #1F6E8C; }
+        .dropdown-content a:hover { background: #f8fafc; color: #1F6E8C; }
+        .nav-link { padding: 8px 20px; border-radius: 40px; font-weight: 500; font-size: 0.9rem; color: #5a6e7a; text-decoration: none; transition: all 0.2s; cursor: pointer; background: transparent; }
+        .nav-link:hover, .nav-link.active { background: white; color: #1F6E8C; }
+        .burger-menu { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 10px; }
+        .burger-menu span { width: 25px; height: 2px; background: #1a2c3e; transition: 0.3s; }
+        .right-panel { display: flex; align-items: center; gap: 16px; }
+        .currency-selector { display: flex; align-items: center; gap: 8px; background: #f8fafc; padding: 6px 16px; border-radius: 40px; border: 1px solid #e2edf2; }
+        .currency-selector select { border: none; background: transparent; font-weight: 500; color: #1F6E8C; outline: none; font-family: inherit; cursor: pointer; }
+        .auth-section { display: flex; align-items: center; gap: 12px; }
+        .btn-login { background: transparent; border: 1px solid #cbdde6; padding: 8px 24px; border-radius: 40px; font-weight: 600; font-size: 0.9rem; color: #1F6E8C; cursor: pointer; transition: all 0.2s; }
+        .btn-login:hover { background: #1F6E8C; color: white; }
+        .btn-register { background: linear-gradient(135deg, #1F6E8C, #2E9A7E); border: none; padding: 8px 24px; border-radius: 40px; font-weight: 600; font-size: 0.9rem; color: white; cursor: pointer; transition: all 0.2s; box-shadow: 0 2px 8px rgba(31,110,140,0.2); }
+        .user-panel { display: flex; align-items: center; gap: 16px; background: #f8fafc; padding: 5px 5px 5px 16px; border-radius: 50px; border: 1px solid #e2edf2; }
+        .user-name { font-weight: 600; font-size: 0.9rem; color: #1F6E8C; }
+        .logout-btn { background: transparent; border: none; padding: 6px 16px; border-radius: 40px; font-size: 0.8rem; color: #94a3b8; cursor: pointer; transition: all 0.2s; }
+        .logout-btn:hover { background: #fee2e2; color: #ef4444; }
+        @media (max-width: 900px) { .desktop-nav { display: none; } .burger-menu { display: flex; } .navbar { justify-content: space-between; } }
+        @media (max-width: 640px) { .right-panel .currency-selector span { display: none; } .container { padding: 0 16px; } }
+
+        /* БЮДЖЕТ */
+        .page-header { margin-bottom: 32px; }
+        .page-header h1 { font-size: 2rem; font-weight: 700; background: linear-gradient(135deg, #1a2c3e, #1F6E8C); background-clip: text; -webkit-background-clip: text; color: transparent; }
+        .page-header p { color: #6c7e8c; margin-top: 8px; }
+        .budget-main-card { background: linear-gradient(135deg, #1F6E8C, #2E9A7E); border-radius: 32px; padding: 40px; margin-bottom: 32px; color: white; }
+        .budget-label { font-size: 0.9rem; opacity: 0.9; margin-bottom: 8px; }
+        .budget-input-group { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin: 20px 0; }
+        .budget-input { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); border-radius: 60px; padding: 14px 24px; font-size: 1.2rem; color: white; font-family: inherit; width: 200px; }
+        .budget-input:focus { outline: none; background: rgba(255,255,255,0.3); }
+        .btn-set-budget { background: white; border: none; padding: 14px 32px; border-radius: 60px; font-weight: 600; color: #1F6E8C; cursor: pointer; transition: all 0.3s; }
+        .btn-set-budget:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
+        .budget-display { margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.2); }
+        .budget-progress { background: rgba(255,255,255,0.3); border-radius: 20px; height: 12px; overflow: hidden; margin: 16px 0; }
+        .budget-progress-bar { background: white; height: 100%; border-radius: 20px; transition: width 0.5s ease; }
+        .budget-stats { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin-top: 16px; }
+        .budget-stat-item { background: rgba(255,255,255,0.15); padding: 12px 20px; border-radius: 20px; text-align: center; }
+        .budget-stat-value { font-size: 1.3rem; font-weight: 700; }
+        .budget-stat-label { font-size: 0.75rem; opacity: 0.8; }
+        .categories-section { background: white; border-radius: 28px; padding: 32px; margin-bottom: 32px; border: 1px solid rgba(31,110,140,0.1); }
+        .section-title { font-size: 1.3rem; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; }
+        .categories-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+        .category-card { background: #f8fafc; border-radius: 20px; padding: 20px; transition: all 0.3s; cursor: pointer; }
+        .category-card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,0.08); }
+        .category-icon { font-size: 2rem; margin-bottom: 12px; }
+        .category-name { font-weight: 600; margin-bottom: 12px; }
+        .category-progress { background: #e2edf2; border-radius: 10px; height: 6px; overflow: hidden; margin: 12px 0; }
+        .category-progress-bar { height: 100%; border-radius: 10px; transition: width 0.3s ease; }
+        .category-stats { display: flex; justify-content: space-between; font-size: 0.8rem; color: #6c7e8c; }
+        .category-spent { font-weight: 600; color: #1F6E8C; }
+        .tips-section { background: white; border-radius: 28px; padding: 32px; margin-bottom: 32px; border: 1px solid rgba(31,110,140,0.1); }
+        .tips-list { display: flex; flex-direction: column; gap: 16px; }
+        .tip-item { display: flex; align-items: center; gap: 16px; padding: 16px; background: #f8fafc; border-radius: 20px; transition: all 0.3s; }
+        .tip-icon { width: 48px; height: 48px; background: rgba(31,110,140,0.1); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; }
+        .tip-content { flex: 1; }
+        .tip-title { font-weight: 600; margin-bottom: 4px; }
+        .tip-text { font-size: 0.85rem; color: #6c7e8c; }
+        .history-section { background: white; border-radius: 28px; padding: 32px; margin-bottom: 32px; border: 1px solid rgba(31,110,140,0.1); }
+        .history-list { display: flex; flex-direction: column; gap: 12px; }
+        .history-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: #f8fafc; border-radius: 16px; flex-wrap: wrap; gap: 8px; }
+        .empty-state { text-align: center; padding: 60px; background: white; border-radius: 28px; }
+        footer { text-align: center; padding: 40px 0; border-top: 1px solid rgba(31,110,140,0.15); color: #8a9aa8; margin-top: 40px; }
+        @media (max-width: 900px) { .categories-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 640px) { .categories-grid { grid-template-columns: 1fr; } .budget-stats { flex-direction: column; } .budget-stat-item { text-align: left; } }
     </style>
 </head>
 <body>
-
 <div class="container">
-    <!-- НАВИГАЦИЯ -->
     <nav class="navbar">
         <div class="logo" onclick="window.location.href='туризм главная.html'">
             <div class="logo-icon"><i class="fas fa-compass"></i></div>
             <span class="logo-text">TravelBudget</span>
         </div>
-
         <div class="desktop-nav">
             <a class="nav-link" href="туризм главная.html">Главная</a>
-
             <div class="dropdown">
                 <button class="dropdown-btn">Путешествия <i class="fas fa-chevron-down"></i></button>
                 <div class="dropdown-content">
@@ -692,7 +110,6 @@
                     <a href="туризм бюджет.html"><i class="fas fa-chart-line"></i> Бюджет</a>
                 </div>
             </div>
-
             <div class="dropdown">
                 <button class="dropdown-btn">Медиа <i class="fas fa-chevron-down"></i></button>
                 <div class="dropdown-content">
@@ -700,15 +117,11 @@
                     <a href="туризм аналитика.html"><i class="fas fa-chart-pie"></i> Аналитика</a>
                 </div>
             </div>
-
-           
             <a class="nav-link" href="туризм кабинет.html" id="profileNavLink" style="display: none;">Личный кабинет</a>
         </div>
-
         <div class="burger-menu" id="burgerMenu">
             <span></span><span></span><span></span>
         </div>
-
         <div class="right-panel">
             <div class="currency-selector">
                 <i class="fas fa-exchange-alt" style="color:#1F6E8C;"></i>
@@ -722,12 +135,10 @@
                     <option value="JPY">¥ JPY</option>
                 </select>
             </div>
-
             <div class="auth-section" id="authButtons">
                 <button class="btn-login" onclick="window.location.href='туризм вход.html'">Вход</button>
                 <button class="btn-register" onclick="window.location.href='туризм вход.html'">Регистрация</button>
             </div>
-
             <div id="userInfo" style="display: none;">
                 <div class="user-panel">
                     <span class="user-name" id="userNameDisplay"></span>
@@ -737,25 +148,6 @@
         </div>
     </nav>
 
-    <!-- МОБИЛЬНОЕ МЕНЮ -->
-    <div class="mobile-nav-overlay" id="mobileOverlay"></div>
-    <div class="mobile-nav" id="mobileNav">
-        <div class="close-mobile-nav" id="closeMobileNav">&times;</div>
-        <a href="туризм главная.html"><i class="fas fa-home"></i> Главная</a>
-        <div class="mobile-section-title">ПУТЕШЕСТВИЯ</div>
-        <a href="туризм направления.html"><i class="fas fa-plane"></i> Направления</a>
-        <a href="туризм учет.html"><i class="fas fa-wallet"></i> Мой учёт</a>
-        <a href="туризм бюджет.html"><i class="fas fa-chart-line"></i> Бюджет</a>
-        <div class="mobile-section-title">МЕДИА</div>
-        <a href="туризм фото.html"><i class="fas fa-camera"></i> Фотоальбом</a>
-        <a href="туризм аналитика.html"><i class="fas fa-chart-pie"></i> Аналитика</a>
-        <div class="mobile-section-title">ИНСТРУМЕНТЫ</div>
-        <a href="туризм чеклист.html"><i class="fas fa-check-square"></i> Чек-лист</a>
-        <div class="mobile-section-title">АККАУНТ</div>
-        <a href="туризм кабинет.html" id="mobileProfileLink"><i class="fas fa-user"></i> Личный кабинет</a>
-    </div>
-
-    <!-- ОСНОВНОЙ КОНТЕНТ -->
     <div class="page-header">
         <h1>💰 Планирование бюджета</h1>
         <p>Установите бюджет на поездку и следите за расходами</p>
@@ -769,7 +161,6 @@
 </div>
 
 <script>
-    // ========== КОНСТАНТЫ ==========
     const STORAGE_SESSION = 'travelbudget_session';
     const STORAGE_CURRENT_TOUR = 'current_user_tour';
     const STORAGE_BUDGET = 'travel_budget';
@@ -777,28 +168,15 @@
     const STORAGE_CATEGORY_BUDGETS = 'category_budgets';
 
     const exchangeRates = {
-        EUR: 1,
-        USD: 1.09,
-        GBP: 0.86,
-        RUB: 95.5,
-        CHF: 0.98,
-        TRY: 35.2,
-        JPY: 164.5
+        EUR: 1, USD: 1.09, GBP: 0.86, RUB: 95.5, CHF: 0.98, TRY: 35.2, JPY: 164.5
     };
 
     const currencySymbols = {
-        EUR: '€',
-        USD: '$',
-        GBP: '£',
-        RUB: '₽',
-        CHF: '₣',
-        TRY: '₺',
-        JPY: '¥'
+        EUR: '€', USD: '$', GBP: '£', RUB: '₽', CHF: '₣', TRY: '₺', JPY: '¥'
     };
 
     let currentCurrency = 'EUR';
 
-    // Категории
     const categories = [
         { name: '🍕 Еда', icon: 'fa-utensils', color: '#2E9A7E' },
         { name: '🚗 Транспорт', icon: 'fa-car', color: '#1F6E8C' },
@@ -810,7 +188,6 @@
         { name: '📱 Другое', icon: 'fa-ellipsis-h', color: '#95A5A6' }
     ];
 
-    // ========== КОНВЕРТАЦИЯ ==========
     function convertToEUR(amount, fromCurrency) {
         const rate = exchangeRates[fromCurrency];
         return amount / rate;
@@ -854,27 +231,19 @@
 
     function getCategoryForExpense(name) {
         const lowerName = name.toLowerCase();
-
-        if (lowerName.includes('еда') || lowerName.includes('обед') ||
-            lowerName.includes('завтрак') || lowerName.includes('ужин') ||
-            lowerName.includes('кафе') || lowerName.includes('ресторан')) {
+        if (lowerName.includes('еда') || lowerName.includes('обед') || lowerName.includes('завтрак') || lowerName.includes('ужин') || lowerName.includes('кафе') || lowerName.includes('ресторан')) {
             return '🍕 Еда';
         }
-        if (lowerName.includes('транспорт') || lowerName.includes('такси') ||
-            lowerName.includes('поезд') || lowerName.includes('автобус') ||
-            lowerName.includes('метро')) {
+        if (lowerName.includes('транспорт') || lowerName.includes('такси') || lowerName.includes('поезд') || lowerName.includes('автобус') || lowerName.includes('метро')) {
             return '🚗 Транспорт';
         }
-        if (lowerName.includes('отель') || lowerName.includes('гостиница') ||
-            lowerName.includes('хостел')) {
+        if (lowerName.includes('отель') || lowerName.includes('гостиница') || lowerName.includes('хостел')) {
             return '🏨 Проживание';
         }
-        if (lowerName.includes('экскурсия') || lowerName.includes('музей') ||
-            lowerName.includes('билет')) {
+        if (lowerName.includes('экскурсия') || lowerName.includes('музей') || lowerName.includes('билет')) {
             return '🎉 Развлечения';
         }
-        if (lowerName.includes('сувенир') || lowerName.includes('магазин') ||
-            lowerName.includes('покупка')) {
+        if (lowerName.includes('сувенир') || lowerName.includes('магазин') || lowerName.includes('покупка')) {
             return '🛍️ Покупки';
         }
         if (lowerName.includes('кофе') || lowerName.includes('чай')) {
@@ -889,12 +258,10 @@
     function getCategorySpending(expenses) {
         const spending = {};
         categories.forEach(cat => { spending[cat.name] = 0; });
-
         expenses.forEach(exp => {
             const category = getCategoryForExpense(exp.name);
             spending[category] = (spending[category] || 0) + exp.amount;
         });
-
         return spending;
     }
 
@@ -977,16 +344,10 @@
     function showToast(message, type) {
         const toast = document.createElement('div');
         toast.style.cssText = `
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
+            position: fixed; bottom: 20px; right: 20px;
             background: ${type === 'success' ? '#2E9A7E' : '#E74C3C'};
-            color: white;
-            padding: 12px 24px;
-            border-radius: 12px;
-            font-size: 0.9rem;
-            z-index: 1000;
-            animation: slideIn 0.3s ease;
+            color: white; padding: 12px 24px; border-radius: 12px; font-size: 0.9rem;
+            z-index: 1000; animation: slideIn 0.3s ease;
             box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         `;
         toast.textContent = message;
@@ -1004,7 +365,6 @@
         return div.innerHTML;
     }
 
-    // ========== ОСНОВНАЯ ЛОГИКА ==========
     function generateTips(totalSpentConverted, budgetConverted, categorySpendingEUR, categoryLimitsEUR) {
         const tips = [];
 
@@ -1096,7 +456,6 @@
                     <input type="number" id="budgetInput" class="budget-input" placeholder="Сумма" value="${budgetConverted || ''}" step="100">
                     <button class="btn-set-budget" id="setBudgetBtn">Установить бюджет</button>
                 </div>
-
                 ${budgetConverted > 0 ? `
                 <div class="budget-display">
                     <div class="budget-progress">
@@ -1204,7 +563,6 @@
         });
     }
 
-    // ========== ОБРАБОТЧИКИ ==========
     function updateUI() {
         const user = getCurrentUser();
         const authDiv = document.getElementById('authButtons');
@@ -1247,53 +605,49 @@
         showToast('👋 Вы вышли из аккаунта', 'success');
     }
 
-    // Мобильное меню
-    const burgerMenu = document.getElementById('burgerMenu');
-    const mobileNav = document.getElementById('mobileNav');
-    const mobileOverlay = document.getElementById('mobileOverlay');
-    const closeMobileNav = document.getElementById('closeMobileNav');
-
-    function openMobileMenu() {
-        mobileNav.classList.add('active');
-        mobileOverlay.classList.add('active');
-        document.body.style.overflow = 'hidden';
-    }
-
-    function closeMobileMenu() {
-        mobileNav.classList.remove('active');
-        mobileOverlay.classList.remove('active');
-        document.body.style.overflow = '';
-    }
-
-    burgerMenu?.addEventListener('click', openMobileMenu);
-    closeMobileNav?.addEventListener('click', closeMobileMenu);
-    mobileOverlay?.addEventListener('click', closeMobileMenu);
-
-    // Инициализация
-    document.getElementById('globalCurrencySelect')?.addEventListener('change', changeCurrency);
-    document.getElementById('logoutBtn')?.addEventListener('click', logout);
+    document.getElementById('burgerMenu')?.addEventListener('click', function() {
+        document.getElementById('mobile-menu-unified').style.display = 'block';
+    });
 
     window.openCategoryModal = openCategoryModal;
 
-    // Добавляем стиль для анимации
     const style = document.createElement('style');
     style.textContent = `
         @keyframes slideIn {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
         }
     `;
     document.head.appendChild(style);
 
+    document.getElementById('globalCurrencySelect')?.addEventListener('change', changeCurrency);
+    document.getElementById('logoutBtn')?.addEventListener('click', logout);
+
     updateUI();
 </script>
-
 <script src="demo-account.js"></script>
+
+<!-- УНИВЕРСАЛЬНОЕ МОБИЛЬНОЕ МЕНЮ -->
+<div id="mobile-menu-unified">
+    <div class="close-mobile-unified" onclick="document.getElementById('mobile-menu-unified').style.display='none'">&times;</div>
+    <div style="margin-bottom:24px; padding-bottom:16px; border-bottom:2px solid #e2edf2;">
+        <div style="display:flex; align-items:center; gap:12px;">
+            <div style="width:44px; height:44px; background:linear-gradient(135deg,#1F6E8C,#2E9A7E); border-radius:12px; display:flex; align-items:center; justify-content:center;"><i class="fas fa-compass" style="color:white; font-size:1.3rem;"></i></div>
+            <span style="font-size:1.3rem; font-weight:800; background:linear-gradient(135deg,#1a2c3e,#1F6E8C); -webkit-background-clip:text; background-clip:text; color:transparent;">TravelBudget</span>
+        </div>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:6px;">
+        <a href="туризм главная.html"><i class="fas fa-home"></i> Главная</a>
+        <a href="туризм направления.html"><i class="fas fa-plane"></i> Направления</a>
+        <a href="туризм учет.html"><i class="fas fa-wallet"></i> Мой учёт</a>
+        <a href="туризм бюджет.html"><i class="fas fa-chart-line"></i> Бюджет</a>
+        <a href="туризм фото.html"><i class="fas fa-camera"></i> Фотоальбом</a>
+        <a href="туризм аналитика.html"><i class="fas fa-chart-pie"></i> Аналитика</a>
+        <a href="туризм кабинет.html"><i class="fas fa-user"></i> Личный кабинет</a>
+    </div>
+    <div style="margin-top:24px; padding-top:16px; border-top:1px solid #e2edf2; text-align:center; font-size:0.7rem; color:#8a9aa8;">
+        <i class="fas fa-shield-alt"></i> TravelBudget v2.0
+    </div>
+</div>
 </body>
 </html>
