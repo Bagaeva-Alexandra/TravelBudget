@@ -585,5 +585,44 @@
     updateUI();
 </script>
 <script src="demo-account.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Находим кнопку бургера
+        const burger = document.querySelector('.burger-menu');
+        // Создаём меню, если его нет
+        if (document.getElementById('mobile-menu-simple') === null) {
+            const menu = document.createElement('div');
+            menu.id = 'mobile-menu-simple';
+            menu.style.cssText = `
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: white;
+                z-index: 9999;
+                padding: 40px 20px;
+            `;
+            menu.innerHTML = `
+                <div onclick="document.getElementById('mobile-menu-simple').style.display='none'" style="font-size:40px; position:absolute; top:20px; right:30px; cursor:pointer;">&times;</div>
+                <a href="туризм главная.html" style="display:block; padding:15px 0; font-size:1.2rem; text-decoration:none; color:#1a2c3e;">🏠 Главная</a>
+                <a href="туризм направления.html" style="display:block; padding:15px 0; font-size:1.2rem; text-decoration:none; color:#1a2c3e;">✈️ Направления</a>
+                <a href="туризм учет.html" style="display:block; padding:15px 0; font-size:1.2rem; text-decoration:none; color:#1a2c3e;">💰 Мой учёт</a>
+                <a href="туризм бюджет.html" style="display:block; padding:15px 0; font-size:1.2rem; text-decoration:none; color:#1a2c3e;">📊 Бюджет</a>
+                <a href="туризм фото.html" style="display:block; padding:15px 0; font-size:1.2rem; text-decoration:none; color:#1a2c3e;">📸 Фотоальбом</a>
+                <a href="туризм аналитика.html" style="display:block; padding:15px 0; font-size:1.2rem; text-decoration:none; color:#1a2c3e;">📈 Аналитика</a>
+                <a href="туризм кабинет.html" style="display:block; padding:15px 0; font-size:1.2rem; text-decoration:none; color:#1a2c3e;">👤 Личный кабинет</a>
+            `;
+            document.body.appendChild(menu);
+        }
+        // При клике на бургер открываем меню
+        if (burger) {
+            burger.onclick = function() {
+                document.getElementById('mobile-menu-simple').style.display = 'block';
+            };
+        }
+    });
+</script>
 </body>
 </html>
