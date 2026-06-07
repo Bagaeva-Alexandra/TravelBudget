@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>TravelBudget | Япония: страна восходящего солнца — сакура, самураи, технологии</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(145deg, #f5f9fc 0%, #eef3f8 100%); color: #1a2c3e; overflow-x: hidden; }
+        .tour-container { max-width: 1300px; margin: 0 auto; padding: 32px 28px 60px; }
+        .back-nav { margin-bottom: 40px; }
+        .back-btn { display: inline-flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.9); backdrop-filter: blur(4px); border: 1px solid #cbdde6; padding: 10px 28px; border-radius: 60px; font-weight: 600; font-size: 0.9rem; color: #1F6E8C; cursor: pointer; transition: 0.25s; text-decoration: none; font-family: inherit; }
+        .back-btn i { transition: transform 0.2s; }
+        .back-btn:hover { background: white; border-color: #1F6E8C; transform: translateX(-4px); box-shadow: 0 6px 14px rgba(31,110,140,0.15); }
+        .currency-bar { display: flex; justify-content: flex-end; margin-bottom: 32px; }
+        .currency-selector { display: flex; align-items: center; gap: 12px; background: white; padding: 8px 20px; border-radius: 60px; border: 1px solid #e2edf2; }
+        .currency-selector select { border: none; background: transparent; font-weight: 600; color: #1F6E8C; outline: none; font-family: inherit; cursor: pointer; }
+        .hero-section { display: grid; grid-template-columns: 1.2fr 0.9fr; gap: 32px; margin-bottom: 60px; background: white; border-radius: 48px; overflow: hidden; box-shadow: 0 25px 45px -12px rgba(0,0,0,0.15); border: 1px solid rgba(31,110,140,0.2); }
+        .hero-gallery { position: relative; min-height: 460px; background: #d0dfe8; overflow: hidden; }
+        .main-img { width: 100%; height: 100%; min-height: 460px; object-fit: cover; }
+        .gallery-thumbs { position: absolute; bottom: 20px; left: 20px; right: 20px; display: flex; gap: 12px; overflow-x: auto; padding: 8px 4px; z-index: 5; }
+        .thumb { width: 70px; height: 70px; border-radius: 20px; object-fit: cover; cursor: pointer; border: 2px solid white; opacity: 0.85; transition: 0.2s; flex-shrink: 0; }
+        .thumb.active, .thumb:hover { opacity: 1; transform: scale(1.03); border-color: #FFD966; }
+        .hero-info { padding: 40px 32px 40px 24px; display: flex; flex-direction: column; justify-content: center; }
+        .tour-title { font-size: 2.6rem; font-weight: 800; background: linear-gradient(135deg, #1a2c3e, #1F6E8C); background-clip: text; -webkit-background-clip: text; color: transparent; margin-bottom: 12px; }
+        .tour-location { display: flex; align-items: center; gap: 8px; font-size: 1rem; color: #1F6E8C; font-weight: 500; margin-bottom: 20px; flex-wrap: wrap; }
+        .price-badge { background: linear-gradient(115deg, #1F6E8C10, #2E9A7E10); padding: 16px 20px; border-radius: 32px; margin: 16px 0; display: inline-block; }
+        .tour-price { font-size: 2.3rem; font-weight: 800; color: #1F6E8C; }
+        .tour-price small { font-size: 0.85rem; font-weight: 400; color: #6c7e8c; }
+        .tour-days { background: #eef3f8; display: inline-flex; align-items: center; gap: 8px; padding: 8px 18px; border-radius: 40px; font-weight: 600; margin: 10px 0; }
+        .btn-select-big { background: linear-gradient(135deg, #1F6E8C, #2E9A7E); border: none; padding: 16px 32px; border-radius: 60px; font-weight: 700; font-size: 1rem; color: white; cursor: pointer; width: 100%; margin-top: 28px; transition: 0.25s; }
+        .btn-select-big:hover { transform: translateY(-3px); box-shadow: 0 14px 28px rgba(31,110,140,0.4); }
+        .rich-description { display: grid; grid-template-columns: 2fr 1fr; gap: 32px; margin: 50px 0; }
+        .description-text h2 { font-size: 1.8rem; margin-bottom: 20px; font-weight: 700; position: relative; }
+        .description-text h2:after { content: ''; position: absolute; bottom: -8px; left: 0; width: 70px; height: 4px; background: linear-gradient(90deg, #1F6E8C, #2E9A7E); border-radius: 4px; }
+        .description-text p { line-height: 1.55; color: #2c475c; margin-bottom: 20px; }
+        .highlights-list { list-style: none; margin-top: 24px; }
+        .highlights-list li { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; font-weight: 500; }
+        .highlights-list li i { width: 28px; color: #1F6E8C; font-size: 1.2rem; }
+        .expense-card { background: white; border-radius: 40px; padding: 28px; box-shadow: 0 15px 30px rgba(0,0,0,0.05); border: 1px solid #e2edf2; align-self: start; }
+        .expense-card h3 { font-size: 1.5rem; margin-bottom: 24px; display: flex; align-items: center; gap: 8px; color: #1F6E8C; }
+        .expense-row { display: flex; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid #e2edf2; font-weight: 500; flex-wrap: wrap; gap: 8px; }
+        .total-row { margin-top: 20px; padding-top: 20px; border-top: 2px solid #cbdde6; display: flex; justify-content: space-between; font-weight: 800; font-size: 1.2rem; flex-wrap: wrap; }
+        .fact-block { background: linear-gradient(115deg, #f8fafc, #ffffff); border-radius: 28px; padding: 24px 32px; margin: 40px 0 30px; display: flex; align-items: center; gap: 24px; flex-wrap: wrap; border-left: 6px solid #1F6E8C; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+        .fact-icon { font-size: 2.2rem; color: #1F6E8C; flex-shrink: 0; }
+        .fact-content { flex: 1; }
+        .fact-content strong { color: #1F6E8C; font-size: 1rem; display: inline-block; margin-right: 8px; }
+        .fact-content span { color: #4a6272; line-height: 1.5; }
+        .fact-emoji { font-size: 1.8rem; flex-shrink: 0; color: #2E9A7E; }
+        .info-panel { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin: 40px 0; }
+        .info-card { background: white; border-radius: 28px; padding: 24px 20px; text-align: center; border: 1px solid #e2edf2; transition: 0.2s; }
+        .info-card:hover { transform: translateY(-5px); box-shadow: 0 12px 24px rgba(0,0,0,0.08); }
+        .info-card i { font-size: 2rem; color: #1F6E8C; margin-bottom: 12px; }
+        .info-card h4 { font-size: 1rem; margin-bottom: 6px; }
+        .info-card p { font-size: 0.8rem; color: #7a8e9c; }
+        .collage-gallery { margin: 60px 0; }
+        .collage-gallery h2 { font-size: 1.8rem; margin-bottom: 28px; text-align: center; }
+        .gallery-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+        .gallery-grid img { width: 100%; height: 220px; object-fit: cover; border-radius: 24px; transition: all 0.4s; cursor: pointer; box-shadow: 0 8px 18px rgba(0,0,0,0.08); }
+        .gallery-grid img:hover { transform: scale(1.02); box-shadow: 0 20px 30px rgba(31,110,140,0.2); }
+        .why-tour { background: linear-gradient(125deg, #ffffff, #f8fdfe); border-radius: 48px; padding: 40px 36px; margin: 50px 0; border: 1px solid #d9e9f0; }
+        .why-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 30px; margin-top: 32px; }
+        .why-item { text-align: center; }
+        .why-item i { font-size: 2.4rem; background: linear-gradient(145deg, #1F6E8C, #2E9A7E); background-clip: text; -webkit-background-clip: text; color: transparent; margin-bottom: 16px; display: inline-block; }
+        .why-item h3 { font-size: 1.1rem; margin-bottom: 8px; color: #1a2c3e; }
+        .why-item p { font-size: 0.85rem; color: #6c7e8c; }
+        .daily-schedule { background: #f8fafc; border-radius: 32px; padding: 32px; margin: 40px 0; }
+        .daily-schedule h3 { font-size: 1.4rem; margin-bottom: 24px; color: #1F6E8C; }
+        .schedule-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+        .schedule-day { background: white; border-radius: 20px; padding: 16px; border: 1px solid #e2edf2; }
+        .schedule-day strong { color: #1F6E8C; display: block; margin-bottom: 8px; }
+        @media (max-width: 1000px) { .hero-section { grid-template-columns: 1fr; } .rich-description { grid-template-columns: 1fr; } .why-grid { grid-template-columns: 1fr; } .gallery-grid { grid-template-columns: repeat(2,1fr); } .info-panel { grid-template-columns: repeat(2,1fr); } }
+        @media (max-width: 640px) { .tour-container { padding: 20px 16px; } .tour-title { font-size: 2rem; } .hero-info { padding: 28px 20px; } .gallery-grid { grid-template-columns: 1fr; } .gallery-grid img { height: 200px; } .info-panel { grid-template-columns: 1fr; } .thumb { width: 55px; height: 55px; } .fact-block { padding: 18px 22px; gap: 16px; } }
+        footer { text-align: center; margin-top: 50px; padding-top: 30px; border-top: 1px solid #cbdde6; color: #7a8e9c; font-size: 0.8rem; }
+        .toast-msg { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #1a2c3e; color: white; padding: 12px 28px; border-radius: 60px; font-weight: 500; z-index: 1100; backdrop-filter: blur(12px); background: rgba(26,44,62,0.9); transition: 0.2s; opacity: 0; pointer-events: none; }
+        .toast-msg.show { opacity: 1; }
+    </style>
+</head>
+<body>
+<div class="tour-container">
+    <div class="back-nav">
+        <button class="back-btn" onclick="window.location.href='туризм направления.html'">
+            <i class="fas fa-arrow-left"></i> Вернуться к направлениям
+        </button>
+    </div>
+    <div class="currency-bar">
+        <div class="currency-selector">
+            <i class="fas fa-globe" style="color:#1F6E8C;"></i>
+            <select id="tourCurrencySelect">
+                <option value="EUR">€ EUR</option><option value="USD">$ USD</option><option value="GBP">£ GBP</option>
+                <option value="RUB">₽ RUB</option><option value="CHF">₣ CHF</option><option value="TRY">₺ TRY</option><option value="JPY">¥ JPY</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="hero-section">
+        <div class="hero-gallery">
+            <img id="mainHeroImage" class="main-img" src="https://avatars.mds.yandex.net/i?id=277d4d3f0b511e70fb1c279fe78db083_l-5865432-images-thumbs&n=13" alt="Япония Токио">
+            <div class="gallery-thumbs" id="thumbContainer"></div>
+        </div>
+        <div class="hero-info">
+            <h1 class="tour-title">Япония: страна восходящего солнца</h1>
+            <div class="tour-location"><i class="fas fa-map-pin"></i> Токио, Киото, Осака — Япония</div>
+            <div class="tour-days"><i class="far fa-calendar-alt"></i> 10 дней / 9 ночей | Традиции + футуризм</div>
+            <div class="price-badge">
+                <div class="tour-price" id="dynamicPrice">2200 €</div>
+                <small>на человека, полный пакет (JR Pass + экскурсии)</small>
+            </div>
+            <button class="btn-select-big" id="selectTourBtn"><i class="fas fa-check-circle"></i> Выбрать этот тур →</button>
+        </div>
+    </div>
+
+    <div class="rich-description">
+        <div class="description-text">
+            <h2>Страна контрастов: от неонового Токио до древнего Киото</h2>
+            <p>Япония — это удивительная страна, где футуристические небоскрёбы соседствуют с многовековыми храмами, а роботы встречают вас в ресторанах. Наш тур познакомит вас с бурлящим Токио, традиционным Киото, гастрономической Осакой и священной горой Фудзи.</p>
+            <p>Вы увидите знаменитый переход Сибуя, посетите храм Сэнсодзи, попробуете настоящие суши и рамен, а также примете участие в чайной церемонии. В программе — поездка на скоростном поезде Синкансэн, катание на лодках в Арасияме и знакомство с оленями в Наре. JR Pass включён в стоимость!</p>
+            <ul class="highlights-list">
+                <li><i class="fas fa-train"></i> JR Pass на 7 дней (скоростные поезда Синкансэн)</li>
+                <li><i class="fas fa-tree"></i> Бамбуковая роща Арасияма и храм Фусими Инари</li>
+                <li><i class="fas fa-mountain"></i> Экскурсия к горе Фудзи + онсэн (горячие источники)</li>
+                <li><i class="fas fa-fish"></i> Ужин с суши в районе Цукидзи, мастер-класс</li>
+            </ul>
+        </div>
+        <div class="expense-card">
+            <h3><i class="fas fa-chart-line"></i> Детализация бюджета</h3>
+            <div id="expensesList"></div>
+            <div class="total-row">
+                <span>💰 ИТОГО (все расходы):</span>
+                <span id="totalExpenseAmount">0 €</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="info-panel">
+        <div class="info-card"><i class="fas fa-cherry-blossom"></i><h4>Лучший сезон</h4><p>Март - апрель (сакура) / Октябрь - ноябрь</p></div>
+        <div class="info-card"><i class="fas fa-passport"></i><h4>Визовый режим</h4><p>Электронная виза для россиян</p></div>
+        <div class="info-card"><i class="fas fa-clock"></i><h4>Часовой пояс</h4><p>UTC +9 (МСК +6)</p></div>
+    </div>
+
+    <div class="fact-block">
+        <div class="fact-icon"><i class="fas fa-lightbulb"></i></div>
+        <div class="fact-content">
+            <strong>✨ Интересный факт:</strong>
+            <span>В Японии более 5 миллионов автоматов с напитками, а поезда Синкансэн опаздывают в среднем на 36 секунд за год! Ещё здесь более 1000 храмов в одном только Киото.</span>
+        </div>
+        <div class="fact-emoji">🗾</div>
+    </div>
+
+    <div class="daily-schedule">
+        <h3><i class="fas fa-calendar-week"></i> Примерная программа по дням</h3>
+        <div class="schedule-grid">
+            <div class="schedule-day"><strong>День 1</strong> Прибытие в Токио, заселение</div>
+            <div class="schedule-day"><strong>День 2</strong> Токио: Сибуя, Харадзюку, храм Сэнсодзи</div>
+            <div class="schedule-day"><strong>День 3</strong> Токио: Akihabara, Императорский дворец</div>
+            <div class="schedule-day"><strong>День 4</strong> Поездка к горе Фудзи, онсэн</div>
+            <div class="schedule-day"><strong>День 5</strong> Переезд в Киото, храм Киёмидзу-дэра</div>
+            <div class="schedule-day"><strong>День 6</strong> Киото: Фусими Инари, Арасияма, чайная церемония</div>
+            <div class="schedule-day"><strong>День 7</strong> Киото: Золотой павильон, философская тропа</div>
+            <div class="schedule-day"><strong>День 8</strong> Поездка в Нару (олени, храм Тодайдзи)</div>
+            <div class="schedule-day"><strong>День 9</strong> Осака: замок, Дотонбори, уличная еда</div>
+            <div class="schedule-day"><strong>День 10</strong> Отъезд из Осаки</div>
+        </div>
+    </div>
+
+    <div class="collage-gallery">
+        <h2><i class="fas fa-camera-retro"></i> Атмосфера японского путешествия</h2>
+        <div class="gallery-grid" id="extraGallery"></div>
+    </div>
+
+    <!-- ИСПРАВЛЕНО: fa-bullet-train -> fa-train (100% работает) -->
+    <div class="why-tour">
+        <h2 style="text-align: center;">Почему стоит выбрать этот тур?</h2>
+        <div class="why-grid">
+            <div class="why-item"><i class="fas fa-torii-gate"></i><h3>Культурное погружение</h3><p>Храмы, чайные церемонии, традиции — настоящая Япония.</p></div>
+            <div class="why-item"><i class="fas fa-train"></i><h3>Скоростные поезда</h3><p>JR Pass включён — путешествуйте на Синкансэне без ограничений.</p></div>
+            <div class="why-item"><i class="fas fa-crown"></i><h3>Прозрачная стоимость</h3><p>Полная смета заранее — от авиабилетов до JR Pass и экскурсий.</p></div>
+        </div>
+    </div>
+
+    <footer>© 2025 TravelBudget — умный учёт в путешествиях • Япония: традиции, технологии, гармония</footer>
+</div>
+<div id="toastMsg" class="toast-msg"></div>
+
+<script>
+    const exchangeRates = { EUR: 1, USD: 1.09, GBP: 0.86, RUB: 95.5, CHF: 0.98, TRY: 35.2, JPY: 164.5 };
+    const currencySymbols = { EUR: '€', USD: '$', GBP: '£', RUB: '₽', CHF: '₣', TRY: '₺', JPY: '¥' };
+    let currentCurrency = 'EUR';
+
+    const tourData = {
+        id: 6, name: "Япония: страна восходящего солнца", basePrice: 2200, days: 10,
+        expenses: [
+            { name: "Авиабилеты (Москва - Токио)", amount: 750 },
+            { name: "JR Pass (7 дней, Синкансэн)", amount: 400 },
+            { name: "Проживание (отели 3* в центре)", amount: 700 },
+            { name: "Питание (завтраки + 2 ужина)", amount: 280 },
+            { name: "Экскурсии и трансферы", amount: 220 }
+        ],
+        gallery: [
+            "тур-6-6.jpg",
+            "тур-6-7.jpg",
+            "тур-6-8.avif",
+            "тур-6-9.jpg",
+            "тур-6-10.jpg",
+            "тур-6-11.jpg",
+            "тур-6-12.jpg",
+            "тур-6-13.jpg"
+        ],
+        thumbs: [
+            "тур-6-2.png",
+            "тур-6-3.webp",
+            "тур-6-4.jpg",
+            "тур-6-5.jpg"
+        ]
+    };
+
+    function convertPrice(p) { return p * exchangeRates[currentCurrency]; }
+    function getSymbol() { return currencySymbols[currentCurrency]; }
+    function updateCurrencyUI() { document.getElementById('dynamicPrice').innerHTML = `${convertPrice(tourData.basePrice).toFixed(0)} ${getSymbol()}`; renderExpenses(); }
+    function renderExpenses() {
+        let total = 0;
+        const html = tourData.expenses.map(e => { const a = convertPrice(e.amount); total += a; return `<div class="expense-row"><span><i class="fas fa-receipt"></i> ${e.name}</span><span>${a.toFixed(2)} ${getSymbol()}</span></div>`; }).join('');
+        document.getElementById('expensesList').innerHTML = html;
+        document.getElementById('totalExpenseAmount').innerText = `${total.toFixed(2)} ${getSymbol()}`;
+    }
+    function initGallery() {
+        const thumbContainer = document.getElementById('thumbContainer');
+        const mainImg = document.getElementById('mainHeroImage');
+        tourData.thumbs.forEach((src, idx) => {
+            const img = document.createElement('img'); img.src = src; img.classList.add('thumb');
+            if (idx === 0) img.classList.add('active');
+            img.onclick = () => { mainImg.src = src.replace('w=400', 'w=1200'); document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active')); img.classList.add('active'); };
+            thumbContainer.appendChild(img);
+        });
+        document.getElementById('extraGallery').innerHTML = tourData.gallery.map(url => `<img src="${url}" alt="Япония" onclick="window.open('${url}', '_blank')">`).join('');
+    }
+    const STORAGE_SESSION = 'travelbudget_session';
+    function getCurrentUser() { const s = localStorage.getItem(STORAGE_SESSION); if(s) { try { const d = JSON.parse(s); if(d.expires > Date.now()) return d; localStorage.removeItem(STORAGE_SESSION); } catch(e){} } return null; }
+    function showToast(msg, d=2500) { const t = document.getElementById('toastMsg'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), d); }
+    function saveTourToUser() { const user = getCurrentUser(); if(!user) return false; localStorage.setItem('selected_tour', JSON.stringify({ id: tourData.id, name: tourData.name, country: "Япония", days: tourData.days, expenses: tourData.expenses, totalPrice: tourData.basePrice, image: "https://images.pexels.com/photos/258117/pexels-photo-258117.jpeg?auto=compress&cs=tinysrgb&w=800", location: "Япония, Токио-Киото-Осака" })); return true; }
+    function selectTour() { const user = getCurrentUser(); if(!user) { showToast('🔐 Войдите в аккаунт', 2000); setTimeout(() => { window.location.href = 'туризм вход.html'; }, 1300); return; } saveTourToUser(); showToast(`✅ Тур "${tourData.name}" выбран!`, 1800); setTimeout(() => { window.location.href = 'туризм учет.html'; }, 1000); }
+    document.getElementById('tourCurrencySelect').addEventListener('change', (e) => { currentCurrency = e.target.value; updateCurrencyUI(); });
+    document.getElementById('selectTourBtn').addEventListener('click', selectTour);
+    initGallery(); updateCurrencyUI();
+</script>
+<script src="optimize.js"></script>
+<script src="demo-account.js"></script>
+</body>
+</html>

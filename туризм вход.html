@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TravelBudget | Вход и регистрация</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; min-height: 100vh; background: linear-gradient(135deg, #e8f0f5 0%, #d4e4ed 100%); display: flex; align-items: center; justify-content: center; padding: 20px; position: relative; }
+        .bg-decoration { position: fixed; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: 0; }
+        .bg-decoration .circle { position: absolute; border-radius: 50%; background: linear-gradient(135deg, rgba(31,110,140,0.08), rgba(46,154,126,0.08)); }
+        .circle-1 { width: 400px; height: 400px; top: -150px; right: -100px; }
+        .circle-2 { width: 500px; height: 500px; bottom: -200px; left: -150px; }
+        .circle-3 { width: 200px; height: 200px; top: 50%; left: 20%; }
+        .auth-card { position: relative; z-index: 2; width: 100%; max-width: 480px; background: white; border-radius: 32px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15); overflow: hidden; }
+        .card-header { background: linear-gradient(135deg, #1F6E8C 0%, #2E9A7E 100%); padding: 36px 24px; text-align: center; }
+        .logo-icon { font-size: 3rem; color: white; margin-bottom: 16px; }
+        .card-header h1 { color: white; font-size: 1.8rem; font-weight: 700; margin-bottom: 8px; }
+        .card-header p { color: rgba(255,255,255,0.9); font-size: 0.9rem; }
+        .tabs { display: flex; background: #f9fbfd; border-bottom: 1px solid #e9edf2; }
+        .tab-btn { flex: 1; padding: 18px; background: transparent; border: none; font-size: 1rem; font-weight: 600; color: #7c8b9c; cursor: pointer; transition: all 0.3s; position: relative; font-family: 'Inter', sans-serif; }
+        .tab-btn.active { color: #1F6E8C; background: white; }
+        .tab-btn.active::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #1F6E8C, #2E9A7E); border-radius: 3px 3px 0 0; }
+        .form-panel { padding: 32px; display: none; animation: fadeIn 0.3s ease; }
+        .form-panel.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        .input-group { margin-bottom: 20px; position: relative; }
+        .input-group i { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #9aaebf; font-size: 1.1rem; z-index: 1; }
+        .input-group input { width: 100%; padding: 14px 16px 14px 48px; border: 1.5px solid #e2e8f0; border-radius: 14px; font-size: 1rem; font-family: 'Inter', sans-serif; transition: all 0.3s; background: #fefefe; }
+        .input-group input:focus { outline: none; border-color: #2E9A7E; box-shadow: 0 0 0 3px rgba(46,154,126,0.1); }
+        .password-wrapper { position: relative; }
+        .toggle-password { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #9aaebf; cursor: pointer; z-index: 2; font-size: 1rem; }
+        .form-options { display: flex; justify-content: space-between; align-items: center; margin: 16px 0 24px; font-size: 0.85rem; }
+        .checkbox-label { display: flex; align-items: center; gap: 8px; color: #5a6e84; cursor: pointer; }
+        .checkbox-label input { width: 16px; height: 16px; cursor: pointer; accent-color: #2E9A7E; }
+        .forgot-link, .terms-link { color: #1F6E8C; text-decoration: none; font-weight: 500; transition: opacity 0.2s; }
+        .forgot-link:hover, .terms-link:hover { text-decoration: underline; opacity: 0.8; }
+        .btn-auth { width: 100%; padding: 14px; background: linear-gradient(95deg, #1F6E8C, #2E9A7E); border: none; border-radius: 14px; color: white; font-weight: 600; font-size: 1rem; cursor: pointer; transition: all 0.3s; margin-top: 8px; }
+        .btn-auth:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(31,110,140,0.3); }
+        
+        /* Кнопка демо-входа в стиле страницы */
+        .demo-login-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(95deg, #f8f9fa, #e9ecef);
+            border: 1.5px solid #dee2e6;
+            border-radius: 14px;
+            color: #1F6E8C;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .demo-login-btn:hover {
+            transform: translateY(-2px);
+            background: white;
+            border-color: #1F6E8C;
+            box-shadow: 0 4px 12px rgba(31,110,140,0.15);
+        }
+        
+        .divider { display: flex; align-items: center; text-align: center; margin: 24px 0 20px; color: #9aaebf; font-size: 0.8rem; }
+        .divider::before, .divider::after { content: ''; flex: 1; border-bottom: 1px solid #e9edf2; }
+        .divider span { margin: 0 12px; }
+        .social-buttons { display: flex; gap: 12px; justify-content: center; }
+        .social-btn { flex: 1; padding: 12px; background: white; border: 1.5px solid #e2e8f0; border-radius: 14px; font-weight: 500; color: #5a6e84; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; transition: all 0.3s; font-family: 'Inter', sans-serif; }
+        .social-btn:hover { border-color: #2E9A7E; background: #f8fafc; transform: translateY(-2px); }
+        .message-box { margin-top: 16px; padding: 12px; border-radius: 12px; font-size: 0.85rem; text-align: center; display: none; }
+        .message-box.error { background: #fee2e2; color: #dc2626; display: block; }
+        .message-box.success { background: #e0f2e9; color: #2E9A7E; display: block; }
+        .back-home { text-align: center; margin-top: 24px; padding-top: 20px; border-top: 1px solid #e9edf2; }
+        .back-home a { text-decoration: none; color: #7c8b9c; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 8px; transition: color 0.3s; }
+        .back-home a:hover { color: #1F6E8C; }
+        @media (max-width: 520px) { .form-panel { padding: 24px; } .social-btn { font-size: 0.85rem; } }
+    </style>
+</head>
+<body>
+<div class="bg-decoration"><div class="circle circle-1"></div><div class="circle circle-2"></div><div class="circle circle-3"></div></div>
+<div class="auth-card">
+    <div class="card-header"><div class="logo-icon"><i class="fas fa-map-marked-alt"></i></div><h1>TravelBudget</h1><p>Умный учёт расходов в путешествиях</p></div>
+    <div class="tabs"><button class="tab-btn active" data-tab="login">Вход</button><button class="tab-btn" data-tab="register">Регистрация</button></div>
+    
+    <!-- Панель входа -->
+    <div class="form-panel active" id="loginPanel">
+        <button class="demo-login-btn" id="demoLoginBtn">
+            <i class="fas fa-user-friends"></i> Войти как Александра Багаева (Демо)
+        </button>
+        
+        <div class="divider"><span>или войти с email</span></div>
+        
+        <div class="input-group"><i class="fas fa-envelope"></i><input type="email" id="loginEmail" placeholder="Электронная почта"></div>
+        <div class="input-group"><i class="fas fa-lock"></i><div class="password-wrapper"><input type="password" id="loginPassword" placeholder="Пароль"><button type="button" class="toggle-password" data-target="loginPassword"><i class="far fa-eye-slash"></i></button></div></div>
+        <div class="form-options"><label class="checkbox-label"><input type="checkbox" id="rememberMe"> Запомнить меня</label><a href="#" class="forgot-link" id="forgotPassword">Забыли пароль?</a></div>
+        <button class="btn-auth" id="loginBtn"><i class="fas fa-arrow-right-to-bracket"></i> Войти</button>
+        
+        <div id="loginMessage" class="message-box"></div>
+        <div class="back-home"><a href="туризм главная.html"><i class="fas fa-home"></i> Вернуться на главную</a></div>
+    </div>
+    
+    <!-- Панель регистрации -->
+    <div class="form-panel" id="registerPanel">
+        <div class="input-group"><i class="fas fa-user"></i><input type="text" id="regName" placeholder="Имя и фамилия"></div>
+        <div class="input-group"><i class="fas fa-envelope"></i><input type="email" id="regEmail" placeholder="Электронная почта"></div>
+        <div class="input-group"><i class="fas fa-lock"></i><div class="password-wrapper"><input type="password" id="regPassword" placeholder="Пароль (минимум 6 символов)"><button type="button" class="toggle-password" data-target="regPassword"><i class="far fa-eye-slash"></i></button></div></div>
+        <div class="input-group"><i class="fas fa-check-circle"></i><div class="password-wrapper"><input type="password" id="regConfirmPassword" placeholder="Подтвердите пароль"><button type="button" class="toggle-password" data-target="regConfirmPassword"><i class="far fa-eye-slash"></i></button></div></div>
+        <div class="form-options"><label class="checkbox-label"><input type="checkbox" id="termsCheckbox"> Я соглашаюсь с <a href="#" class="terms-link">условиями использования</a></label></div>
+        <button class="btn-auth" id="registerBtn"><i class="fas fa-user-plus"></i> Зарегистрироваться</button>
+        <div id="registerMessage" class="message-box"></div>
+        <div class="back-home"><a href="туризм главная.html"><i class="fas fa-home"></i> Вернуться на главную</a></div>
+    </div>
+</div>
+
+<script>
+    // ========== КОНСТАНТЫ ==========
+    const STORAGE_USERS = 'travelbudget_users';
+    const DEMO_USER = {
+        id: 'demo_alexandra',
+        name: 'Александра Багаева',
+        email: 'alexandra@travelbudget.demo',
+        password: 'demo123'
+    };
+
+    // ========== ИНИЦИАЛИЗАЦИЯ ХРАНИЛИЩА ==========
+    function initStorage() {
+        if (!localStorage.getItem(STORAGE_USERS)) {
+            const demoUsers = [
+                { id: '1', name: 'Анна Петрова', email: 'anna@travel.com', password: 'anna123' },
+                { id: '2', name: 'Иван Сидоров', email: 'ivan@travel.com', password: 'ivan123' },
+                DEMO_USER
+            ];
+            localStorage.setItem(STORAGE_USERS, JSON.stringify(demoUsers));
+        } else {
+            const users = getUsers();
+            const existingDemo = users.find(u => u.email === DEMO_USER.email);
+            if (!existingDemo) {
+                users.push(DEMO_USER);
+                saveUsers(users);
+            }
+        }
+    }
+
+    function getUsers() {
+        return JSON.parse(localStorage.getItem(STORAGE_USERS)) || [];
+    }
+
+    function saveUsers(users) {
+        localStorage.setItem(STORAGE_USERS, JSON.stringify(users));
+    }
+
+    function showMessage(panel, text, isError = true) {
+        const msgDiv = panel === 'login' ? document.getElementById('loginMessage') : document.getElementById('registerMessage');
+        msgDiv.textContent = text;
+        msgDiv.className = 'message-box ' + (isError ? 'error' : 'success');
+        setTimeout(() => {
+            msgDiv.style.display = 'none';
+        }, 3000);
+    }
+
+    function createSession(email, name, rememberMe = false) {
+        const sessionData = {
+            email: email,
+            name: name,
+            expires: rememberMe ? Date.now() + 30 * 24 * 60 * 60 * 1000 : Date.now() + 24 * 60 * 60 * 1000
+        };
+        localStorage.setItem('travelbudget_session', JSON.stringify(sessionData));
+    }
+
+    function handleLogin(email, password, rememberMe) {
+        if (!email || !password) {
+            showMessage('login', 'Пожалуйста, заполните все поля');
+            return false;
+        }
+        
+        const users = getUsers();
+        const user = users.find(u => u.email === email && u.password === password);
+        
+        if (user) {
+            createSession(user.email, user.name, rememberMe);
+            showMessage('login', 'Вход выполнен успешно! Перенаправление...', false);
+            setTimeout(() => {
+                window.location.href = 'туризм главная.html';
+            }, 1000);
+            return true;
+        } else {
+            showMessage('login', 'Неверный email или пароль');
+            return false;
+        }
+    }
+
+    function handleDemoLogin() {
+        createSession(DEMO_USER.email, DEMO_USER.name, true);
+        localStorage.removeItem('demo_mode_disabled');
+        showMessage('login', 'Вход в демо-аккаунт! Перенаправление...', false);
+        setTimeout(() => {
+            window.location.href = 'туризм главная.html';
+        }, 1000);
+    }
+
+    function handleRegister() {
+        const name = document.getElementById('regName').value.trim();
+        const email = document.getElementById('regEmail').value.trim();
+        const password = document.getElementById('regPassword').value;
+        const confirm = document.getElementById('regConfirmPassword').value;
+        const termsAccepted = document.getElementById('termsCheckbox').checked;
+
+        if (!name || !email || !password || !confirm) {
+            showMessage('register', 'Заполните все поля');
+            return;
+        }
+        if (password.length < 6) {
+            showMessage('register', 'Пароль должен быть не менее 6 символов');
+            return;
+        }
+        if (password !== confirm) {
+            showMessage('register', 'Пароли не совпадают');
+            return;
+        }
+        if (!termsAccepted) {
+            showMessage('register', 'Необходимо согласиться с условиями');
+            return;
+        }
+
+        const users = getUsers();
+        if (users.find(u => u.email === email)) {
+            showMessage('register', 'Пользователь с таким email уже существует');
+            return;
+        }
+
+        const newUser = {
+            id: Date.now().toString(),
+            name: name,
+            email: email,
+            password: password
+        };
+        users.push(newUser);
+        saveUsers(users);
+
+        createSession(newUser.email, newUser.name, false);
+        showMessage('register', 'Регистрация успешна! Перенаправление...', false);
+        setTimeout(() => {
+            window.location.href = 'туризм главная.html';
+        }, 1000);
+    }
+
+    function handleForgotPassword() {
+        alert('Для восстановления пароля обратитесь к администратору.\n\nДемо-аккаунт:\nEmail: alexandra@travelbudget.demo\nПароль: demo123');
+    }
+
+    function setupPasswordToggles() {
+        const toggles = document.querySelectorAll('.toggle-password');
+        toggles.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const targetId = this.getAttribute('data-target');
+                const input = document.getElementById(targetId);
+                const icon = this.querySelector('i');
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                } else {
+                    input.type = 'password';
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
+                }
+            });
+        });
+    }
+
+    function setupTabs() {
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const loginPanel = document.getElementById('loginPanel');
+        const registerPanel = document.getElementById('registerPanel');
+
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tab = btn.getAttribute('data-tab');
+                tabBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                if (tab === 'login') {
+                    loginPanel.classList.add('active');
+                    registerPanel.classList.remove('active');
+                } else {
+                    registerPanel.classList.add('active');
+                    loginPanel.classList.remove('active');
+                }
+            });
+        });
+    }
+
+    // ========== ИНИЦИАЛИЗАЦИЯ ==========
+    document.addEventListener('DOMContentLoaded', () => {
+        initStorage();
+        setupPasswordToggles();
+        setupTabs();
+        
+        document.getElementById('loginBtn').addEventListener('click', () => {
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            const rememberMe = document.getElementById('rememberMe').checked;
+            handleLogin(email, password, rememberMe);
+        });
+        
+        document.getElementById('demoLoginBtn').addEventListener('click', handleDemoLogin);
+        document.getElementById('registerBtn').addEventListener('click', handleRegister);
+        
+        document.getElementById('forgotPassword').addEventListener('click', (e) => {
+            e.preventDefault();
+            handleForgotPassword();
+        });
+        
+        document.getElementById('loginPassword').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const email = document.getElementById('loginEmail').value.trim();
+                const password = document.getElementById('loginPassword').value;
+                const rememberMe = document.getElementById('rememberMe').checked;
+                handleLogin(email, password, rememberMe);
+            }
+        });
+        document.getElementById('regConfirmPassword').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleRegister();
+        });
+    });
+</script>
+<script src="demo-account.js"></script>
+<script src="optimize.js"></script>
+</body>
+</html>

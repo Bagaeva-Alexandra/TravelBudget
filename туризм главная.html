@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TravelBudget | Учёт расходов в путешествии</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #f5f9fc 0%, #eef3f8 100%); color: #1a2c3e; }
+        .container { max-width: 1280px; margin: 0 auto; padding: 0 32px; }
+
+        /* ========== НАВИГАЦИЯ ========== */
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid #e2edf2; margin-bottom: 20px; flex-wrap: wrap; gap: 16px; }
+        .logo { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+        .logo-icon { width: 42px; height: 42px; background: linear-gradient(135deg, #1F6E8C, #2E9A7E); border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+        .logo-icon i { font-size: 1.3rem; color: white; }
+        .logo-text { font-size: 1.4rem; font-weight: 700; color: #1a2c3e; letter-spacing: -0.3px; }
+        .desktop-nav { display: flex; align-items: center; gap: 8px; }
+        .dropdown { position: relative; }
+        .dropdown-btn { padding: 8px 20px; border-radius: 40px; font-weight: 500; font-size: 0.9rem; color: #5a6e7a; text-decoration: none; transition: all 0.2s; cursor: pointer; background: transparent; display: flex; align-items: center; gap: 8px; border: none; font-family: inherit; }
+        .dropdown-btn i { font-size: 0.7rem; transition: transform 0.2s; }
+        .dropdown:hover .dropdown-btn i { transform: rotate(180deg); }
+        .dropdown-btn:hover { background: white; color: #1F6E8C; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+        .dropdown-content { position: absolute; top: 100%; left: 0; background: white; min-width: 200px; border-radius: 20px; box-shadow: 0 20px 35px rgba(0,0,0,0.1); border: 1px solid #e2edf2; opacity: 0; visibility: hidden; transform: translateY(-10px); transition: all 0.2s; z-index: 100; }
+        .dropdown:hover .dropdown-content { opacity: 1; visibility: visible; transform: translateY(0); }
+        .dropdown-content a { display: flex; align-items: center; gap: 12px; padding: 12px 20px; color: #5a6e7a; text-decoration: none; font-size: 0.85rem; transition: all 0.2s; }
+        .dropdown-content a i { width: 20px; color: #1F6E8C; }
+        .dropdown-content a:hover { background: #f8fafc; color: #1F6E8C; }
+        .nav-link { padding: 8px 20px; border-radius: 40px; font-weight: 500; font-size: 0.9rem; color: #5a6e7a; text-decoration: none; transition: all 0.2s; cursor: pointer; background: transparent; }
+        .nav-link:hover { background: white; color: #1F6E8C; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+        .burger-menu { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 10px; }
+        .burger-menu span { width: 25px; height: 2px; background: #1a2c3e; transition: 0.3s; }
+        .mobile-nav { display: none; position: fixed; top: 0; left: -100%; width: 80%; max-width: 300px; height: 100%; background: white; z-index: 1000; padding: 80px 24px 24px; box-shadow: 2px 0 20px rgba(0,0,0,0.1); transition: left 0.3s ease; overflow-y: auto; }
+        .mobile-nav.active { left: 0; }
+        .mobile-nav-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999; }
+        .mobile-nav-overlay.active { display: block; }
+        .mobile-nav a { display: flex; align-items: center; gap: 12px; padding: 14px 0; color: #5a6e7a; text-decoration: none; font-weight: 500; border-bottom: 1px solid #e2edf2; }
+        .mobile-nav a i { width: 24px; color: #1F6E8C; }
+        .mobile-nav .mobile-section-title { font-size: 0.7rem; text-transform: uppercase; color: #8a9aa8; margin-top: 16px; margin-bottom: 8px; letter-spacing: 1px; }
+        .close-mobile-nav { position: absolute; top: 20px; right: 20px; font-size: 1.5rem; cursor: pointer; color: #8a9aa8; }
+        .right-panel { display: flex; align-items: center; gap: 16px; }
+        .currency-selector { display: flex; align-items: center; gap: 8px; background: #f8fafc; padding: 6px 16px; border-radius: 40px; border: 1px solid #e2edf2; }
+        .currency-selector select { border: none; background: transparent; font-weight: 500; color: #1F6E8C; outline: none; font-family: inherit; cursor: pointer; }
+        .auth-section { display: flex; align-items: center; gap: 12px; }
+        .btn-login { background: transparent; border: 1px solid #cbdde6; padding: 8px 24px; border-radius: 40px; font-weight: 600; font-size: 0.9rem; color: #1F6E8C; cursor: pointer; transition: all 0.2s; }
+        .btn-login:hover { background: #1F6E8C; border-color: #1F6E8C; color: white; }
+        .btn-register { background: linear-gradient(135deg, #1F6E8C, #2E9A7E); border: none; padding: 8px 24px; border-radius: 40px; font-weight: 600; font-size: 0.9rem; color: white; cursor: pointer; transition: all 0.2s; box-shadow: 0 2px 8px rgba(31,110,140,0.2); }
+        .btn-register:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(31,110,140,0.3); }
+        .user-panel { display: flex; align-items: center; gap: 16px; background: #f8fafc; padding: 5px 5px 5px 16px; border-radius: 50px; border: 1px solid #e2edf2; }
+        .user-name { font-weight: 600; font-size: 0.9rem; color: #1a2c3e; }
+        .logout-btn { background: transparent; border: none; padding: 6px 16px; border-radius: 40px; font-size: 0.8rem; color: #94a3b8; cursor: pointer; transition: all 0.2s; }
+        .logout-btn:hover { background: #fee2e2; color: #ef4444; }
+        @media (max-width: 900px) { .desktop-nav { display: none; } .burger-menu { display: flex; } .navbar { justify-content: space-between; } }
+        @media (max-width: 640px) { .right-panel .currency-selector span { display: none; } .container { padding: 0 16px; } }
+
+        /* ========== ОСТАЛЬНЫЕ СТИЛИ ========== */
+        .hero { display: flex; justify-content: space-between; align-items: center; gap: 60px; padding: 60px 0 40px; }
+        .hero-left { flex: 1; animation: fadeInUp 0.6s ease; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(31,110,140,0.12); padding: 8px 18px; border-radius: 60px; font-size: 0.85rem; font-weight: 600; color: #1F6E8C; margin-bottom: 28px; }
+        .hero-left h1 { font-size: 3.5rem; font-weight: 800; line-height: 1.2; margin-bottom: 24px; background: linear-gradient(135deg, #1a2c3e, #1F6E8C); background-clip: text; -webkit-background-clip: text; color: transparent; }
+        .hero-left p { font-size: 1.1rem; color: #6c7e8c; line-height: 1.6; margin-bottom: 36px; max-width: 500px; }
+        .hero-stats { display: flex; gap: 48px; margin-bottom: 32px; }
+        .stat { text-align: left; }
+        .stat-number { font-size: 2rem; font-weight: 800; color: #1F6E8C; }
+        .stat-label { font-size: 0.85rem; color: #8a9aa8; margin-top: 4px; }
+        .hero-right { flex: 1; background: linear-gradient(135deg, #e8f4f0, #d4ece4); border-radius: 40px; padding: 48px 32px; text-align: center; animation: fadeInUp 0.6s ease 0.1s both; box-shadow: 0 20px 40px rgba(31,110,140,0.1); }
+        .hero-right i { font-size: 4rem; color: #1F6E8C; margin-bottom: 20px; }
+        .hero-right h3 { font-size: 1.3rem; margin-bottom: 16px; color: #1a2c3e; }
+        .demo-total { font-size: 2.5rem; font-weight: 800; color: #1F6E8C; margin: 20px 0; }
+
+        .how-it-works { padding: 60px 0; background: white; border-radius: 40px; margin: 40px 0; }
+        .steps-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; margin-top: 40px; }
+        .step-card { text-align: center; padding: 20px; }
+        .step-number { width: 50px; height: 50px; background: linear-gradient(135deg, #1F6E8C, #2E9A7E); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 1.5rem; font-weight: 700; color: white; }
+        .step-card h4 { font-size: 1.1rem; margin-bottom: 10px; }
+        .step-card p { font-size: 0.85rem; color: #6c7e8c; }
+
+        .features { padding: 80px 0; }
+        .section-header { text-align: center; margin-bottom: 56px; }
+        .section-header h2 { font-size: 2.2rem; font-weight: 700; margin-bottom: 12px; color: #1a2c3e; }
+        .section-header p { color: #8a9aa8; }
+        .features-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; }
+        .feature-card { background: white; padding: 32px 24px; border-radius: 28px; text-align: center; transition: all 0.4s ease; box-shadow: 0 8px 20px rgba(0,0,0,0.02); border: 1px solid rgba(31,110,140,0.1); cursor: pointer; }
+        .feature-card:hover { transform: translateY(-8px); box-shadow: 0 20px 35px rgba(31,110,140,0.12); border-color: rgba(31,110,140,0.3); }
+        .feature-icon { width: 70px; height: 70px; background: linear-gradient(135deg, rgba(31,110,140,0.1), rgba(46,154,126,0.1)); border-radius: 24px; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; transition: all 0.3s; }
+        .feature-card:hover .feature-icon { transform: scale(1.05); }
+        .feature-icon i { font-size: 32px; color: #1F6E8C; }
+        .feature-card h3 { font-size: 1.2rem; font-weight: 600; margin-bottom: 10px; color: #1a2c3e; }
+        .feature-card p { font-size: 0.85rem; color: #8a9aa8; line-height: 1.5; }
+
+        .testimonials { padding: 60px 0; }
+        .testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+        .testimonial-card { background: white; padding: 28px; border-radius: 24px; border: 1px solid rgba(31,110,140,0.1); transition: all 0.3s; }
+        .testimonial-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(31,110,140,0.1); }
+        .testimonial-text { font-style: italic; color: #4a6572; line-height: 1.6; margin-bottom: 20px; }
+        .testimonial-author { display: flex; align-items: center; gap: 12px; }
+        .testimonial-avatar { width: 45px; height: 45px; background: linear-gradient(135deg, #1F6E8C, #2E9A7E); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; }
+        .testimonial-name { font-weight: 600; }
+        .testimonial-role { font-size: 0.7rem; color: #8a9aa8; }
+
+        .about-section { background: white; border-radius: 40px; padding: 60px 48px; margin: 40px 0; box-shadow: 0 20px 40px rgba(0,0,0,0.03); border: 1px solid rgba(31,110,140,0.1); }
+        .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+        .about-content h2 { font-size: 2rem; font-weight: 700; margin-bottom: 20px; color: #1a2c3e; }
+        .about-content h2 i { color: #1F6E8C; margin-right: 12px; }
+        .about-content p { color: #6c7e8c; line-height: 1.7; margin-bottom: 24px; font-size: 1rem; }
+        .about-features { display: flex; flex-direction: column; gap: 16px; margin-top: 24px; }
+        .about-feature-item { display: flex; align-items: center; gap: 12px; }
+        .about-feature-item i { width: 28px; height: 28px; background: rgba(31,110,140,0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #1F6E8C; font-size: 0.9rem; }
+        .about-feature-item span { color: #4a6572; font-size: 0.95rem; }
+        .about-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+        .about-stat-card { background: linear-gradient(135deg, #f8fbfd, #f0f5f9); padding: 28px; border-radius: 24px; text-align: center; }
+        .about-stat-card .number { font-size: 2rem; font-weight: 800; color: #1F6E8C; }
+        .about-stat-card .label { font-size: 0.85rem; color: #8a9aa8; margin-top: 8px; }
+
+        .widget-section { padding: 40px 0 80px; }
+        .widget-card { background: white; border-radius: 36px; padding: 40px; max-width: 750px; margin: 0 auto; box-shadow: 0 20px 40px rgba(0,0,0,0.05); border: 1px solid rgba(31,110,140,0.15); }
+        .widget-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; flex-wrap: wrap; gap: 16px; }
+        .widget-title { font-size: 1.3rem; font-weight: 700; display: flex; align-items: center; gap: 12px; color: #1a2c3e; }
+        .widget-title i { color: #1F6E8C; font-size: 1.5rem; }
+        .expense-item { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid #f0e8e0; }
+        .expense-info { display: flex; align-items: center; gap: 12px; flex: 1; }
+        .expense-name { font-weight: 500; color: #4a6572; }
+        .expense-amount { font-weight: 700; color: #1F6E8C; font-size: 1.05rem; margin-right: 16px; }
+        .delete-expense { background: none; border: none; color: #cbd5e1; cursor: pointer; font-size: 1rem; transition: all 0.2s; padding: 4px 8px; border-radius: 20px; }
+        .delete-expense:hover { color: #ef4444; background: rgba(239,68,68,0.1); transform: scale(1.1); }
+        .total-line { display: flex; justify-content: space-between; margin-top: 24px; padding-top: 20px; border-top: 2px solid rgba(31,110,140,0.2); font-weight: 800; font-size: 1.3rem; color: #1a2c3e; }
+        .add-form { display: flex; gap: 12px; margin-top: 28px; flex-wrap: wrap; }
+        .add-form input { flex: 1; padding: 14px 20px; border: 2px solid #e2e8f0; border-radius: 60px; font-family: inherit; font-size: 0.95rem; transition: all 0.3s; background: white; }
+        .add-form input:focus { outline: none; border-color: #1F6E8C; box-shadow: 0 0 0 4px rgba(31,110,140,0.1); }
+        .add-btn { background: linear-gradient(135deg, #1F6E8C, #2E9A7E); border: none; padding: 14px 32px; border-radius: 60px; color: white; font-weight: 600; cursor: pointer; transition: all 0.3s; }
+        .add-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(31,110,140,0.3); }
+        .widget-note { font-size: 0.7rem; color: #aab7c4; margin-top: 20px; text-align: center; padding-top: 16px; border-top: 1px solid #f0f3f8; }
+
+        .destinations { padding: 60px 0; }
+        .destinations-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+        .dest-card { background: white; padding: 28px 20px; border-radius: 24px; text-align: center; transition: all 0.4s; border: 1px solid rgba(31,110,140,0.1); cursor: pointer; }
+        .dest-card:hover { transform: translateY(-6px); border-color: #1F6E8C; box-shadow: 0 12px 28px rgba(31,110,140,0.12); }
+        .dest-emoji { font-size: 2.5rem; margin-bottom: 12px; }
+        .dest-card h4 { font-size: 1.1rem; font-weight: 600; margin-bottom: 6px; color: #1a2c3e; }
+        .dest-price { font-size: 0.85rem; color: #1F6E8C; font-weight: 600; }
+
+        .cta { background: linear-gradient(135deg, #1F6E8C, #2E9A7E); border-radius: 40px; padding: 64px 48px; text-align: center; margin: 60px 0; }
+        .cta h2 { font-size: 2rem; font-weight: 700; color: white; margin-bottom: 12px; }
+        .cta p { color: rgba(255,255,255,0.9); margin-bottom: 28px; }
+        .cta-button { background: white; border: none; padding: 14px 40px; border-radius: 60px; font-weight: 700; font-size: 1rem; color: #1F6E8C; cursor: pointer; transition: all 0.3s; }
+        .cta-button:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(0,0,0,0.15); }
+
+        footer { text-align: center; padding: 40px 0; border-top: 1px solid rgba(31,110,140,0.15); color: #8a9aa8; }
+        @media (max-width: 1000px) { .features-grid, .destinations-grid, .steps-grid, .testimonials-grid { grid-template-columns: repeat(2, 1fr); } .about-grid { grid-template-columns: 1fr; gap: 40px; } .hero { flex-direction: column; text-align: center; } .hero-left p { margin: 0 auto; } .hero-stats { justify-content: center; } }
+        @media (max-width: 640px) { .features-grid, .destinations-grid, .steps-grid, .testimonials-grid { grid-template-columns: 1fr; } .hero-left h1 { font-size: 2.2rem; } .widget-header { flex-direction: column; align-items: flex-start; } .about-section { padding: 40px 24px; } }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- НАВИГАЦИЯ -->
+    <nav class="navbar">
+        <div class="logo" onclick="scrollToTop()">
+            <div class="logo-icon"><i class="fas fa-compass"></i></div>
+            <span class="logo-text">TravelBudget</span>
+        </div>
+        <div class="desktop-nav">
+            <a class="nav-link" href="туризм главная.html">Главная</a>
+            <div class="dropdown">
+                <button class="dropdown-btn">Путешествия <i class="fas fa-chevron-down"></i></button>
+                <div class="dropdown-content">
+                    <a href="туризм направления.html"><i class="fas fa-plane"></i> Направления</a>
+                    <a href="туризм учет.html"><i class="fas fa-wallet"></i> Мой учёт</a>
+                    <a href="туризм бюджет.html"><i class="fas fa-chart-line"></i> Бюджет</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropdown-btn">Медиа <i class="fas fa-chevron-down"></i></button>
+                <div class="dropdown-content">
+                    <a href="туризм фото.html"><i class="fas fa-camera"></i> Фотоальбом</a>
+                    <a href="туризм аналитика.html"><i class="fas fa-chart-pie"></i> Аналитика</a>
+                </div>
+            </div>
+            <a class="nav-link" href="туризм кабинет.html">Личный кабинет</a>
+        </div>
+        <div class="burger-menu" id="burgerMenu"><span></span><span></span><span></span></div>
+        <div class="right-panel">
+            <div class="currency-selector"><i class="fas fa-exchange-alt" style="color:#1F6E8C;"></i><select id="currencySelect"><option value="EUR">€ EUR</option><option value="USD">$ USD</option><option value="GBP">£ GBP</option><option value="RUB">₽ RUB</option><option value="CHF">₣ CHF</option><option value="TRY">₺ TRY</option><option value="JPY">¥ JPY</option></select></div>
+            <div class="auth-section" id="authButtons"><button class="btn-login" onclick="window.location.href='туризм вход.html'">Вход</button><button class="btn-register" onclick="window.location.href='туризм вход.html'">Регистрация</button></div>
+            <div id="userInfo" style="display: none;"><div class="user-panel"><span class="user-name" id="userNameDisplay"></span><button class="logout-btn" id="logoutBtn">Выйти</button></div></div>
+        </div>
+    </nav>
+    <div class="mobile-nav-overlay" id="mobileOverlay"></div>
+    <div class="mobile-nav" id="mobileNav">
+        <div class="close-mobile-nav" id="closeMobileNav">&times;</div>
+        <a href="туризм главная.html"><i class="fas fa-home"></i> Главная</a>
+        <div class="mobile-section-title">ПУТЕШЕСТВИЯ</div>
+        <a href="туризм направления.html"><i class="fas fa-plane"></i> Направления</a>
+        <a href="туризм учет.html"><i class="fas fa-wallet"></i> Мой учёт</a>
+        <a href="туризм бюджет.html"><i class="fas fa-chart-line"></i> Бюджет</a>
+        <div class="mobile-section-title">МЕДИА</div>
+        <a href="туризм фото.html"><i class="fas fa-camera"></i> Фотоальбом</a>
+        <a href="туризм аналитика.html"><i class="fas fa-chart-pie"></i> Аналитика</a>
+        <div class="mobile-section-title">АККАУНТ</div>
+        <a href="туризм кабинет.html" id="mobileProfileLink"><i class="fas fa-user"></i> Личный кабинет</a>
+    </div>
+
+    <!-- Hero -->
+    <div class="hero" id="hero">
+        <div class="hero-left">
+            <span class="hero-badge"><i class="fas fa-umbrella-beach"></i> Умный тревел-кошелек</span>
+            <h1>Контролируйте расходы<br>в путешествиях</h1>
+            <p>Добавляйте траты за секунды, следите за бюджетом и наслаждайтесь отпуском без финансовых сюрпризов.</p>
+            <div class="hero-stats">
+                <div class="stat"><div class="stat-number">5,000+</div><div class="stat-label">активных поездок</div></div>
+                <div class="stat"><div class="stat-number">98%</div><div class="stat-label">точности учёта</div></div>
+                <div class="stat"><div class="stat-number">30+</div><div class="stat-label">валют</div></div>
+            </div>
+        </div>
+        <div class="hero-right">
+            <i class="fas fa-chart-line"></i>
+            <h3>Средняя экономия</h3>
+            <div class="demo-total">до 25%</div>
+            <p style="font-size:0.9rem;">путешественников экономят<br>с нашим приложением</p>
+        </div>
+    </div>
+
+    <!-- Как это работает -->
+    <div class="how-it-works">
+        <div class="section-header"><h2>🚀 Как это работает</h2><p>Всего 3 простых шага к контролю бюджета</p></div>
+        <div class="steps-grid">
+            <div class="step-card"><div class="step-number">1</div><h4>Выберите тур</h4><p>Найдите идеальное направление на странице направлений</p></div>
+            <div class="step-card"><div class="step-number">2</div><h4>Добавляйте расходы</h4><p>Фиксируйте каждую трату в учёте</p></div>
+            <div class="step-card"><div class="step-number">3</div><h4>Анализируйте бюджет</h4><p>Смотрите графики и получайте советы</p></div>
+            <div class="step-card"><div class="step-number">✨</div><h4>Наслаждайтесь!</h4><p>Путешествуйте без финансового стресса</p></div>
+        </div>
+    </div>
+
+    <!-- Преимущества -->
+    <div class="features" id="features">
+        <div class="section-header"><h2>Всё для вашего комфорта</h2><p>Простой и понятный учёт расходов в дороге</p></div>
+        <div class="features-grid">
+            <div class="feature-card"><div class="feature-icon"><i class="fas fa-bolt"></i></div><h3>Мгновенные записи</h3><p>Добавляйте траты за секунды</p></div>
+            <div class="feature-card"><div class="feature-icon"><i class="fas fa-chart-line"></i></div><h3>Умная аналитика</h3><p>Графики и диаграммы расходов</p></div>
+            <div class="feature-card"><div class="feature-icon"><i class="fas fa-globe"></i></div><h3>Мультивалютность</h3><p>Автоматический пересчёт</p></div>
+            <div class="feature-card"><div class="feature-icon"><i class="fas fa-sync-alt"></i></div><h3>Синхронизация</h3><p>Данные всегда с вами</p></div>
+        </div>
+    </div>
+
+    <!-- Отзывы -->
+    <div class="testimonials">
+        <div class="section-header"><h2>❤️ Что говорят путешественники</h2><p>Более 5000 довольных пользователей</p></div>
+        <div class="testimonials-grid">
+            <div class="testimonial-card"><div class="testimonial-text">"Отличное приложение! Теперь я точно знаю, сколько трачу в поездках. Очень помогает планировать бюджет."</div><div class="testimonial-author"><div class="testimonial-avatar">А</div><div><div class="testimonial-name">Анна Петрова</div><div class="testimonial-role">Частый путешественник</div></div></div></div>
+            <div class="testimonial-card"><div class="testimonial-text">"Удобно, что можно выбрать любую валюту. В поездке по Европе очень помогло! Рекомендую всем."</div><div class="testimonial-author"><div class="testimonial-avatar">Д</div><div><div class="testimonial-name">Дмитрий Смирнов</div><div class="testimonial-role">Блогер</div></div></div></div>
+            <div class="testimonial-card"><div class="testimonial-text">"Фотоальбом и чек-лист — мои любимые функции. Всё в одном месте, ничего не забываю."</div><div class="testimonial-author"><div class="testimonial-avatar">Е</div><div><div class="testimonial-name">Елена Ковалёва</div><div class="testimonial-role">Семья 4 человека</div></div></div></div>
+        </div>
+    </div>
+
+    <!-- О проекте -->
+    <div class="about-section" id="about">
+        <div class="about-grid">
+            <div class="about-content"><h2><i class="fas fa-info-circle"></i> О проекте TravelBudget</h2><p><strong>TravelBudget</strong> — это современное веб-приложение, разработанное в рамках дипломной работы для помощи путешественникам в учёте расходов.</p><p>Наше приложение позволяет мгновенно фиксировать любые расходы, анализировать бюджет в реальном времени и планировать будущие путешествия.</p><div class="about-features"><div class="about-feature-item"><i class="fas fa-check"></i><span>📊 Полная статистика расходов</span></div><div class="about-feature-item"><i class="fas fa-check"></i><span>💱 Конвертация валют</span></div><div class="about-feature-item"><i class="fas fa-check"></i><span>📸 Фотоальбом путешествий</span></div><div class="about-feature-item"><i class="fas fa-check"></i><span>✅ Чек-лист вещей</span></div></div></div>
+            <div class="about-stats"><div class="about-stat-card"><div class="number">2025</div><div class="label">Год основания</div></div><div class="about-stat-card"><div class="number">5,000+</div><div class="label">Активных пользователей</div></div><div class="about-stat-card"><div class="number">50,000+</div><div class="label">Записанных расходов</div></div><div class="about-stat-card"><div class="number">30+</div><div class="label">Поддерживаемых валют</div></div></div>
+        </div>
+    </div>
+
+    <!-- Популярные направления -->
+    <div class="destinations" id="destinations">
+        <div class="section-header"><h2>✈️ Популярные направления</h2><p>Примерный бюджет на 7 дней для двоих</p></div>
+        <div class="destinations-grid">
+            <div class="dest-card"><div class="dest-emoji">🏝️</div><h4>Мальдивы</h4><div class="dest-price">от 2,500 €</div></div>
+            <div class="dest-card"><div class="dest-emoji">🗻</div><h4>Швейцария</h4><div class="dest-price">от 1,800 €</div></div>
+            <div class="dest-card"><div class="dest-emoji">🍜</div><h4>Таиланд</h4><div class="dest-price">от 800 €</div></div>
+            <div class="dest-card"><div class="dest-emoji">🏰</div><h4>Италия</h4><div class="dest-price">от 1,200 €</div></div>
+        </div>
+    </div>
+
+    <!-- ДЕМО-СЧЁТЧИК РАСХОДОВ (ИСПРАВЛЕН) -->
+    <div class="widget-section" id="widget">
+        <div class="widget-card">
+            <div class="widget-header">
+                <div class="widget-title"><i class="fas fa-wallet"></i><span>💰 Демо-счётчик расходов</span></div>
+            </div>
+            <div id="expenseList"></div>
+            <div class="total-line"><span>📊 Итого</span><span id="totalAmount">0 €</span></div>
+            <div class="add-form">
+                <input type="text" id="expenseName" placeholder="Что купили? (например: Такси, Обед)">
+                <input type="number" id="expenseAmount" placeholder="Сумма" step="0.01" value="">
+                <button class="add-btn" id="addExpenseBtn">➕ Добавить</button>
+            </div>
+            <div class="widget-note">
+                <i class="fas fa-info-circle"></i> 
+                <strong style="color:#1F6E8C;">Попробуйте прямо сейчас!</strong> Добавьте расход — он появится в списке.<br>
+                💡 После регистрации все расходы сохранятся в вашем аккаунте.<br>
+                💱 Сумма автоматически пересчитывается в выбранную валюту.
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta">
+        <h2>Начните контролировать бюджет</h2>
+        <p>Присоединяйтесь к тысячам путешественников</p>
+        <button class="cta-button" onclick="window.location.href='туризм вход.html'">Начать учёт →</button>
+    </div>
+
+    <footer>
+        <p>© 2025 TravelBudget — веб-приложение для учёта расходов в путешествии</p>
+        <p style="margin-top:8px;">Дипломная работа | Современный дизайн | Полноценная авторизация</p>
+    </footer>
+</div>
+
+<script>
+    // ========== КОНСТАНТЫ ==========
+    const STORAGE_SESSION = 'travelbudget_session';
+    const exchangeRates = { EUR: 1, USD: 1.09, GBP: 0.86, RUB: 95.5, CHF: 0.98, TRY: 35.2, JPY: 164.5 };
+    const currencySymbols = { EUR: '€', USD: '$', GBP: '£', RUB: '₽', CHF: '₣', TRY: '₺', JPY: '¥' };
+    let currentCurrency = 'EUR';
+
+    // Демо-данные (суммы уже в EUR, так как изначально были в евро)
+    let demoExpenses = [
+        { name: "Обед в кафе", amount: 24.50 },
+        { name: "Билет на поезд", amount: 12.30 },
+        { name: "Отель (ночь)", amount: 89.00 }
+    ];
+    
+    let currentExpenses = [];
+
+    // ========== КОНВЕРТАЦИЯ ==========
+    function convertFromEUR(amountEUR) {
+        return amountEUR * exchangeRates[currentCurrency];
+    }
+    function getSymbol() {
+        return currencySymbols[currentCurrency];
+    }
+    function formatNumber(num) {
+        return num.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    // ========== РАБОТА С ПОЛЬЗОВАТЕЛЕМ ==========
+    function getCurrentUser() {
+        const session = localStorage.getItem(STORAGE_SESSION);
+        if (session) {
+            try {
+                const data = JSON.parse(session);
+                if (data.expires > Date.now()) return data;
+                localStorage.removeItem(STORAGE_SESSION);
+            } catch(e) {}
+        }
+        return null;
+    }
+
+    function loadExpenses(email) {
+        if (!email) {
+            // Неавторизованный — показываем демо-данные
+            currentExpenses = JSON.parse(JSON.stringify(demoExpenses));
+            renderExpenses();
+            return;
+        }
+        const saved = localStorage.getItem(`expenses_demo_${email}`);
+        if (saved) {
+            currentExpenses = JSON.parse(saved);
+        } else {
+            currentExpenses = JSON.parse(JSON.stringify(demoExpenses));
+            saveExpenses(email);
+        }
+        renderExpenses();
+    }
+
+    function saveExpenses(email) {
+        if (email) {
+            localStorage.setItem(`expenses_demo_${email}`, JSON.stringify(currentExpenses));
+        }
+    }
+
+    function deleteExpense(index) {
+        const user = getCurrentUser();
+        currentExpenses.splice(index, 1);
+        if (user) saveExpenses(user.email);
+        renderExpenses();
+    }
+
+    function renderExpenses() {
+        const container = document.getElementById('expenseList');
+        const totalSpan = document.getElementById('totalAmount');
+        if (!container) return;
+
+        let totalEUR = 0;
+        container.innerHTML = '';
+        const icons = ['fa-utensils', 'fa-train', 'fa-bed', 'fa-taxi', 'fa-gift', 'fa-coffee'];
+
+        if (currentExpenses.length === 0) {
+            container.innerHTML = '<div style="text-align:center; padding:40px; color:#8a9aa8;">✨ Нет расходов. Добавьте первый!</div>';
+            totalSpan.innerText = `0 ${getSymbol()}`;
+            return;
+        }
+
+        currentExpenses.forEach((exp, idx) => {
+            totalEUR += exp.amount;
+            const convertedAmount = convertFromEUR(exp.amount);
+            const symbol = getSymbol();
+            const formattedAmount = formatNumber(convertedAmount);
+            
+            const row = document.createElement('div');
+            row.className = 'expense-item';
+            row.innerHTML = `
+                <div class="expense-info">
+                    <i class="fas ${icons[idx % icons.length]}" style="color:#1F6E8C; width: 30px;"></i>
+                    <span class="expense-name">${escapeHtml(exp.name)}</span>
+                </div>
+                <div style="display:flex; align-items:center; gap:12px;">
+                    <span class="expense-amount">${formattedAmount} ${symbol}</span>
+                    <button class="delete-expense" data-index="${idx}" title="Удалить расход">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </div>
+            `;
+            container.appendChild(row);
+        });
+
+        document.querySelectorAll('.delete-expense').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const index = parseInt(btn.getAttribute('data-index'));
+                deleteExpense(index);
+            });
+        });
+
+        const totalConverted = convertFromEUR(totalEUR);
+        const symbol = getSymbol();
+        totalSpan.innerText = `${formatNumber(totalConverted)} ${symbol}`;
+    }
+
+    function addExpense() {
+        const nameInput = document.getElementById('expenseName');
+        const amountInput = document.getElementById('expenseAmount');
+        const name = nameInput.value.trim();
+        let amount = parseFloat(amountInput.value);
+
+        if (!name) {
+            alert('❌ Введите название расхода');
+            nameInput.style.borderColor = '#ff6b6b';
+            setTimeout(() => nameInput.style.borderColor = '', 1000);
+            return;
+        }
+        if (isNaN(amount) || amount <= 0) {
+            alert('❌ Введите корректную сумму');
+            amountInput.style.borderColor = '#ff6b6b';
+            setTimeout(() => amountInput.style.borderColor = '', 1000);
+            return;
+        }
+
+        // Конвертируем введённую сумму в EUR для хранения
+        // (пользователь ввёл сумму в текущей валюте)
+        const amountEUR = amount / exchangeRates[currentCurrency];
+        
+        currentExpenses.push({ name: name, amount: amountEUR });
+        
+        const user = getCurrentUser();
+        if (user) saveExpenses(user.email);
+        
+        renderExpenses();
+        
+        nameInput.value = '';
+        amountInput.value = '';
+        
+        const btn = document.getElementById('addExpenseBtn');
+        btn.style.transform = 'scale(0.95)';
+        setTimeout(() => btn.style.transform = '', 200);
+    }
+
+    function changeCurrency() {
+        const select = document.getElementById('currencySelect');
+        currentCurrency = select.value;
+        renderExpenses();
+    }
+
+    function logout() {
+        localStorage.removeItem(STORAGE_SESSION);
+        updateUI();
+        alert('👋 Вы вышли из аккаунта');
+        closeMobileMenu();
+    }
+
+    function scrollToTop() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function escapeHtml(str) {
+        const div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
+    }
+
+    // ========== МОБИЛЬНОЕ МЕНЮ ==========
+    const burgerMenu = document.getElementById('burgerMenu');
+    const mobileNav = document.getElementById('mobileNav');
+    const mobileOverlay = document.getElementById('mobileOverlay');
+    const closeMobileNav = document.getElementById('closeMobileNav');
+
+    function openMobileMenu() {
+        mobileNav.classList.add('active');
+        mobileOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeMobileMenu() {
+        mobileNav.classList.remove('active');
+        mobileOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    burgerMenu?.addEventListener('click', openMobileMenu);
+    closeMobileNav?.addEventListener('click', closeMobileMenu);
+    mobileOverlay?.addEventListener('click', closeMobileMenu);
+
+    // ========== ИНИЦИАЛИЗАЦИЯ ==========
+    function updateUI() {
+        const user = getCurrentUser();
+        const authDiv = document.getElementById('authButtons');
+        const userDiv = document.getElementById('userInfo');
+        const profileLink = document.getElementById('profileNavLink');
+        const mobileProfileLink = document.getElementById('mobileProfileLink');
+        const userNameSpan = document.getElementById('userNameDisplay');
+
+        if (user) {
+            authDiv.style.display = 'none';
+            userDiv.style.display = 'block';
+            if (profileLink) profileLink.style.display = 'inline-block';
+            if (mobileProfileLink) mobileProfileLink.style.display = 'flex';
+            userNameSpan.textContent = user.name || user.email.split('@')[0];
+            loadExpenses(user.email);
+        } else {
+            authDiv.style.display = 'flex';
+            userDiv.style.display = 'none';
+            if (profileLink) profileLink.style.display = 'none';
+            if (mobileProfileLink) mobileProfileLink.style.display = 'none';
+            loadExpenses(null);
+        }
+    }
+
+    document.getElementById('addExpenseBtn')?.addEventListener('click', addExpense);
+    document.getElementById('logoutBtn')?.addEventListener('click', logout);
+    document.getElementById('currencySelect')?.addEventListener('change', changeCurrency);
+    document.getElementById('expenseAmount')?.addEventListener('keypress', e => { if (e.key === 'Enter') addExpense(); });
+
+    updateUI();
+</script>
+<script src="optimize.js"></script>
+<script src="demo-account.js"></script>
+</body>
+</html>

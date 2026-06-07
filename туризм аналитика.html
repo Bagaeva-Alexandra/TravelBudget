@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TravelBudget | Аналитика расходов</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f5f9fc 0%, #eef3f8 100%);
+            color: #1a2c3e;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 32px;
+        }
+
+        /* ========== НАВИГАЦИЯ ========== */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 1px solid #e2edf2;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .logo-icon {
+            width: 42px;
+            height: 42px;
+            background: linear-gradient(135deg, #1F6E8C, #2E9A7E);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-icon i {
+            font-size: 1.3rem;
+            color: white;
+        }
+
+        .logo-text {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #1a2c3e;
+        }
+
+        .desktop-nav {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-btn {
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: #5a6e7a;
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+            background: transparent;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            font-family: inherit;
+        }
+
+        .dropdown-btn i {
+            font-size: 0.7rem;
+            transition: transform 0.2s;
+        }
+
+        .dropdown:hover .dropdown-btn i {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-btn:hover {
+            background: white;
+            color: #1F6E8C;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .dropdown-content {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            min-width: 200px;
+            border-radius: 20px;
+            box-shadow: 0 20px 35px rgba(0,0,0,0.1);
+            border: 1px solid #e2edf2;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.2s;
+            z-index: 100;
+        }
+
+        .dropdown:hover .dropdown-content {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-content a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            color: #5a6e7a;
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .dropdown-content a i {
+            width: 20px;
+            color: #1F6E8C;
+        }
+
+        .dropdown-content a:hover {
+            background: #f8fafc;
+            color: #1F6E8C;
+        }
+
+        .nav-link {
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: #5a6e7a;
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+            background: transparent;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: white;
+            color: #1F6E8C;
+        }
+
+        .burger-menu {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 10px;
+        }
+
+        .burger-menu span {
+            width: 25px;
+            height: 2px;
+            background: #1a2c3e;
+            transition: 0.3s;
+        }
+
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: -100%;
+            width: 80%;
+            max-width: 300px;
+            height: 100%;
+            background: white;
+            z-index: 1000;
+            padding: 80px 24px 24px;
+            box-shadow: 2px 0 20px rgba(0,0,0,0.1);
+            transition: left 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .mobile-nav.active {
+            left: 0;
+        }
+
+        .mobile-nav-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+        }
+
+        .mobile-nav-overlay.active {
+            display: block;
+        }
+
+        .mobile-nav a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 0;
+            color: #5a6e7a;
+            text-decoration: none;
+            font-weight: 500;
+            border-bottom: 1px solid #e2edf2;
+        }
+
+        .mobile-nav a i {
+            width: 24px;
+            color: #1F6E8C;
+        }
+
+        .mobile-nav .mobile-section-title {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: #8a9aa8;
+            margin-top: 16px;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .close-mobile-nav {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #8a9aa8;
+        }
+
+        .right-panel {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .currency-selector {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #f8fafc;
+            padding: 6px 16px;
+            border-radius: 40px;
+            border: 1px solid #e2edf2;
+        }
+
+        .currency-selector select {
+            border: none;
+            background: transparent;
+            font-weight: 500;
+            color: #1F6E8C;
+            outline: none;
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        .auth-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-login {
+            background: transparent;
+            border: 1px solid #cbdde6;
+            padding: 8px 24px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #1F6E8C;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-login:hover {
+            background: #1F6E8C;
+            color: white;
+        }
+
+        .btn-register {
+            background: linear-gradient(135deg, #1F6E8C, #2E9A7E);
+            border: none;
+            padding: 8px 24px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 8px rgba(31,110,140,0.2);
+        }
+
+        .user-panel {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: #f8fafc;
+            padding: 5px 5px 5px 16px;
+            border-radius: 50px;
+            border: 1px solid #e2edf2;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .logout-btn {
+            background: transparent;
+            border: none;
+            padding: 6px 16px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .logout-btn:hover {
+            background: #fee2e2;
+            color: #ef4444;
+        }
+
+        @media (max-width: 900px) {
+            .desktop-nav {
+                display: none;
+            }
+            .burger-menu {
+                display: flex;
+            }
+            .navbar {
+                justify-content: space-between;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .right-panel .currency-selector span {
+                display: none;
+            }
+            .container {
+                padding: 0 16px;
+            }
+        }
+
+        /* ========== СТИЛИ СТРАНИЦЫ АНАЛИТИКИ ========== */
+        .page-header {
+            margin-bottom: 32px;
+        }
+
+        .page-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #1a2c3e, #1F6E8C);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .page-header p {
+            color: #6c7e8c;
+            margin-top: 8px;
+        }
+
+        .filters-bar {
+            background: white;
+            border-radius: 20px;
+            padding: 16px 24px;
+            margin-bottom: 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            border: 1px solid rgba(31,110,140,0.1);
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .filter-group label {
+            font-weight: 500;
+            color: #5a6e7a;
+        }
+
+        .filter-select {
+            padding: 8px 16px;
+            border: 1px solid #e2edf2;
+            border-radius: 40px;
+            font-family: inherit;
+            background: white;
+            cursor: pointer;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 24px;
+            border-radius: 28px;
+            border: 1px solid rgba(31,110,140,0.1);
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 28px rgba(31,110,140,0.1);
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, rgba(31,110,140,0.1), rgba(46,154,126,0.1));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+
+        .stat-icon i {
+            font-size: 1.5rem;
+            color: #1F6E8C;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #1a2c3e;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: #8a9aa8;
+            margin-top: 4px;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            margin-bottom: 40px;
+        }
+
+        .chart-card {
+            background: white;
+            border-radius: 28px;
+            padding: 24px;
+            border: 1px solid rgba(31,110,140,0.1);
+        }
+
+        .chart-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chart-title i {
+            color: #1F6E8C;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+
+        .top-expenses-card {
+            background: white;
+            border-radius: 28px;
+            padding: 24px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(31,110,140,0.1);
+        }
+
+        .top-expenses-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .top-expenses-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .top-expense-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            background: #f8fafc;
+            border-radius: 16px;
+        }
+
+        .top-expense-name {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .top-expense-name i {
+            width: 32px;
+            color: #1F6E8C;
+        }
+
+        .top-expense-amount {
+            font-weight: 700;
+            color: #1F6E8C;
+        }
+
+        .budget-card {
+            background: linear-gradient(135deg, #1F6E8C, #2E9A7E);
+            border-radius: 28px;
+            padding: 32px;
+            margin-bottom: 40px;
+            color: white;
+        }
+
+        .budget-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+        }
+
+        .budget-progress {
+            background: rgba(255,255,255,0.3);
+            border-radius: 20px;
+            height: 12px;
+            overflow: hidden;
+            margin: 16px 0;
+        }
+
+        .budget-progress-bar {
+            background: white;
+            height: 100%;
+            border-radius: 20px;
+            transition: width 0.5s ease;
+        }
+
+        .budget-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 16px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .insights-card {
+            background: white;
+            border-radius: 28px;
+            padding: 24px;
+            border: 1px solid rgba(31,110,140,0.1);
+            margin-bottom: 40px;
+        }
+
+        .insights-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .insight-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 12px;
+            background: #f8fafc;
+            border-radius: 16px;
+        }
+
+        .insight-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(31,110,140,0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px;
+            background: white;
+            border-radius: 28px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            border-top: 1px solid rgba(31,110,140,0.15);
+            color: #8a9aa8;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 1000px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 640px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            .container {
+                padding: 0 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- НАВИГАЦИЯ -->
+    <nav class="navbar">
+        <div class="logo" onclick="window.location.href='туризм главная.html'">
+            <div class="logo-icon"><i class="fas fa-compass"></i></div>
+            <span class="logo-text">TravelBudget</span>
+        </div>
+
+        <div class="desktop-nav">
+            <a class="nav-link" href="туризм главная.html">Главная</a>
+
+            <div class="dropdown">
+                <button class="dropdown-btn">Путешествия <i class="fas fa-chevron-down"></i></button>
+                <div class="dropdown-content">
+                    <a href="туризм направления.html"><i class="fas fa-plane"></i> Направления</a>
+                    <a href="туризм учет.html"><i class="fas fa-wallet"></i> Мой учёт</a>
+                    <a href="туризм бюджет.html"><i class="fas fa-chart-line"></i> Бюджет</a>
+                </div>
+            </div>
+
+            <div class="dropdown">
+                <button class="dropdown-btn">Медиа <i class="fas fa-chevron-down"></i></button>
+                <div class="dropdown-content">
+                    <a href="туризм фото.html"><i class="fas fa-camera"></i> Фотоальбом</a>
+                    <a href="туризм аналитика.html"><i class="fas fa-chart-pie"></i> Аналитика</a>
+                </div>
+            </div>
+
+            <a class="nav-link" href="туризм кабинет.html" id="profileNavLink" style="display: none;">Личный кабинет</a>
+        </div>
+
+        <div class="burger-menu" id="burgerMenu">
+            <span></span><span></span><span></span>
+        </div>
+
+        <div class="right-panel">
+            <div class="currency-selector">
+                <i class="fas fa-exchange-alt" style="color:#1F6E8C;"></i>
+                <select id="globalCurrencySelect">
+                    <option value="EUR">€ EUR</option>
+                    <option value="USD">$ USD</option>
+                    <option value="GBP">£ GBP</option>
+                    <option value="RUB">₽ RUB</option>
+                    <option value="CHF">₣ CHF</option>
+                    <option value="TRY">₺ TRY</option>
+                    <option value="JPY">¥ JPY</option>
+                </select>
+            </div>
+
+            <div class="auth-section" id="authButtons">
+                <button class="btn-login" onclick="window.location.href='туризм вход.html'">Вход</button>
+                <button class="btn-register" onclick="window.location.href='туризм вход.html'">Регистрация</button>
+            </div>
+
+            <div id="userInfo" style="display: none;">
+                <div class="user-panel">
+                    <span class="user-name" id="userNameDisplay"></span>
+                    <button class="logout-btn" id="logoutBtn">Выйти</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- МОБИЛЬНОЕ МЕНЮ -->
+    <div class="mobile-nav-overlay" id="mobileOverlay"></div>
+    <div class="mobile-nav" id="mobileNav">
+        <div class="close-mobile-nav" id="closeMobileNav">&times;</div>
+        <a href="туризм главная.html"><i class="fas fa-home"></i> Главная</a>
+        <div class="mobile-section-title">ПУТЕШЕСТВИЯ</div>
+        <a href="туризм направления.html"><i class="fas fa-plane"></i> Направления</a>
+        <a href="туризм учет.html"><i class="fas fa-wallet"></i> Мой учёт</a>
+        <a href="туризм бюджет.html"><i class="fas fa-chart-line"></i> Бюджет</a>
+        <div class="mobile-section-title">МЕДИА</div>
+        <a href="туризм фото.html"><i class="fas fa-camera"></i> Фотоальбом</a>
+        <a href="туризм аналитика.html"><i class="fas fa-chart-pie"></i> Аналитика</a>
+        <div class="mobile-section-title">АККАУНТ</div>
+        <a href="туризм кабинет.html" id="mobileProfileLink"><i class="fas fa-user"></i> Личный кабинет</a>
+    </div>
+
+    <!-- ОСНОВНОЙ КОНТЕНТ -->
+    <div class="page-header">
+        <h1>📊 Аналитика расходов</h1>
+        <p>Детальная статистика ваших трат в путешествиях</p>
+    </div>
+
+    <div class="filters-bar">
+        <div class="filter-group">
+            <label><i class="fas fa-calendar"></i> Период:</label>
+            <select id="periodSelect" class="filter-select">
+                <option value="all">Все время</option>
+                <option value="week">Последняя неделя</option>
+                <option value="month">Последний месяц</option>
+                <option value="year">Последний год</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label><i class="fas fa-chart-simple"></i> Тип графика:</label>
+            <select id="chartTypeSelect" class="filter-select">
+                <option value="line">Линейный график</option>
+                <option value="bar">Столбчатая диаграмма</option>
+            </select>
+        </div>
+    </div>
+
+    <div id="mainContent">
+        <div class="empty-state">
+            <i class="fas fa-chart-line" style="font-size: 3rem; color: #1F6E8C; margin-bottom: 16px;"></i>
+            <h3>Загрузка данных...</h3>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2025 TravelBudget — умный учёт расходов в путешествиях</p>
+    </footer>
+</div>
+
+<script>
+    // ========== КОНСТАНТЫ ==========
+    const STORAGE_SESSION = 'travelbudget_session';
+    const STORAGE_CURRENT_TOUR = 'current_user_tour';
+
+    const exchangeRates = {
+        EUR: 1,
+        USD: 1.09,
+        GBP: 0.86,
+        RUB: 95.5,
+        CHF: 0.98,
+        TRY: 35.2,
+        JPY: 164.5
+    };
+
+    const currencySymbols = {
+        EUR: '€',
+        USD: '$',
+        GBP: '£',
+        RUB: '₽',
+        CHF: '₣',
+        TRY: '₺',
+        JPY: '¥'
+    };
+
+    let currentCurrency = 'EUR';
+    let lineChart = null;
+    let pieChart = null;
+
+    // Категории расходов
+    const categoryMapping = {
+        'еда': '🍕 Еда', 'обед': '🍕 Еда', 'завтрак': '🍕 Еда',
+        'ужин': '🍕 Еда', 'кафе': '🍕 Еда', 'ресторан': '🍕 Еда',
+        'транспорт': '🚗 Транспорт', 'такси': '🚗 Транспорт', 'поезд': '🚗 Транспорт',
+        'автобус': '🚗 Транспорт', 'метро': '🚗 Транспорт',
+        'отель': '🏨 Проживание', 'гостиница': '🏨 Проживание', 'хостел': '🏨 Проживание',
+        'экскурсия': '🎉 Развлечения', 'музей': '🎉 Развлечения', 'билет': '🎉 Развлечения',
+        'сувенир': '🛍️ Покупки', 'магазин': '🛍️ Покупки',
+        'аптека': '💊 Здоровье', 'лекарство': '💊 Здоровье',
+        'кофе': '☕ Кафе', 'чай': '☕ Кафе'
+    };
+
+    const categories = [
+        { name: '🍕 Еда', icon: 'fa-utensils', color: '#2E9A7E' },
+        { name: '🚗 Транспорт', icon: 'fa-car', color: '#1F6E8C' },
+        { name: '🏨 Проживание', icon: 'fa-hotel', color: '#E67E22' },
+        { name: '🎉 Развлечения', icon: 'fa-ticket-alt', color: '#9B59B6' },
+        { name: '🛍️ Покупки', icon: 'fa-shopping-bag', color: '#E74C3C' },
+        { name: '☕ Кафе', icon: 'fa-mug-hot', color: '#D35400' },
+        { name: '💊 Здоровье', icon: 'fa-medkit', color: '#1ABC9C' },
+        { name: '📱 Другое', icon: 'fa-ellipsis-h', color: '#95A5A6' }
+    ];
+
+    function getCategory(name) {
+        const lowerName = name.toLowerCase();
+        for (const [key, cat] of Object.entries(categoryMapping)) {
+            if (lowerName.includes(key)) return cat;
+        }
+        return '📱 Другое';
+    }
+
+    function getCategoryColor(categoryName) {
+        const cat = categories.find(c => c.name === categoryName);
+        return cat ? cat.color : '#95A5A6';
+    }
+
+    function getCurrentUser() {
+        const session = localStorage.getItem(STORAGE_SESSION);
+        if (session) {
+            try {
+                const data = JSON.parse(session);
+                if (data.expires > Date.now()) return data;
+                localStorage.removeItem(STORAGE_SESSION);
+            } catch(e) {}
+        }
+        return null;
+    }
+
+    function loadCurrentTourExpenses() {
+        const user = getCurrentUser();
+        if (!user) return [];
+
+        const saved = localStorage.getItem(`${STORAGE_CURRENT_TOUR}_${user.email}`);
+        if (saved) {
+            try {
+                const tour = JSON.parse(saved);
+                if (tour.expenses && tour.expenses.length > 0) {
+                    return tour.expenses.map(e => ({
+                        ...e,
+                        date: tour.savedAt || new Date().toISOString()
+                    }));
+                }
+            } catch(e) {}
+        }
+        return [];
+    }
+
+    function getAllExpenses() {
+        return loadCurrentTourExpenses();
+    }
+
+    function filterExpensesByPeriod(expenses, period) {
+        const now = new Date();
+        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+        return expenses.filter(exp => {
+            const expDate = exp.date ? new Date(exp.date) : new Date();
+            expDate.setHours(0, 0, 0, 0);
+
+            switch(period) {
+                case 'week':
+                    const weekAgo = new Date(today);
+                    weekAgo.setDate(today.getDate() - 7);
+                    return expDate >= weekAgo;
+                case 'month':
+                    const monthAgo = new Date(today);
+                    monthAgo.setMonth(today.getMonth() - 1);
+                    return expDate >= monthAgo;
+                case 'year':
+                    const yearAgo = new Date(today);
+                    yearAgo.setFullYear(today.getFullYear() - 1);
+                    return expDate >= yearAgo;
+                default:
+                    return true;
+            }
+        });
+    }
+
+    function convertAmount(amount) {
+        return amount * exchangeRates[currentCurrency];
+    }
+
+    function getSymbol() {
+        return currencySymbols[currentCurrency];
+    }
+
+    function getUniqueDaysCount(expenses) {
+        const days = new Set();
+        expenses.forEach(exp => {
+            const date = exp.date ? new Date(exp.date).toDateString() : new Date().toDateString();
+            days.add(date);
+        });
+        return Math.max(days.size, 1);
+    }
+
+    function getDailyExpenses(expenses) {
+        const dailyMap = new Map();
+        expenses.forEach(exp => {
+            const date = exp.date ? new Date(exp.date).toLocaleDateString() : new Date().toLocaleDateString();
+            dailyMap.set(date, (dailyMap.get(date) || 0) + exp.amount);
+        });
+        const sorted = Array.from(dailyMap.entries()).sort((a, b) => new Date(a[0]) - new Date(b[0]));
+        return {
+            labels: sorted.map(d => d[0]),
+            values: sorted.map(d => d[1])
+        };
+    }
+
+    function getBudget() {
+        const saved = localStorage.getItem('travel_budget');
+        if (saved) {
+            const budget = parseFloat(saved);
+            return isNaN(budget) ? 0 : budget;
+        }
+        return 0;
+    }
+
+    function generateInsights(expenses, categoryTotals, totalSpent) {
+        const insights = [];
+
+        let topCategory = '';
+        let topAmount = 0;
+        for (const [cat, amount] of Object.entries(categoryTotals)) {
+            if (amount > topAmount) {
+                topAmount = amount;
+                topCategory = cat;
+            }
+        }
+        if (topCategory) {
+            const percent = (topAmount / totalSpent * 100).toFixed(1);
+            insights.push(`💡 Больше всего вы тратите на <strong>${topCategory}</strong> — ${percent}% от всех расходов`);
+        }
+
+        const avgTransaction = totalSpent / expenses.length;
+        insights.push(`💰 Средняя сумма одной покупки: ${convertAmount(avgTransaction).toFixed(2)} ${getSymbol()}`);
+
+        if (expenses.length > 20) {
+            insights.push(`📊 У вас ${expenses.length} записей о расходах — отличная финансовая дисциплина!`);
+        } else if (expenses.length < 5) {
+            insights.push(`📝 Добавьте больше расходов, чтобы аналитика стала точнее`);
+        }
+
+        if (categoryTotals['🍕 Еда'] && categoryTotals['🍕 Еда'] > totalSpent * 0.4) {
+            insights.push(`🍽️ Вы тратите на еду больше 40% бюджета. Попробуйте готовить сами или искать местные кафе подешевле`);
+        }
+
+        if (categoryTotals['🚗 Транспорт'] && categoryTotals['🚗 Транспорт'] > totalSpent * 0.3) {
+            insights.push(`🚌 Много тратите на транспорт. Рассмотрите покупку проездного или аренду велосипеда`);
+        }
+
+        return insights.join('</div><div class="insight-item"><div class="insight-icon"><i class="fas fa-chart-simple"></i></div><div>');
+    }
+
+    function updateUI() {
+        const user = getCurrentUser();
+        const authDiv = document.getElementById('authButtons');
+        const userDiv = document.getElementById('userInfo');
+        const profileLink = document.getElementById('profileNavLink');
+        const mobileProfileLink = document.getElementById('mobileProfileLink');
+        const userNameSpan = document.getElementById('userNameDisplay');
+
+        if (user) {
+            authDiv.style.display = 'none';
+            userDiv.style.display = 'block';
+            if (profileLink) profileLink.style.display = 'inline-block';
+            if (mobileProfileLink) mobileProfileLink.style.display = 'flex';
+            userNameSpan.textContent = user.name || user.email.split('@')[0];
+            loadAnalytics();
+        } else {
+            authDiv.style.display = 'flex';
+            userDiv.style.display = 'none';
+            if (profileLink) profileLink.style.display = 'none';
+            if (mobileProfileLink) mobileProfileLink.style.display = 'none';
+            document.getElementById('mainContent').innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-lock" style="font-size: 3rem; color: #1F6E8C; margin-bottom: 16px;"></i>
+                    <h3>Войдите в аккаунт</h3>
+                    <p style="margin-top: 8px;">Чтобы видеть аналитику ваших расходов</p>
+                    <button class="btn-register" onclick="window.location.href='туризм вход.html'" style="margin-top: 20px; padding: 12px 32px;">Войти</button>
+                </div>
+            `;
+        }
+    }
+
+    function loadAnalytics() {
+        const period = document.getElementById('periodSelect').value;
+        let expenses = getAllExpenses();
+        expenses = filterExpensesByPeriod(expenses, period);
+
+        if (expenses.length === 0) {
+            document.getElementById('mainContent').innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-chart-line" style="font-size: 3rem; color: #1F6E8C; margin-bottom: 16px;"></i>
+                    <h3>Нет данных для аналитики</h3>
+                    <p style="margin-top: 8px;">Добавьте хотя бы один расход на странице учёта</p>
+                    <button class="btn-register" onclick="window.location.href='туризм учет.html'" style="margin-top: 20px; padding: 12px 32px;">Перейти к учёту</button>
+                </div>
+            `;
+            return;
+        }
+
+        renderAnalytics(expenses);
+    }
+
+    function renderAnalytics(expenses) {
+        const totalSpent = expenses.reduce((sum, e) => sum + e.amount, 0);
+        const avgPerDay = expenses.length > 0 ? totalSpent / getUniqueDaysCount(expenses) : 0;
+        const highestExpense = expenses.length > 0 ? Math.max(...expenses.map(e => e.amount)) : 0;
+        const totalTransactions = expenses.length;
+
+        const categoryTotals = {};
+        expenses.forEach(exp => {
+            const category = getCategory(exp.name);
+            categoryTotals[category] = (categoryTotals[category] || 0) + exp.amount;
+        });
+
+        const topExpenses = [...expenses].sort((a, b) => b.amount - a.amount).slice(0, 5);
+        const dailyData = getDailyExpenses(expenses);
+        const budget = getBudget();
+        const budgetPercent = budget > 0 ? (totalSpent / budget) * 100 : 0;
+
+        const html = `
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-euro-sign"></i></div>
+                    <div class="stat-value">${convertAmount(totalSpent).toFixed(2)} ${getSymbol()}</div>
+                    <div class="stat-label">Всего потрачено</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-calendar-day"></i></div>
+                    <div class="stat-value">${convertAmount(avgPerDay).toFixed(2)} ${getSymbol()}</div>
+                    <div class="stat-label">Средний расход в день</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-rocket"></i></div>
+                    <div class="stat-value">${convertAmount(highestExpense).toFixed(2)} ${getSymbol()}</div>
+                    <div class="stat-label">Самая крупная трата</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-receipt"></i></div>
+                    <div class="stat-value">${totalTransactions}</div>
+                    <div class="stat-label">Всего транзакций</div>
+                </div>
+            </div>
+
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <div class="chart-title"><i class="fas fa-chart-line"></i> Динамика расходов</div>
+                    <div class="chart-container">
+                        <canvas id="dailyChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-title"><i class="fas fa-chart-pie"></i> Расходы по категориям</div>
+                    <div class="chart-container">
+                        <canvas id="categoryChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            ${budget > 0 ? `
+            <div class="budget-card">
+                <h3>🎯 Бюджет на поездку</h3>
+                <div class="budget-progress">
+                    <div class="budget-progress-bar" style="width: ${Math.min(budgetPercent, 100)}%"></div>
+                </div>
+                <div class="budget-stats">
+                    <span>💰 Потрачено: ${convertAmount(totalSpent).toFixed(2)} ${getSymbol()}</span>
+                    <span>📊 Бюджет: ${convertAmount(budget).toFixed(2)} ${getSymbol()}</span>
+                    <span>${budgetPercent > 100 ? '⚠️ Превышение!' : `✅ Осталось: ${convertAmount(budget - totalSpent).toFixed(2)} ${getSymbol()}`}</span>
+                </div>
+            </div>
+            ` : ''}
+
+            <div class="top-expenses-card">
+                <div class="top-expenses-title"><i class="fas fa-trophy"></i> Топ 5 самых крупных трат</div>
+                <div class="top-expenses-list">
+                    ${topExpenses.map(exp => `
+                        <div class="top-expense-item">
+                            <div class="top-expense-name">
+                                <i class="fas fa-receipt"></i>
+                                <span>${escapeHtml(exp.name)}</span>
+                            </div>
+                            <div class="top-expense-amount">${convertAmount(exp.amount).toFixed(2)} ${getSymbol()}</div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+
+            <div class="insights-card">
+                <div class="chart-title"><i class="fas fa-lightbulb"></i> Финансовые инсайты</div>
+                <div class="insights-list">
+                    ${generateInsights(expenses, categoryTotals, totalSpent)}
+                </div>
+            </div>
+        `;
+
+        document.getElementById('mainContent').innerHTML = html;
+
+        setTimeout(() => {
+            createDailyChart(dailyData);
+            createPieChart(categoryTotals);
+        }, 100);
+    }
+
+    function createDailyChart(dailyData) {
+        const canvas = document.getElementById('dailyChart');
+        if (!canvas) return;
+
+        const ctx = canvas.getContext('2d');
+        const chartType = document.getElementById('chartTypeSelect').value;
+
+        if (lineChart) lineChart.destroy();
+
+        const convertedValues = dailyData.values.map(v => convertAmount(v));
+
+        lineChart = new Chart(ctx, {
+            type: chartType,
+            data: {
+                labels: dailyData.labels,
+                datasets: [{
+                    label: `Расходы (${getSymbol()})`,
+                    data: convertedValues,
+                    backgroundColor: chartType === 'bar' ? 'rgba(31, 110, 140, 0.5)' : 'rgba(31, 110, 140, 0.1)',
+                    borderColor: '#1F6E8C',
+                    borderWidth: 2,
+                    fill: chartType === 'line',
+                    tension: 0.3,
+                    pointBackgroundColor: '#1F6E8C',
+                    pointBorderColor: 'white',
+                    pointRadius: 4,
+                    pointHoverRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'top' },
+                    tooltip: { callbacks: { label: (ctx) => `${ctx.dataset.label}: ${ctx.raw.toFixed(2)}` } }
+                },
+                scales: {
+                    y: { beginAtZero: true, title: { display: true, text: getSymbol() } }
+                }
+            }
+        });
+    }
+
+    function createPieChart(categoryTotals) {
+        const canvas = document.getElementById('categoryChart');
+        if (!canvas) return;
+
+        const ctx = canvas.getContext('2d');
+
+        if (pieChart) pieChart.destroy();
+
+        const labels = Object.keys(categoryTotals);
+        const values = Object.values(categoryTotals).map(v => convertAmount(v));
+        const backgroundColors = labels.map(l => getCategoryColor(l));
+
+        pieChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: values,
+                    backgroundColor: backgroundColors,
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'right' },
+                    tooltip: { callbacks: { label: (ctx) => `${ctx.label}: ${ctx.raw.toFixed(2)} ${getSymbol()}` } }
+                }
+            }
+        });
+    }
+
+    function changeCurrency() {
+        currentCurrency = document.getElementById('globalCurrencySelect').value;
+        loadAnalytics();
+    }
+
+    function logout() {
+        localStorage.removeItem(STORAGE_SESSION);
+        updateUI();
+        alert('👋 Вы вышли из аккаунта');
+    }
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        const div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
+    }
+
+    // Мобильное меню
+    const burgerMenu = document.getElementById('burgerMenu');
+    const mobileNav = document.getElementById('mobileNav');
+    const mobileOverlay = document.getElementById('mobileOverlay');
+    const closeMobileNav = document.getElementById('closeMobileNav');
+
+    function openMobileMenu() {
+        mobileNav.classList.add('active');
+        mobileOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeMobileMenu() {
+        mobileNav.classList.remove('active');
+        mobileOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    burgerMenu?.addEventListener('click', openMobileMenu);
+    closeMobileNav?.addEventListener('click', closeMobileMenu);
+    mobileOverlay?.addEventListener('click', closeMobileMenu);
+
+    // Инициализация
+    document.getElementById('globalCurrencySelect')?.addEventListener('change', changeCurrency);
+    document.getElementById('logoutBtn')?.addEventListener('click', logout);
+    document.getElementById('periodSelect')?.addEventListener('change', loadAnalytics);
+    document.getElementById('chartTypeSelect')?.addEventListener('change', () => {
+        if (document.getElementById('dailyChart')) {
+            const dailyData = getDailyExpenses(getAllExpenses());
+            createDailyChart(dailyData);
+        }
+    });
+
+    updateUI();
+</script>
+<script src="optimize.js"></script>
+<script src="demo-account.js"></script>
+</body>
+</html>

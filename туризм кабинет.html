@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>TravelBudget | Личный кабинет — ваши путешествия и бюджет</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f5f9fc 0%, #eef3f8 100%);
+            color: #1a2c3e;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 32px;
+        }
+
+        /* ========== НАВИГАЦИЯ ========== */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 1px solid #e2edf2;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        .logo:hover { transform: scale(1.02); }
+
+        .logo-icon {
+            width: 42px;
+            height: 42px;
+            background: linear-gradient(135deg, #1F6E8C, #2E9A7E);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 6px 12px rgba(31,110,140,0.2);
+        }
+
+        .logo-icon i { font-size: 1.3rem; color: white; }
+        .logo-text { font-size: 1.4rem; font-weight: 700; color: #1a2c3e; }
+
+        .desktop-nav { display: flex; align-items: center; gap: 8px; }
+        .dropdown { position: relative; }
+        .dropdown-btn {
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: #5a6e7a;
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+            background: transparent;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            font-family: inherit;
+        }
+        .dropdown-btn i { font-size: 0.7rem; transition: transform 0.2s; }
+        .dropdown:hover .dropdown-btn i { transform: rotate(180deg); }
+        .dropdown-btn:hover { background: white; color: #1F6E8C; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+        .dropdown-content {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            min-width: 200px;
+            border-radius: 20px;
+            box-shadow: 0 20px 35px rgba(0,0,0,0.1);
+            border: 1px solid #e2edf2;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.2s;
+            z-index: 100;
+        }
+        .dropdown:hover .dropdown-content { opacity: 1; visibility: visible; transform: translateY(0); }
+        .dropdown-content a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            color: #5a6e7a;
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .dropdown-content a i { width: 20px; color: #1F6E8C; }
+        .dropdown-content a:hover { background: #f8fafc; color: #1F6E8C; }
+        .nav-link {
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: #5a6e7a;
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .nav-link:hover, .nav-link.active { background: white; color: #1F6E8C; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
+        .burger-menu { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 10px; }
+        .burger-menu span { width: 25px; height: 2px; background: #1a2c3e; transition: 0.3s; }
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: -100%;
+            width: 80%;
+            max-width: 300px;
+            height: 100%;
+            background: white;
+            z-index: 1000;
+            padding: 80px 24px 24px;
+            box-shadow: 2px 0 20px rgba(0,0,0,0.1);
+            transition: left 0.3s ease;
+            overflow-y: auto;
+        }
+        .mobile-nav.active { left: 0; display: block; }
+        .mobile-nav-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+        }
+        .mobile-nav-overlay.active { display: block; }
+        .mobile-nav a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 0;
+            color: #5a6e7a;
+            text-decoration: none;
+            font-weight: 500;
+            border-bottom: 1px solid #e2edf2;
+        }
+        .mobile-nav a i { width: 24px; color: #1F6E8C; }
+        .mobile-nav .mobile-section-title { font-size: 0.7rem; text-transform: uppercase; color: #8a9aa8; margin-top: 16px; margin-bottom: 8px; letter-spacing: 1px; }
+        .close-mobile-nav { position: absolute; top: 20px; right: 20px; font-size: 1.5rem; cursor: pointer; color: #8a9aa8; }
+        .right-panel { display: flex; align-items: center; gap: 16px; }
+        .currency-selector {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #f8fafc;
+            padding: 6px 16px;
+            border-radius: 40px;
+            border: 1px solid #e2edf2;
+            transition: all 0.2s;
+        }
+        .currency-selector select { border: none; background: transparent; font-weight: 500; color: #1F6E8C; outline: none; font-family: inherit; cursor: pointer; }
+        .auth-section { display: flex; align-items: center; gap: 12px; }
+        .btn-login {
+            background: transparent;
+            border: 1px solid #cbdde6;
+            padding: 8px 24px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #1F6E8C;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-login:hover { background: #1F6E8C; color: white; }
+        .btn-register {
+            background: linear-gradient(135deg, #1F6E8C, #2E9A7E);
+            border: none;
+            padding: 8px 24px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 8px rgba(31,110,140,0.2);
+        }
+        .btn-register:hover { transform: translateY(-2px); box-shadow: 0 6px 14px rgba(31,110,140,0.3); }
+        .user-panel {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: #f8fafc;
+            padding: 5px 5px 5px 16px;
+            border-radius: 50px;
+            border: 1px solid #e2edf2;
+        }
+        .user-name { font-weight: 700; font-size: 0.9rem; background: linear-gradient(135deg, #1F6E8C, #2E9A7E); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .logout-btn {
+            background: transparent;
+            border: none;
+            padding: 6px 16px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .logout-btn:hover { background: #fee2e2; color: #ef4444; }
+
+        @media (max-width: 900px) { .desktop-nav { display: none; } .burger-menu { display: flex; } .navbar { justify-content: space-between; } }
+        @media (max-width: 640px) { .right-panel .currency-selector span { display: none; } .container { padding: 0 16px; } }
+
+        /* ========== ВКЛАДКИ ЛИЧНОГО КАБИНЕТА (улучшенные) ========== */
+        .profile-tabs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+            border-bottom: 1px solid #e2edf2;
+            padding-bottom: 8px;
+        }
+        .profile-tab {
+            padding: 10px 24px;
+            border-radius: 40px;
+            background: #f8fafc;
+            border: 1px solid #e2edf2;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .profile-tab i { font-size: 1rem; }
+        .profile-tab:hover { background: white; transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0,0,0,0.05); }
+        .profile-tab.active { background: linear-gradient(135deg, #1F6E8C, #2E9A7E); color: white; border-color: transparent; box-shadow: 0 8px 18px rgba(31,110,140,0.25); }
+        .tab-content { display: none; animation: fadeSlideUp 0.35s ease-out; }
+        .tab-content.active { display: block; }
+        @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* ========== ОБЩИЕ УЛУЧШЕНИЯ ========== */
+        .settings-panel, .profile-header, .stat-card, .place-card, .tour-item, .checklist-progress {
+            transition: all 0.25s ease;
+        }
+        .stat-card {
+            background: white;
+            padding: 28px 20px;
+            border-radius: 28px;
+            text-align: center;
+            border: 1px solid rgba(31,110,140,0.08);
+            box-shadow: 0 6px 14px rgba(0,0,0,0.02);
+        }
+        .stat-card:hover { transform: translateY(-6px); box-shadow: 0 20px 30px rgba(31,110,140,0.12); border-color: rgba(31,110,140,0.2); }
+        .stat-number { font-size: 2.6rem; font-weight: 800; background: linear-gradient(135deg, #1F6E8C, #2E9A7E); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .section-title { font-size: 1.5rem; font-weight: 700; margin: 40px 0 20px; display: flex; align-items: center; gap: 12px; }
+        .add-trip-btn {
+            background: linear-gradient(135deg, #1F6E8C, #2E9A7E);
+            border: none;
+            padding: 10px 24px;
+            border-radius: 40px;
+            color: white;
+            cursor: pointer;
+            margin-left: auto;
+            transition: all 0.2s;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .add-trip-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 18px rgba(31,110,140,0.3); }
+        .place-card { cursor: pointer; transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1); }
+        .place-card:hover { transform: translateY(-6px); box-shadow: 0 20px 30px rgba(0,0,0,0.1); }
+        .tour-item { cursor: pointer; transition: all 0.2s ease; }
+        .tour-item:hover { transform: translateX(6px) scale(1.01); border-left: 4px solid #1F6E8C; background: #ffffff; box-shadow: 0 10px 25px rgba(31,110,140,0.1); }
+        .checklist-item { transition: all 0.2s; }
+        .checklist-item:hover { background: #eef2f5; transform: translateX(4px); }
+        .btn-save-settings, .btn-create, .btn-save { transition: all 0.2s; }
+        .btn-save-settings:hover, .btn-create:hover, .btn-save:hover { transform: translateY(-2px); filter: brightness(1.02); box-shadow: 0 10px 18px rgba(31,110,140,0.25); }
+        .empty-state { text-align: center; padding: 50px 20px; background: white; border-radius: 32px; box-shadow: 0 4px 12px rgba(0,0,0,0.02); }
+        footer { text-align: center; padding: 40px 0; border-top: 1px solid rgba(31,110,140,0.15); color: #8a9aa8; margin-top: 40px; }
+
+        @media (max-width: 1000px) { .settings-grid { grid-template-columns: 1fr; } .stats-grid { grid-template-columns: repeat(2, 1fr); } .visited-places { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 768px) { .settings-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 640px) { .stats-grid { grid-template-columns: 1fr; } .visited-places { grid-template-columns: 1fr; } .profile-header { flex-direction: column; text-align: center; } .profile-tab { padding: 6px 16px; font-size: 0.8rem; } }
+    </style>
+</head>
+<body>
+<div class="container">
+    <nav class="navbar">
+        <div class="logo" onclick="window.location.href='туризм главная.html'">
+            <div class="logo-icon"><i class="fas fa-compass"></i></div>
+            <span class="logo-text">TravelBudget</span>
+        </div>
+        <div class="desktop-nav">
+            <a class="nav-link" href="туризм главная.html">Главная</a>
+            <div class="dropdown">
+                <button class="dropdown-btn">Путешествия <i class="fas fa-chevron-down"></i></button>
+                <div class="dropdown-content">
+                    <a href="туризм направления.html"><i class="fas fa-plane"></i> Направления</a>
+                    <a href="туризм учет.html"><i class="fas fa-wallet"></i> Мой учёт</a>
+                    <a href="туризм бюджет.html"><i class="fas fa-chart-line"></i> Бюджет</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropdown-btn">Медиа <i class="fas fa-chevron-down"></i></button>
+                <div class="dropdown-content">
+                    <a href="туризм фото.html"><i class="fas fa-camera"></i> Фотоальбом</a>
+                    <a href="туризм аналитика.html"><i class="fas fa-chart-pie"></i> Аналитика</a>
+                </div>
+            </div>
+            <a class="nav-link active" href="туризм кабинет.html">Личный кабинет</a>
+        </div>
+        <div class="burger-menu" id="burgerMenu"><span></span><span></span><span></span></div>
+        <div class="right-panel">
+            <div class="currency-selector"><i class="fas fa-exchange-alt" style="color:#1F6E8C;"></i><select id="globalCurrencySelect"><option value="EUR">€ EUR</option><option value="USD">$ USD</option><option value="GBP">£ GBP</option><option value="RUB">₽ RUB</option><option value="CHF">₣ CHF</option><option value="TRY">₺ TRY</option><option value="JPY">¥ JPY</option></select></div>
+            <div class="auth-section" id="authButtons"><button class="btn-login" onclick="window.location.href='туризм вход.html'">Вход</button><button class="btn-register" onclick="window.location.href='туризм вход.html'">Регистрация</button></div>
+            <div id="userInfo" style="display: none;"><div class="user-panel"><span class="user-name" id="userNameDisplay"></span><button class="logout-btn" id="logoutBtn">Выйти</button></div></div>
+        </div>
+    </nav>
+    <div class="mobile-nav-overlay" id="mobileOverlay"></div>
+    <div class="mobile-nav" id="mobileNav"><div class="close-mobile-nav" id="closeMobileNav">&times;</div><a href="туризм главная.html"><i class="fas fa-home"></i> Главная</a><div class="mobile-section-title">ПУТЕШЕСТВИЯ</div><a href="туризм направления.html"><i class="fas fa-plane"></i> Направления</a><a href="туризм учет.html"><i class="fas fa-wallet"></i> Мой учёт</a><a href="туризм бюджет.html"><i class="fas fa-chart-line"></i> Бюджет</a><div class="mobile-section-title">МЕДИА</div><a href="туризм фото.html"><i class="fas fa-camera"></i> Фотоальбом</a><a href="туризм аналитика.html"><i class="fas fa-chart-pie"></i> Аналитика</a><div class="mobile-section-title">АККАУНТ</div><a href="туризм кабинет.html" id="mobileProfileLink"><i class="fas fa-user"></i> Личный кабинет</a></div>
+
+    <div id="mainContent"></div>
+    <footer><p>© 2025 TravelBudget — умный учёт расходов в путешествиях</p></footer>
+</div>
+
+<div id="placeModal" class="modal"><div class="modal-content"><h3 id="modalTitle">Добавить место</h3><input type="text" id="placeName" placeholder="Название места"><input type="date" id="placeDate"><textarea id="placeDesc" rows="3" placeholder="Ваши впечатления..."></textarea><input type="file" id="placeImage" accept="image/*"><div class="modal-buttons"><button class="btn-save" id="savePlaceBtn">Сохранить</button><button class="btn-cancel" id="cancelPlaceBtn">Отмена</button></div></div></div>
+
+<style>.modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); z-index: 1000; justify-content: center; align-items: center; }.modal.active { display: flex; }.modal-content { background: white; border-radius: 32px; max-width: 500px; width: 90%; padding: 32px; animation: modalFadeIn 0.3s ease; }@keyframes modalFadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }.modal-content input, .modal-content textarea { width: 100%; padding: 12px; margin: 12px 0; border: 1px solid #e2edf2; border-radius: 16px; font-family: inherit; }.modal-buttons { display: flex; gap: 12px; margin-top: 20px; }.btn-save { background: linear-gradient(135deg, #1F6E8C, #2E9A7E); border: none; padding: 10px 24px; border-radius: 40px; color: white; cursor: pointer; }.btn-cancel { background: transparent; border: 1px solid #cbdde6; padding: 10px 24px; border-radius: 40px; cursor: pointer; }</style>
+
+<script>
+    // ========== КОНСТАНТЫ ==========
+    const STORAGE_SESSION = 'travelbudget_session';
+    const STORAGE_USER_TOURS = 'user_saved_tours';
+    const STORAGE_USER_PLACES = 'user_visited_places';
+    const STORAGE_USER_PROFILE = 'user_profile';
+    const STORAGE_SETTINGS = 'user_settings';
+    const STORAGE_CHECKLIST = 'travel_checklist';
+    const exchangeRates = { EUR:1, USD:1.09, GBP:0.86, RUB:95.5, CHF:0.98, TRY:35.2, JPY:164.5 };
+    const currencySymbols = { EUR:'€', USD:'$', GBP:'£', RUB:'₽', CHF:'₣', TRY:'₺', JPY:'¥' };
+    let currentCurrency = 'EUR';
+    let currentTab = 'profile';
+    const checklistCategories = [{ id:'documents', name:'📄 Документы', icon:'fa-passport' },{ id:'clothes', name:'👕 Одежда', icon:'fa-shirt' },{ id:'electronics', name:'📱 Электроника', icon:'fa-mobile-alt' },{ id:'hygiene', name:'🧴 Гигиена', icon:'fa-soap' },{ id:'medicine', name:'💊 Аптечка', icon:'fa-medkit' },{ id:'other', name:'🔧 Другое', icon:'fa-ellipsis-h' }];
+    const defaultChecklistItems = { documents:[{name:'Загранпаспорт',checked:false},{name:'Внутренний паспорт',checked:false},{name:'Авиабилеты',checked:false},{name:'Страховка',checked:false},{name:'Отель/бронирование',checked:false},{name:'Виза',checked:false},{name:'Водительские права',checked:false}], clothes:[{name:'Футболки',checked:false},{name:'Шорты/юбки',checked:false},{name:'Джинсы/брюки',checked:false},{name:'Куртка/ветровка',checked:false},{name:'Купальник/плавки',checked:false},{name:'Головной убор',checked:false},{name:'Обувь (2-3 пары)',checked:false},{name:'Носки',checked:false},{name:'Бельё',checked:false}], electronics:[{name:'Телефон',checked:false},{name:'Зарядное устройство',checked:false},{name:'Power Bank',checked:false},{name:'Наушники',checked:false},{name:'Фотоаппарат',checked:false},{name:'Адаптер для розетки',checked:false},{name:'Ноутбук/планшет',checked:false}], hygiene:[{name:'Зубная щётка',checked:false},{name:'Зубная паста',checked:false},{name:'Шампунь',checked:false},{name:'Гель для душа',checked:false},{name:'Дезодорант',checked:false},{name:'Расчёска',checked:false},{name:'Солнцезащитный крем',checked:false},{name:'Средство от насекомых',checked:false}], medicine:[{name:'Обезболивающее',checked:false},{name:'Жаропонижающее',checked:false},{name:'Сорбенты',checked:false},{name:'Антигистаминные',checked:false},{name:'Пластыри',checked:false},{name:'Бинт',checked:false},{name:'Личные лекарства',checked:false}], other:[{name:'Солнцезащитные очки',checked:false},{name:'Зонт',checked:false},{name:'Рюкзак/сумка',checked:false},{name:'Плед в самолёт',checked:false},{name:'Подушка для шеи',checked:false},{name:'Закуски в дорогу',checked:false},{name:'Бутылка для воды',checked:false}] };
+    let checklistData = {};
+    let currentChecklistCategory = 'documents';
+
+    function convertPrice(price) { return price * exchangeRates[currentCurrency]; }
+    function getSymbol() { return currencySymbols[currentCurrency]; }
+    function escapeHtml(str) { if(!str) return ''; const div = document.createElement('div'); div.textContent = str; return div.innerHTML; }
+    function showToast(message, type) { const toast = document.createElement('div'); toast.style.cssText = `position:fixed; bottom:20px; right:20px; background:${type === 'success' ? '#2E9A7E' : '#E74C3C'}; color:white; padding:12px 24px; border-radius:12px; font-size:0.9rem; z-index:2000; animation:slideIn 0.3s ease; box-shadow:0 4px 12px rgba(0,0,0,0.2);`; toast.textContent = message; document.body.appendChild(toast); setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 2800); }
+    function getCurrentUser() { const session = localStorage.getItem(STORAGE_SESSION); if(session) { try { const data = JSON.parse(session); if(data.expires > Date.now()) return data; localStorage.removeItem(STORAGE_SESSION); } catch(e){} } return null; }
+    function getUserProfile() { const user = getCurrentUser(); if(!user) return null; const defaultProfile = { name: user.name, email: user.email, avatar: null }; const saved = localStorage.getItem(`${STORAGE_USER_PROFILE}_${user.email}`); return saved ? JSON.parse(saved) : defaultProfile; }
+    function saveUserProfile(profile) { const user = getCurrentUser(); if(user) localStorage.setItem(`${STORAGE_USER_PROFILE}_${user.email}`, JSON.stringify(profile)); }
+    function getUserPlaces() { const user = getCurrentUser(); if(!user) return []; return JSON.parse(localStorage.getItem(`${STORAGE_USER_PLACES}_${user.email}`) || '[]'); }
+    function saveUserPlaces(places) { const user = getCurrentUser(); if(user) localStorage.setItem(`${STORAGE_USER_PLACES}_${user.email}`, JSON.stringify(places)); }
+    function addPlace(place) { const places = getUserPlaces(); places.push({ ...place, id: Date.now(), createdAt: new Date().toISOString() }); saveUserPlaces(places); renderContent(); showToast('✅ Место добавлено!', 'success'); }
+    function deletePlace(placeId) { if(confirm('Удалить это место?')) { const places = getUserPlaces().filter(p => p.id !== placeId); saveUserPlaces(places); renderContent(); showToast('🗑️ Место удалено', 'success'); } }
+    function getUserTours() { const user = getCurrentUser(); if(!user) return []; return JSON.parse(localStorage.getItem(`${STORAGE_USER_TOURS}_${user.email}`) || '[]'); }
+    function loadTourToAccounting(tour) { localStorage.setItem('selected_tour', JSON.stringify({ name:tour.name, country:tour.country, days:tour.days, expenses:tour.expenses, totalPrice:tour.totalPrice })); window.location.href = 'туризм учет.html'; }
+    function editProfile() { const profile = getUserProfile(); const newName = prompt('Введите ваше имя:', profile.name); if(newName && newName.trim()) { profile.name = newName.trim(); saveUserProfile(profile); renderContent(); showToast('✅ Имя обновлено!', 'success'); } }
+    function updateAvatar(file) { if(file) { const reader = new FileReader(); reader.onload = function(e) { const profile = getUserProfile(); profile.avatar = e.target.result; saveUserProfile(profile); renderContent(); showToast('✅ Аватар обновлён!', 'success'); }; reader.readAsDataURL(file); } }
+    function getSettings() { const user = getCurrentUser(); if(!user) return {}; const saved = localStorage.getItem(`${STORAGE_SETTINGS}_${user.email}`); return saved ? JSON.parse(saved) : { defaultCurrency:'EUR', defaultDays:7 }; }
+    function saveSettings() { const settings = { defaultCurrency:document.getElementById('defaultCurrency')?.value || 'EUR', defaultDays:parseInt(document.getElementById('defaultDays')?.value) || 7 }; const user = getCurrentUser(); if(user) { localStorage.setItem(`${STORAGE_SETTINGS}_${user.email}`, JSON.stringify(settings)); const currencySelect = document.getElementById('globalCurrencySelect'); if(currencySelect) { currencySelect.value = settings.defaultCurrency; currentCurrency = settings.defaultCurrency; } showToast('✅ Настройки сохранены!', 'success'); renderContent(); } }
+    function loadChecklist() { const user = getCurrentUser(); if(!user) return; const saved = localStorage.getItem(`${STORAGE_CHECKLIST}_${user.email}`); if(saved) { try { checklistData = JSON.parse(saved); } catch(e) { checklistData = JSON.parse(JSON.stringify(defaultChecklistItems)); } } else { checklistData = JSON.parse(JSON.stringify(defaultChecklistItems)); saveChecklist(); } }
+    function saveChecklist() { const user = getCurrentUser(); if(user) localStorage.setItem(`${STORAGE_CHECKLIST}_${user.email}`, JSON.stringify(checklistData)); }
+    function toggleChecklistItem(categoryId, itemIndex) { if(checklistData[categoryId] && checklistData[categoryId][itemIndex]) { checklistData[categoryId][itemIndex].checked = !checklistData[categoryId][itemIndex].checked; saveChecklist(); renderChecklistTab(); } }
+    function addChecklistItem(categoryId, itemName) { if(!itemName.trim()) return; if(!checklistData[categoryId]) checklistData[categoryId] = []; checklistData[categoryId].push({ name: itemName.trim(), checked: false }); saveChecklist(); renderChecklistTab(); }
+    function deleteChecklistItem(categoryId, itemIndex) { if(checklistData[categoryId] && checklistData[categoryId][itemIndex]) { checklistData[categoryId].splice(itemIndex, 1); saveChecklist(); renderChecklistTab(); } }
+    function resetChecklist() { if(confirm('Сбросить все галочки?')) { for(const cat of checklistCategories) if(checklistData[cat.id]) checklistData[cat.id].forEach(item => item.checked = false); saveChecklist(); renderChecklistTab(); showToast('✅ Все галочки сброшены', 'success'); } }
+    function getChecklistProgress() { let total=0, checked=0; for(const cat of checklistCategories) if(checklistData[cat.id]) checklistData[cat.id].forEach(item => { total++; if(item.checked) checked++; }); const percent = total>0 ? (checked/total)*100 : 0; return { total, checked, percent: Math.round(percent) }; }
+    function openAddPlaceModal() { document.getElementById('modalTitle').textContent = 'Добавить место'; document.getElementById('placeName').value = ''; document.getElementById('placeDate').value = ''; document.getElementById('placeDesc').value = ''; document.getElementById('placeImage').value = ''; document.getElementById('placeModal').classList.add('active'); }
+    function savePlaceFromModal() { const name = document.getElementById('placeName').value.trim(); const date = document.getElementById('placeDate').value; const desc = document.getElementById('placeDesc').value.trim(); const imageFile = document.getElementById('placeImage').files[0]; if(!name) { showToast('❌ Введите название места', 'error'); return; } if(imageFile) { const reader = new FileReader(); reader.onload = function(e) { addPlace({ name, date, description: desc, image: e.target.result }); document.getElementById('placeModal').classList.remove('active'); }; reader.readAsDataURL(imageFile); } else { addPlace({ name, date, description: desc, image: null }); document.getElementById('placeModal').classList.remove('active'); } }
+    function viewPlace(placeId) { const place = getUserPlaces().find(p => p.id === placeId); if(place) alert(`📍 ${place.name}\n📅 ${place.date || 'Дата не указана'}\n\n${place.description || 'Нет описания'}`); }
+    function renderChecklistTab() { const container = document.getElementById('checklistTabContent'); if(!container) return; const progress = getChecklistProgress(); const currentItems = checklistData[currentChecklistCategory] || []; container.innerHTML = `<div class="checklist-progress"><div class="progress-stats" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:16px;"><div><span class="progress-percent" style="font-size:2rem; font-weight:800; color:#1F6E8C;">${progress.percent}%</span><span style="color:#8a9aa8;"> готовности</span></div><div style="color:#8a9aa8;"><i class="fas fa-check-circle"></i> ${progress.checked} / ${progress.total} вещей</div><button class="edit-profile-btn" style="background:transparent; border:1px solid #cbdde6; padding:6px 16px; border-radius:40px;" onclick="resetChecklist()"><i class="fas fa-undo-alt"></i> Сбросить все</button></div><div class="progress-bar" style="background:#e2edf2; border-radius:20px; height:12px; overflow:hidden;"><div class="progress-fill" style="background:linear-gradient(90deg,#1F6E8C,#2E9A7E); height:100%; width:${progress.percent}%; border-radius:20px;"></div></div></div><div class="checklist-categories" style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:24px;">${checklistCategories.map(cat => `<button class="checklist-cat-btn ${currentChecklistCategory === cat.id ? 'active' : ''}" style="padding:8px 20px; border-radius:40px; background:${currentChecklistCategory === cat.id ? 'linear-gradient(135deg,#1F6E8C,#2E9A7E)' : '#f8fafc'}; color:${currentChecklistCategory === cat.id ? 'white' : '#5a6e7a'}; border:1px solid #e2edf2; cursor:pointer;" onclick="setChecklistCategory('${cat.id}')"><i class="fas ${cat.icon}"></i> ${cat.name}</button>`).join('')}</div><div class="settings-panel"><div class="checklist-items">${currentItems.length>0 ? currentItems.map((item,idx)=>`<div class="checklist-item ${item.checked ? 'checked' : ''}" style="display:flex; align-items:center; gap:16px; padding:12px 16px; background:#f8fafc; border-radius:16px; margin-bottom:8px;"><input type="checkbox" ${item.checked ? 'checked' : ''} onchange="toggleChecklistItem('${currentChecklistCategory}', ${idx})" style="width:20px; height:20px; accent-color:#2E9A7E;"><label style="flex:1; ${item.checked ? 'text-decoration:line-through; color:#a0b3c4;' : ''}">${escapeHtml(item.name)}</label><button class="edit-profile-btn" style="padding:4px 12px; background:transparent; border:none; color:#e74c3c; cursor:pointer;" onclick="deleteChecklistItem('${currentChecklistCategory}', ${idx})"><i class="fas fa-trash-alt"></i></button></div>`).join('') : '<p style="text-align:center; padding:40px; color:#8a9aa8;">Нет добавленных вещей. Добавьте свою!</p>'}</div><div class="add-item-form" style="margin-top:24px; display:flex; gap:12px;"><input type="text" id="newChecklistItem" placeholder="Добавить свою вещь..." style="flex:1; padding:12px 16px; border-radius:40px; border:1px solid #e2edf2;"><button onclick="addNewChecklistItem()" style="background:linear-gradient(135deg,#1F6E8C,#2E9A7E); border:none; padding:12px 24px; border-radius:40px; color:white; font-weight:600; cursor:pointer;">+ Добавить</button></div></div>`; }
+    function setChecklistCategory(categoryId) { currentChecklistCategory = categoryId; renderChecklistTab(); }
+    function addNewChecklistItem() { const input = document.getElementById('newChecklistItem'); const name = input.value.trim(); if(name) { addChecklistItem(currentChecklistCategory, name); input.value = ''; } else showToast('❌ Введите название вещи', 'error'); }
+
+    function renderContent() {
+        const container = document.getElementById('mainContent'); const user = getCurrentUser();
+        if(!user) { container.innerHTML = `<div class="empty-state"><i class="fas fa-lock" style="font-size:3rem; margin-bottom:20px; color:#8a9aa8;"></i><h3>Войдите в аккаунт</h3><button class="btn-create" onclick="window.location.href='туризм вход.html'" style="background:linear-gradient(135deg,#1F6E8C,#2E9A7E); border:none; padding:12px 32px; border-radius:40px; color:white; margin-top:20px;">Войти</button></div>`; return; }
+        const profile = getUserProfile(); const places = getUserPlaces(); const tours = getUserTours(); const settings = getSettings();
+        const totalTrips = tours.length; const totalExpenses = tours.reduce((sum,t) => sum + (t.totalPrice || 0),0); const totalDays = tours.reduce((sum,t) => sum + (t.days || 7),0);
+        const placesHtml = places.map(place => `<div class="place-card" onclick="viewPlace(${place.id})"><div class="place-image" style="height:180px; overflow:hidden;">${place.image ? `<img src="${place.image}" style="width:100%; height:100%; object-fit:cover;">` : `<div style="background:#e2edf2; height:100%; display:flex; align-items:center; justify-content:center;"><i class="fas fa-image" style="font-size:3rem; color:#8a9aa8;"></i></div>`}</div><div class="place-info" style="padding:16px;"><div class="place-name" style="font-weight:700;">${escapeHtml(place.name)}</div><div class="place-date" style="font-size:0.75rem; color:#8a9aa8;"><i class="fas fa-calendar-alt"></i> ${place.date || 'Дата не указана'}</div><div class="place-desc" style="font-size:0.85rem; color:#6c7e8c; margin-top:8px;">${escapeHtml(place.description || '')}</div><button class="edit-profile-btn" style="margin-top:12px; padding:4px 12px; font-size:0.75rem; background:transparent; border:1px solid #cbdde6; border-radius:40px;" onclick="event.stopPropagation(); deletePlace(${place.id})">🗑️ Удалить</button></div></div>`).join('');
+        const toursHtml = tours.map(tour => { const total = tour.totalPrice || tour.expenses?.reduce((s,e) => s + e.amount, 0) || 0; return `<div class="tour-item" style="background:white; border-radius:24px; padding:24px; border:1px solid rgba(31,110,140,0.1);" onclick='loadTourToAccounting(${JSON.stringify(tour).replace(/'/g, "\\'")})'><div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; margin-bottom:12px;"><span style="font-size:1.2rem; font-weight:700; color:#1F6E8C;">${escapeHtml(tour.name)}</span><span style="font-size:0.75rem; color:#8a9aa8;"><i class="fas fa-calendar-alt"></i> ${new Date(tour.savedAt).toLocaleDateString()}</span></div><div style="color:#5a6e7a;">📍 ${escapeHtml(tour.country || 'Не указано')} • ${tour.days || 7} дней</div><div style="margin-top:12px; text-align:right; font-weight:700; color:#1F6E8C;">💰 Итого: ${convertPrice(total).toFixed(2)} ${getSymbol()}</div></div>`; }).join('');
+        container.innerHTML = `<div class="profile-tabs"><button class="profile-tab ${currentTab === 'profile' ? 'active' : ''}" onclick="switchTab('profile')"><i class="fas fa-user"></i> Профиль</button><button class="profile-tab ${currentTab === 'places' ? 'active' : ''}" onclick="switchTab('places')"><i class="fas fa-map-marked-alt"></i> Мои места</button><button class="profile-tab ${currentTab === 'tours' ? 'active' : ''}" onclick="switchTab('tours')"><i class="fas fa-suitcase"></i> Путешествия</button><button class="profile-tab ${currentTab === 'checklist' ? 'active' : ''}" onclick="switchTab('checklist')"><i class="fas fa-check-square"></i> Чек-лист</button><button class="profile-tab ${currentTab === 'settings' ? 'active' : ''}" onclick="switchTab('settings')"><i class="fas fa-sliders-h"></i> Настройки</button></div>
+        <div id="profileTabContent" class="tab-content ${currentTab === 'profile' ? 'active' : ''}"><div class="profile-header" style="display:flex; gap:32px; align-items:center; flex-wrap:wrap;"><div class="avatar" style="width:100px; height:100px; background:linear-gradient(135deg,#1F6E8C,#2E9A7E); border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; position:relative;" onclick="document.getElementById('avatarInput').click()">${profile.avatar ? `<img src="${profile.avatar}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">` : `<i class="fas fa-user" style="font-size:3rem; color:white;"></i>`}<div class="avatar-upload" style="position:absolute; bottom:0; left:0; right:0; background:rgba(0,0,0,0.7); color:white; font-size:0.7rem; text-align:center; padding:4px; border-radius:0 0 50px 50px; opacity:0; transition:0.2s;">📷</div></div><input type="file" id="avatarInput" accept="image/*" style="display:none;" onchange="updateAvatar(this.files[0])"><div class="profile-info"><h2>${escapeHtml(profile.name)}</h2><p><i class="fas fa-envelope"></i> ${escapeHtml(profile.email)}</p><div style="display:flex; gap:12px; margin-top:12px;"><button class="edit-profile-btn" onclick="editProfile()" style="background:transparent; border:1px solid #cbdde6; border-radius:40px; padding:8px 20px;"><i class="fas fa-edit"></i> Редактировать</button></div></div></div><div class="stats-grid" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:24px; margin-top:24px;"><div class="stat-card"><div class="stat-number">${totalTrips}</div><div class="stat-label">🗺️ Путешествий</div></div><div class="stat-card"><div class="stat-number">${totalDays}</div><div class="stat-label">📅 Всего дней</div></div><div class="stat-card"><div class="stat-number">${convertPrice(totalExpenses).toFixed(0)} ${getSymbol()}</div><div class="stat-label">💰 Потрачено</div></div><div class="stat-card"><div class="stat-number">${places.length}</div><div class="stat-label">📍 Посещено мест</div></div></div></div>
+        <div id="placesTabContent" class="tab-content ${currentTab === 'places' ? 'active' : ''}"><div class="section-title"><i class="fas fa-map-marked-alt"></i> Где я побывал<button class="add-trip-btn" onclick="openAddPlaceModal()"><i class="fas fa-plus"></i> Добавить место</button></div><div class="visited-places" style="display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:24px;">${placesHtml || '<div class="empty-state" style="grid-column:1/-1;"><i class="fas fa-globe-asia" style="font-size:2rem; color:#8a9aa8;"></i><p>Пока нет добавленных мест. Нажмите "Добавить место", чтобы поделиться впечатлениями!</p></div>'}</div></div>
+        <div id="toursTabContent" class="tab-content ${currentTab === 'tours' ? 'active' : ''}"><div class="section-title"><i class="fas fa-suitcase"></i> Мои путешествия</div><div class="tours-list" style="display:flex; flex-direction:column; gap:20px;">${toursHtml || '<div class="empty-state"><i class="fas fa-umbrella-beach" style="font-size:2rem; color:#8a9aa8;"></i><p>У вас пока нет сохранённых путешествий. Выберите тур на странице направлений!</p><button class="btn-create" onclick="window.location.href=\'туризм направления.html\'" style="margin-top:16px;">Выбрать тур</button></div>'}</div></div>
+        <div id="checklistTabContent" class="tab-content ${currentTab === 'checklist' ? 'active' : ''}"></div>
+        <div id="settingsTabContent" class="tab-content ${currentTab === 'settings' ? 'active' : ''}"><div class="settings-panel" style="background:white; border-radius:32px; padding:32px;"><div class="settings-title" style="font-size:1.3rem; font-weight:700; margin-bottom:24px;"><i class="fas fa-sliders-h"></i> Настройки профиля</div><div class="settings-grid" style="display:grid; grid-template-columns:repeat(2,1fr); gap:32px;"><div class="setting-group" style="background:#f8fafc; border-radius:20px; padding:20px;"><div class="setting-group-title" style="font-weight:600; margin-bottom:16px; border-bottom:2px solid rgba(31,110,140,0.2);"><i class="fas fa-globe"></i> Региональные настройки</div><div class="setting-item" style="display:flex; justify-content:space-between; padding:12px 0;"><label><i class="fas fa-money-bill-wave"></i> Валюта по умолчанию</label><select id="defaultCurrency">${Object.keys(currencySymbols).map(c => `<option value="${c}" ${settings.defaultCurrency===c ? 'selected' : ''}>${currencySymbols[c]} ${c}</option>`).join('')}</select></div></div><div class="setting-group" style="background:#f8fafc; border-radius:20px; padding:20px;"><div class="setting-group-title"><i class="fas fa-calendar-alt"></i> Планирование</div><div class="setting-item" style="display:flex; justify-content:space-between; padding:12px 0;"><label><i class="fas fa-calendar-day"></i> Дней в туре по умолчанию</label><input type="number" id="defaultDays" value="${settings.defaultDays}" min="1" max="30" style="width:80px; padding:6px; border-radius:20px; border:1px solid #e2edf2;"></div></div></div><button class="btn-save-settings" onclick="saveSettings()" style="margin-top:24px; padding:12px 32px; background:linear-gradient(135deg,#1F6E8C,#2E9A7E); border:none; border-radius:40px; color:white; font-weight:600; cursor:pointer;"><i class="fas fa-save"></i> Сохранить настройки</button></div></div>`;
+        if(currentTab === 'checklist') renderChecklistTab();
+    }
+    function switchTab(tab) { currentTab = tab; renderContent(); }
+    function changeCurrency() { currentCurrency = document.getElementById('globalCurrencySelect').value; renderContent(); }
+    function logout() { localStorage.removeItem(STORAGE_SESSION); window.location.reload(); }
+    const burgerMenu = document.getElementById('burgerMenu'); const mobileNav = document.getElementById('mobileNav'); const mobileOverlay = document.getElementById('mobileOverlay'); const closeMobileNav = document.getElementById('closeMobileNav');
+    function openMobileMenu() { mobileNav.classList.add('active'); mobileOverlay.classList.add('active'); document.body.style.overflow = 'hidden'; }
+    function closeMobileMenu() { mobileNav.classList.remove('active'); mobileOverlay.classList.remove('active'); document.body.style.overflow = ''; }
+    if(burgerMenu) burgerMenu.addEventListener('click', openMobileMenu); if(closeMobileNav) closeMobileNav.addEventListener('click', closeMobileMenu); if(mobileOverlay) mobileOverlay.addEventListener('click', closeMobileMenu);
+    document.getElementById('globalCurrencySelect')?.addEventListener('change', changeCurrency); document.getElementById('logoutBtn')?.addEventListener('click', logout); document.getElementById('savePlaceBtn')?.addEventListener('click', savePlaceFromModal); document.getElementById('cancelPlaceBtn')?.addEventListener('click', () => { document.getElementById('placeModal').classList.remove('active'); }); window.addEventListener('click', (e) => { if(e.target === document.getElementById('placeModal')) document.getElementById('placeModal').classList.remove('active'); });
+    window.editProfile = editProfile; window.openAddPlaceModal = openAddPlaceModal; window.deletePlace = deletePlace; window.viewPlace = viewPlace; window.loadTourToAccounting = loadTourToAccounting; window.updateAvatar = updateAvatar; window.saveSettings = saveSettings; window.switchTab = switchTab; window.setChecklistCategory = setChecklistCategory; window.toggleChecklistItem = toggleChecklistItem; window.deleteChecklistItem = deleteChecklistItem; window.addNewChecklistItem = addNewChecklistItem; window.resetChecklist = resetChecklist;
+    const styleAnim = document.createElement('style'); styleAnim.textContent = `@keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } } .avatar:hover .avatar-upload { opacity: 1; }`; document.head.appendChild(styleAnim);
+    function updateUI() { const user = getCurrentUser(); const authDiv = document.getElementById('authButtons'); const userDiv = document.getElementById('userInfo'); const mobileProfileLink = document.getElementById('mobileProfileLink'); const userNameSpan = document.getElementById('userNameDisplay'); if(user) { authDiv.style.display = 'none'; userDiv.style.display = 'block'; if(mobileProfileLink) mobileProfileLink.style.display = 'flex'; userNameSpan.textContent = user.name || user.email.split('@')[0]; const settings = getSettings(); currentCurrency = settings.defaultCurrency; const currencySelect = document.getElementById('globalCurrencySelect'); if(currencySelect) currencySelect.value = currentCurrency; loadChecklist(); renderContent(); } else { authDiv.style.display = 'flex'; userDiv.style.display = 'none'; if(mobileProfileLink) mobileProfileLink.style.display = 'none'; renderContent(); } }
+    updateUI();
+</script>
+<script src="optimize.js"></script>
+<script src="demo-account.js"></script>
+</body>
+</html>

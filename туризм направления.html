@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>TravelBudget | Популярные направления — туры, цены, впечатления</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #f5f9fc 0%, #eef3f8 100%); color: #1a2c3e; overflow-x: hidden; }
+        .container { max-width: 1280px; margin: 0 auto; padding: 0 32px; }
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid #e2edf2; margin-bottom: 20px; flex-wrap: wrap; gap: 16px; }
+        .logo { display: flex; align-items: center; gap: 10px; cursor: pointer; transition: transform 0.2s; }
+        .logo:hover { transform: scale(1.01); }
+        .logo-icon { width: 42px; height: 42px; background: linear-gradient(135deg, #1F6E8C, #2E9A7E); border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 12px rgba(31,110,140,0.2); }
+        .logo-icon i { font-size: 1.3rem; color: white; }
+        .logo-text { font-size: 1.4rem; font-weight: 700; background: linear-gradient(135deg, #1a2c3e, #1F6E8C); background-clip: text; -webkit-background-clip: text; color: transparent; }
+        .desktop-nav { display: flex; align-items: center; gap: 8px; }
+        .dropdown { position: relative; }
+        .dropdown-btn { padding: 8px 20px; border-radius: 40px; font-weight: 500; font-size: 0.9rem; color: #5a6e7a; text-decoration: none; transition: all 0.2s; cursor: pointer; background: transparent; display: flex; align-items: center; gap: 8px; border: none; font-family: inherit; }
+        .dropdown-btn i { font-size: 0.7rem; transition: transform 0.2s; }
+        .dropdown:hover .dropdown-btn i { transform: rotate(180deg); }
+        .dropdown-btn:hover { background: white; color: #1F6E8C; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+        .dropdown-content { position: absolute; top: 100%; left: 0; background: white; min-width: 200px; border-radius: 20px; box-shadow: 0 20px 35px rgba(0,0,0,0.1); border: 1px solid #e2edf2; opacity: 0; visibility: hidden; transform: translateY(-10px); transition: all 0.2s; z-index: 100; backdrop-filter: blur(4px); }
+        .dropdown:hover .dropdown-content { opacity: 1; visibility: visible; transform: translateY(0); }
+        .dropdown-content a { display: flex; align-items: center; gap: 12px; padding: 12px 20px; color: #5a6e7a; text-decoration: none; font-size: 0.85rem; transition: all 0.2s; }
+        .dropdown-content a i { width: 20px; color: #1F6E8C; }
+        .dropdown-content a:hover { background: #f8fafc; color: #1F6E8C; }
+        .nav-link { padding: 8px 20px; border-radius: 40px; font-weight: 500; font-size: 0.9rem; color: #5a6e7a; text-decoration: none; transition: all 0.2s; cursor: pointer; background: transparent; }
+        .nav-link:hover, .nav-link.active { background: white; color: #1F6E8C; box-shadow: 0 2px 6px rgba(0,0,0,0.02); }
+        .burger-menu { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 10px; }
+        .burger-menu span { width: 25px; height: 2px; background: #1a2c3e; transition: 0.3s; border-radius: 4px; }
+        .mobile-nav { display: none; position: fixed; top: 0; left: -100%; width: 80%; max-width: 300px; height: 100%; background: white; z-index: 1000; padding: 80px 24px 24px; box-shadow: 2px 0 20px rgba(0,0,0,0.1); transition: left 0.3s ease; overflow-y: auto; }
+        .mobile-nav.active { left: 0; }
+        .mobile-nav-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999; backdrop-filter: blur(2px); }
+        .mobile-nav-overlay.active { display: block; }
+        .mobile-nav a { display: flex; align-items: center; gap: 12px; padding: 14px 0; color: #5a6e7a; text-decoration: none; font-weight: 500; border-bottom: 1px solid #e2edf2; }
+        .mobile-nav a i { width: 24px; color: #1F6E8C; }
+        .mobile-nav .mobile-section-title { font-size: 0.7rem; text-transform: uppercase; color: #8a9aa8; margin-top: 16px; margin-bottom: 8px; letter-spacing: 1px; font-weight: 600; }
+        .close-mobile-nav { position: absolute; top: 20px; right: 20px; font-size: 1.5rem; cursor: pointer; color: #8a9aa8; }
+        .right-panel { display: flex; align-items: center; gap: 16px; }
+        .currency-selector { display: flex; align-items: center; gap: 8px; background: #f8fafc; padding: 6px 16px; border-radius: 40px; border: 1px solid #e2edf2; transition: all 0.2s; }
+        .currency-selector:hover { border-color: #1F6E8C; background: white; }
+        .currency-selector select { border: none; background: transparent; font-weight: 500; color: #1F6E8C; outline: none; font-family: inherit; cursor: pointer; font-size: 0.85rem; }
+        .auth-section { display: flex; align-items: center; gap: 12px; }
+        .btn-login { background: transparent; border: 1px solid #cbdde6; padding: 8px 24px; border-radius: 40px; font-weight: 600; font-size: 0.9rem; color: #1F6E8C; cursor: pointer; transition: all 0.2s; }
+        .btn-login:hover { background: #1F6E8C; color: white; border-color: #1F6E8C; }
+        .btn-register { background: linear-gradient(135deg, #1F6E8C, #2E9A7E); border: none; padding: 8px 24px; border-radius: 40px; font-weight: 600; font-size: 0.9rem; color: white; cursor: pointer; transition: all 0.2s; box-shadow: 0 2px 8px rgba(31,110,140,0.2); }
+        .btn-register:hover { transform: translateY(-2px); box-shadow: 0 6px 14px rgba(31,110,140,0.3); }
+        .user-panel { display: flex; align-items: center; gap: 16px; background: #f8fafc; padding: 5px 5px 5px 16px; border-radius: 50px; border: 1px solid #e2edf2; }
+        .user-name { font-weight: 600; font-size: 0.9rem; color: #1F6E8C; }
+        .logout-btn { background: transparent; border: none; padding: 6px 16px; border-radius: 40px; font-size: 0.8rem; color: #94a3b8; cursor: pointer; transition: 0.2s; }
+        .logout-btn:hover { background: #fee2e2; color: #ef4444; }
+        @media (max-width: 900px) { .desktop-nav { display: none; } .burger-menu { display: flex; } .navbar { justify-content: space-between; } }
+        @media (max-width: 640px) { .right-panel .currency-selector span { display: none; } .container { padding: 0 16px; } }
+        
+        /* page header */
+        .page-header { text-align: center; padding: 20px 0 30px; }
+        .page-header h1 { font-size: 2rem; font-weight: 800; margin-bottom: 12px; background: linear-gradient(135deg, #1a2c3e, #1F6E8C, #2E9A7E); background-clip: text; -webkit-background-clip: text; color: transparent; letter-spacing: -0.3px; }
+        .page-header p { font-size: 1rem; color: #5a6e7a; max-width: 580px; margin: 0 auto; }
+        
+        /* new info blocks */
+        .info-blocks { display: flex; flex-wrap: wrap; gap: 28px; margin: 30px 0 40px; justify-content: center; }
+        .info-card { background: white; border-radius: 28px; padding: 24px 20px; flex: 1; min-width: 200px; text-align: center; box-shadow: 0 6px 14px rgba(0,0,0,0.02), 0 0 0 1px rgba(31,110,140,0.08); transition: all 0.25s; }
+        .info-card i { font-size: 2.2rem; color: #1F6E8C; margin-bottom: 16px; }
+        .info-card h3 { font-size: 1.1rem; margin-bottom: 8px; }
+        .info-card p { font-size: 0.85rem; color: #6c7e8c; }
+        .info-card:hover { transform: translateY(-5px); box-shadow: 0 18px 28px rgba(31,110,140,0.1); border-color: transparent; }
+        
+        /* modern grid cards */
+        .tours-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; padding: 10px 0 40px; }
+        .tour-card { background: rgba(255,255,255,0.96); border-radius: 32px; overflow: hidden; transition: all 0.35s cubic-bezier(0.2, 0, 0, 1); box-shadow: 0 12px 28px rgba(0,0,0,0.06), 0 0 0 1px rgba(31,110,140,0.04); backdrop-filter: blur(0px); display: flex; flex-direction: column; height: 100%; }
+        .tour-card:hover { transform: translateY(-10px); box-shadow: 0 28px 40px rgba(31,110,140,0.18), 0 0 0 1px rgba(31,110,140,0.15); }
+        .tour-image { height: 250px; overflow: hidden; position: relative; }
+        .tour-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
+        .tour-card:hover .tour-image img { transform: scale(1.07); }
+        .tour-badge { position: absolute; top: 16px; right: 16px; background: rgba(255,255,240,0.96); backdrop-filter: blur(4px); padding: 6px 14px; border-radius: 40px; font-size: 0.7rem; font-weight: 700; color: #1F6E8C; letter-spacing: 0.3px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .tour-features { position: absolute; bottom: 16px; left: 16px; display: flex; gap: 8px; flex-wrap: wrap; }
+        .feature-chip { background: rgba(0,0,0,0.65); backdrop-filter: blur(4px); padding: 4px 10px; border-radius: 30px; font-size: 0.7rem; font-weight: 500; color: white; letter-spacing: 0.2px; }
+        .tour-content { padding: 24px 24px 28px; display: flex; flex-direction: column; flex-grow: 1; }
+        .tour-title { font-size: 1.45rem; font-weight: 800; margin-bottom: 6px; color: #1a2c3e; line-height: 1.3; }
+        .tour-location { display: flex; align-items: center; gap: 6px; color: #1F6E8C; font-size: 0.85rem; font-weight: 500; margin-bottom: 12px; }
+        .tour-price-row { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; margin: 14px 0 8px; }
+        .tour-price { font-size: 1.9rem; font-weight: 800; color: #1F6E8C; display: flex; align-items: baseline; gap: 4px; }
+        .tour-price span { font-size: 0.85rem; font-weight: 400; color: #8a9aa8; }
+        .tour-days { background: rgba(31,110,140,0.08); padding: 5px 14px; border-radius: 40px; font-size: 0.75rem; font-weight: 600; color: #1F6E8C; display: inline-flex; align-items: center; gap: 6px; }
+        .highlights-mini { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 12px; }
+        .highlight-tag { font-size: 0.7rem; background: #f0f4f9; padding: 5px 10px; border-radius: 20px; color: #2c4e64; font-weight: 500; display: inline-flex; align-items: center; gap: 5px; }
+        .tour-description { color: #6c7e8c; font-size: 0.9rem; line-height: 1.48; margin-bottom: 22px; }
+        .tour-buttons { display: flex; gap: 12px; margin-top: auto; }
+        .btn-details, .btn-select { flex: 1; padding: 11px 0; border-radius: 60px; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: all 0.25s; text-align: center; text-decoration: none; display: inline-block; }
+        .btn-details { background: transparent; border: 1px solid #cbdde6; color: #1F6E8C; }
+        .btn-details:hover { background: #1F6E8C; color: white; border-color: #1F6E8C; transform: translateY(-2px); }
+        .btn-select { background: linear-gradient(135deg, #1F6E8C, #2E9A7E); border: none; color: white; font-weight: 700; box-shadow: 0 2px 6px rgba(31,110,140,0.2); }
+        .btn-select:hover { transform: translateY(-3px); box-shadow: 0 8px 18px rgba(31,110,140,0.3); }
+        
+        /* faq / about section */
+        .about-section { background: white; border-radius: 40px; padding: 40px 32px; margin: 40px 0 30px; box-shadow: 0 12px 28px rgba(0,0,0,0.04); border: 1px solid #e2edf2; }
+        .about-section h2 { font-size: 1.6rem; margin-bottom: 24px; font-weight: 700; position: relative; display: inline-block; }
+        .about-section h2:after { content: ''; position: absolute; bottom: -8px; left: 0; width: 60px; height: 3px; background: linear-gradient(90deg, #1F6E8C, #2E9A7E); border-radius: 4px; }
+        .faq-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 24px; margin-top: 24px; }
+        .faq-item h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 8px; color: #1F6E8C; }
+        .faq-item p { color: #5a6e7a; line-height: 1.45; font-size: 0.9rem; }
+        @media (max-width: 700px) { .faq-grid { grid-template-columns: 1fr; } .info-blocks { flex-direction: column; } }
+        
+        footer { text-align: center; padding: 40px 0; border-top: 1px solid rgba(31,110,140,0.15); color: #8a9aa8; font-size: 0.85rem; margin-top: 20px; }
+        @media (max-width: 1000px) { .tours-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; } }
+        @media (max-width: 640px) { .tours-grid { grid-template-columns: 1fr; gap: 28px; } .page-header h1 { font-size: 1.7rem; } }
+        
+        .fade-in { animation: fadeUp 0.5s ease forwards; }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+        .toast-msg { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #1a2c3e; color: white; padding: 12px 28px; border-radius: 60px; font-size: 0.9rem; font-weight: 500; box-shadow: 0 12px 24px rgba(0,0,0,0.2); z-index: 1200; backdrop-filter: blur(8px); background: rgba(26,44,62,0.9); pointer-events: none; transition: opacity 0.2s; opacity: 0; }
+        .toast-msg.show { opacity: 1; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <nav class="navbar">
+        <div class="logo" onclick="window.location.href='туризм главная.html'"><div class="logo-icon"><i class="fas fa-compass"></i></div><span class="logo-text">TravelBudget</span></div>
+        <div class="desktop-nav">
+            <a class="nav-link" href="туризм главная.html">Главная</a>
+            <div class="dropdown"><button class="dropdown-btn">Путешествия <i class="fas fa-chevron-down"></i></button><div class="dropdown-content"><a href="туризм направления.html"><i class="fas fa-plane"></i> Направления</a><a href="туризм учет.html"><i class="fas fa-wallet"></i> Мой учёт</a><a href="туризм бюджет.html"><i class="fas fa-chart-line"></i> Бюджет</a></div></div>
+            <div class="dropdown"><button class="dropdown-btn">Медиа <i class="fas fa-chevron-down"></i></button><div class="dropdown-content"><a href="туризм фото.html"><i class="fas fa-camera"></i> Фотоальбом</a><a href="туризм аналитика.html"><i class="fas fa-chart-pie"></i> Аналитика</a></div></div>
+            <a class="nav-link" href="туризм кабинет.html" id="profileNavLink" style="display: none;">Личный кабинет</a>
+        </div>
+        <div class="burger-menu" id="burgerMenu"><span></span><span></span><span></span></div>
+        <div class="right-panel">
+            <div class="currency-selector"><i class="fas fa-exchange-alt" style="color:#1F6E8C;"></i><select id="globalCurrencySelect"><option value="EUR">€ EUR</option><option value="USD">$ USD</option><option value="GBP">£ GBP</option><option value="RUB">₽ RUB</option><option value="CHF">₣ CHF</option><option value="TRY">₺ TRY</option><option value="JPY">¥ JPY</option></select></div>
+            <div class="auth-section" id="authButtons"><button class="btn-login" onclick="window.location.href='туризм вход.html'">Вход</button><button class="btn-register" onclick="window.location.href='туризм вход.html'">Регистрация</button></div>
+            <div id="userInfo" style="display: none;"><div class="user-panel"><span class="user-name" id="userNameDisplay"></span><button class="logout-btn" id="logoutBtn">Выйти</button></div></div>
+        </div>
+    </nav>
+    <div class="mobile-nav-overlay" id="mobileOverlay"></div>
+    <div class="mobile-nav" id="mobileNav"><div class="close-mobile-nav" id="closeMobileNav">&times;</div><a href="туризм главная.html"><i class="fas fa-home"></i> Главная</a><div class="mobile-section-title">ПУТЕШЕСТВИЯ</div><a href="туризм направления.html"><i class="fas fa-plane"></i> Направления</a><a href="туризм учет.html"><i class="fas fa-wallet"></i> Мой учёт</a><a href="туризм бюджет.html"><i class="fas fa-chart-line"></i> Бюджет</a><div class="mobile-section-title">МЕДИА</div><a href="туризм фото.html"><i class="fas fa-camera"></i> Фотоальбом</a><a href="туризм аналитика.html"><i class="fas fa-chart-pie"></i> Аналитика</a><div class="mobile-section-title">АККАУНТ</div><a href="туризм кабинет.html" id="mobileProfileLink"><i class="fas fa-user"></i> Личный кабинет</a></div>
+    
+    <div class="page-header">
+        <h1>🌍 Выберите маршрут мечты</h1>
+        <p>Интерактивные карточки, живые цены и полная прозрачность бюджета — планируйте путешествие с умом</p>
+    </div>
+
+    <!-- Блоки преимуществ и идей -->
+    <div class="info-blocks">
+        <div class="info-card"><i class="fas fa-chart-simple"></i><h3>Прозрачный бюджет</h3><p>Детализация каждой статьи расходов — без скрытых комиссий</p></div>
+        <div class="info-card"><i class="fas fa-globe"></i><h3>50+ направлений</h3><p>От экзотических пляжей до горных вершин</p></div>
+        <div class="info-card"><i class="fas fa-calendar-check"></i><h3>Гибкий выбор</h3><p>Сравнивайте туры, выбирайте даты и стартуйте</p></div>
+        <div class="info-card"><i class="fas fa-wallet"></i><h3>Учёт в реальном времени</h3><p>Автоматический пересчёт в любой валюте</p></div>
+    </div>
+
+    <div class="tours-grid" id="toursGrid"></div>
+
+    <!-- Дополнительный блок о сервисе и популярных вопросах -->
+    <div class="about-section">
+        <h2><i class="fas fa-leaf" style="margin-right: 12px; color:#1F6E8C;"></i> О сервисе TravelBudget</h2>
+        <p style="margin-top: 16px; max-width: 85%;">Мы объединили тревел-экспертизу и умный учёт расходов. Каждый тур в каталоге содержит полную смету: от авиабилетов до экскурсий. Вы можете мгновенно пересчитать стоимость в удобной валюте и сохранить выбранный пакет в личном кабинете. Путешествуйте осознанно — без финансовых сюрпризов.</p>
+        <div class="faq-grid">
+            <div class="faq-item"><h3><i class="fas fa-question-circle"></i> Как выбрать тур?</h3><p>Нажмите «Детали тура» для полной информации или «Выбрать» — система сохранит поездку в разделе «Мой учёт».</p></div>
+            <div class="faq-item"><h3><i class="fas fa-chart-line"></i> Как работает конвертер валют?</h3><p>Выберите валюту в верхней панели — все цены пересчитаются по актуальному курсу автоматически.</p></div>
+            <div class="faq-item"><h3><i class="fas fa-luggage-cart"></i> Можно ли изменить состав тура?</h3><p>Да! В разделе учёта вы можете редактировать расходы и добавлять индивидуальные траты.</p></div>
+            <div class="faq-item"><h3><i class="fas fa-shield-alt"></i> Нужно ли сразу оплачивать?</h3><p>Нет, TravelBudget — это планировщик. Вы фиксируете бюджет, а бронируете самостоятельно по лучшим ценам.</p></div>
+        </div>
+    </div>
+    <footer>© 2025 TravelBudget — умный учёт расходов в путешествиях • Лучшие предложения без скрытых комиссий</footer>
+</div>
+<div id="toastMsg" class="toast-msg"></div>
+
+<script>
+    // ---------- КОНФИГУРАЦИЯ ----------
+    const STORAGE_SESSION = 'travelbudget_session';
+    const exchangeRates = { EUR: 1, USD: 1.09, GBP: 0.86, RUB: 95.5, CHF: 0.98, TRY: 35.2, JPY: 164.5 };
+    const currencySymbols = { EUR: '€', USD: '$', GBP: '£', RUB: '₽', CHF: '₣', TRY: '₺', JPY: '¥' };
+    let currentCurrency = 'EUR';
+    
+    // Расширенный массив туров с доп. полями для ярких карточек
+    const tours = [
+        { id:1, name:"Мальдивский рай", location:"Мальдивы, Атолл Северный Мале", country:"Мальдивы", price:2500, days:7, image:"тур-1-9.jpg", shortDescription:"Белый песок, бирюзовая вода и полное расслабление.", fullDescription:"Роскошные виллы на воде, дайвинг с мanta rays.", highlights:["🏖️ Пляжи","🤿 Дайвинг","🌅 Закаты"], features:["Отель 5*", "All inclusive"], expenses:[{name:"Авиабилеты",amount:800},{name:"Проживание",amount:1200},{name:"Питание",amount:350},{name:"Трансфер",amount:80},{name:"Экскурсии",amount:70}] },
+        { id:2, name:"Швейцарские Альпы", location:"Швейцария, Интерлакен", country:"Швейцария", price:1800, days:7, image:"тур-2-1.jpg", shortDescription:"Горы, чистейший воздух, активный отдых.", fullDescription:"Идеально для лыжников и альпинистов.", highlights:["⛷️ Лыжи","🚂 Юнгфрау","🍫 Шоколад"], features:["Ски-пасс", "Трансфер"], expenses:[{name:"Авиабилеты",amount:400},{name:"Проживание",amount:900},{name:"Питание",amount:300},{name:"Ски-пасс",amount:120},{name:"Аренда снаряжения",amount:80}] },
+        { id:3, name:"Таиланд: вкус экзотики", location:"Таиланд, Пхукет", country:"Таиланд", price:800, days:10, image:"тур-3-1.jpg", shortDescription:"Экзотическая природа, вкусная еда, бюджетно.", fullDescription:"Ночные рынки, храмы, острова Пхи-Пхи.", highlights:["🏝️ Пхи-Пхи","🐘 Слоны","🍜 Уличная еда"], features:["Завтраки", "Гид"], expenses:[{name:"Авиабилеты",amount:350},{name:"Проживание",amount:300},{name:"Питание",amount:100},{name:"Трансфер",amount:30},{name:"Экскурсии",amount:120}] },
+        { id:4, name:"Итальянская Ривьера", location:"Италия, Амальфи", country:"Италия", price:1200, days:8, image:"тур-4-1.webp", shortDescription:"Средиземноморье, лимончелло, dolce vita.", fullDescription:"Побережье Амальфи, уютные городки.", highlights:["🏛️ Помпеи","🍋 Лимончелло","🚤 Капри"], features:["Завтрак", "Экскурсии"], expenses:[{name:"Авиабилеты",amount:300},{name:"Проживание",amount:700},{name:"Питание",amount:150},{name:"Трансфер",amount:50},{name:"Экскурсии",amount:120}] },
+        { id:5, name:"Грузинское гостеприимство", location:"Грузия, Тбилиси", country:"Грузия", price:600, days:7, image:"тур-5-1.jpeg", shortDescription:"Хинкали, хачапури, горные пейзажи.", fullDescription:"Кахетия, дегустации вина, старый Тбилиси.", highlights:["🍷 Вино","🥟 Хинкали","⛰️ Казбек"], features:["Мастер-класс", "Трансфер"], expenses:[{name:"Авиабилеты",amount:250},{name:"Проживание",amount:200},{name:"Питание",amount:100},{name:"Трансфер",amount:30},{name:"Экскурсии",amount:120}] },
+        { id:6, name:"Япония: восходящее солнце", location:"Япония, Токио—Киото", country:"Япония", price:2200, days:10, image:"тур-6-1.webp", shortDescription:"Футуризм и древние храмы, сакура.", fullDescription:"Неоновый Токио и традиционный Киото.", highlights:["🗼 Токио","⛩️ Киото","🗻 Фудзи"], features:["JR Pass", "Чайная церемония"], expenses:[{name:"Авиабилеты",amount:800},{name:"Проживание",amount:800},{name:"Питание",amount:300},{name:"JR Pass",amount:250},{name:"Экскурсии",amount:150}] }
+    ];
+    
+    function convertPrice(price) { return price * exchangeRates[currentCurrency]; }
+    function getSymbol() { return currencySymbols[currentCurrency]; }
+    
+    function getCurrentUser() { 
+        const session = localStorage.getItem(STORAGE_SESSION); 
+        if(session) { 
+            try { const data = JSON.parse(session); if(data.expires > Date.now()) return data; localStorage.removeItem(STORAGE_SESSION); } catch(e) {} 
+        } return null; 
+    }
+    function showToast(message, duration = 2500) {
+        const toast = document.getElementById('toastMsg');
+        toast.textContent = message;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), duration);
+    }
+    
+    function saveTourToUser(tour) {
+        const user = getCurrentUser();
+        if(!user) return false;
+        localStorage.setItem('selected_tour', JSON.stringify({ name:tour.name, country:tour.country, days:tour.days, expenses:tour.expenses, totalPrice:tour.price, id:tour.id, image:tour.image, location:tour.location }));
+        return true;
+    }
+    
+    function selectTour(tourId) {
+        const user = getCurrentUser();
+        if(!user) { showToast('🔐 Войдите, чтобы выбрать тур', 2000); setTimeout(() => { window.location.href = 'туризм вход.html'; }, 1300); return; }
+        const tour = tours.find(t => t.id === tourId);
+        if(tour) { saveTourToUser(tour); showToast(`✅ Тур "${tour.name}" сохранён в учёте`, 1800); setTimeout(() => { window.location.href = 'туризм учет.html'; }, 1000); }
+    }
+    
+    // Генерация карточек с живыми элементами (без модалок, просто ссылки)
+    function renderTours() {
+        const grid = document.getElementById('toursGrid');
+        if(!grid) return;
+        grid.innerHTML = tours.map(tour => {
+            const convertedPrice = convertPrice(tour.price);
+            const firstTwoHighlights = tour.highlights.slice(0,2);
+            const featureChips = tour.features.map(f => `<span class="feature-chip">${f}</span>`).join('');
+            return `<div class="tour-card fade-in" style="animation-delay: ${tour.id * 0.05}s">
+                        <div class="tour-image">
+                            <img src="${tour.image}" alt="${tour.name}" loading="lazy">
+                            <div class="tour-badge">${tour.id === 1 || tour.id === 6 ? '🔥 Топ-тур' : '⭐ Рекомендуем'}</div>
+                            <div class="tour-features">${featureChips}</div>
+                        </div>
+                        <div class="tour-content">
+                            <div class="tour-title">${tour.name}</div>
+                            <div class="tour-location"><i class="fas fa-map-marker-alt"></i> ${tour.location}</div>
+                            <div class="tour-price-row">
+                                <div class="tour-price">${convertedPrice.toFixed(0)} ${getSymbol()} <span>на человека</span></div>
+                                <div class="tour-days"><i class="fas fa-calendar-alt"></i> ${tour.days} дн.</div>
+                            </div>
+                            <div class="highlights-mini">
+                                ${firstTwoHighlights.map(h => `<span class="highlight-tag"><i class="fas fa-star" style="font-size: 9px;"></i> ${h}</span>`).join('')}
+                                ${tour.highlights.length > 2 ? `<span class="highlight-tag">+ ещё ${tour.highlights.length-2}</span>` : ''}
+                            </div>
+                            <div class="tour-description">${tour.shortDescription}</div>
+                            <div class="tour-buttons">
+                                <a href="tour-${tour.id}.html" class="btn-details"><i class="fas fa-info-circle"></i> Детали тура</a>
+                                <button class="btn-select" onclick="selectTour(${tour.id})">📌 Выбрать</button>
+                            </div>
+                        </div>
+                    </div>`;
+        }).join('');
+    }
+    
+    function logout() { localStorage.removeItem(STORAGE_SESSION); updateUI(); showToast('Вы вышли из профиля', 1800); closeMobileMenu(); }
+    function changeGlobalCurrency() { currentCurrency = document.getElementById('globalCurrencySelect').value; renderTours(); }
+    function updateUI() {
+        const user = getCurrentUser();
+        const authDiv = document.getElementById('authButtons');
+        const userDiv = document.getElementById('userInfo');
+        const profileLink = document.getElementById('profileNavLink');
+        const mobileProfileLink = document.getElementById('mobileProfileLink');
+        const userNameSpan = document.getElementById('userNameDisplay');
+        if(user) { authDiv.style.display = 'none'; userDiv.style.display = 'block'; if(profileLink) profileLink.style.display = 'inline-block'; if(mobileProfileLink) mobileProfileLink.style.display = 'flex'; userNameSpan.textContent = user.name || user.email?.split('@')[0] || 'Турист'; }
+        else { authDiv.style.display = 'flex'; userDiv.style.display = 'none'; if(profileLink) profileLink.style.display = 'none'; if(mobileProfileLink) mobileProfileLink.style.display = 'none'; }
+    }
+    
+    const burgerMenu = document.getElementById('burgerMenu'); const mobileNav = document.getElementById('mobileNav'); const mobileOverlay = document.getElementById('mobileOverlay'); const closeMobileNav = document.getElementById('closeMobileNav');
+    function openMobileMenu() { mobileNav.classList.add('active'); mobileOverlay.classList.add('active'); document.body.style.overflow = 'hidden'; }
+    function closeMobileMenu() { mobileNav.classList.remove('active'); mobileOverlay.classList.remove('active'); document.body.style.overflow = ''; }
+    burgerMenu?.addEventListener('click', openMobileMenu); closeMobileNav?.addEventListener('click', closeMobileMenu); mobileOverlay?.addEventListener('click', closeMobileMenu);
+    document.getElementById('globalCurrencySelect')?.addEventListener('change', changeGlobalCurrency);
+    document.getElementById('logoutBtn')?.addEventListener('click', logout);
+    renderTours(); updateUI();
+    if(document.getElementById('globalCurrencySelect')) document.getElementById('globalCurrencySelect').value = currentCurrency;
+    window.selectTour = selectTour;
+</script>
+<script src="optimize.js"></script>
+<script src="demo-account.js"></script>
+</body>
+</html>
